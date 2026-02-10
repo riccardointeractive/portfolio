@@ -155,7 +155,7 @@ function ProjectsContent() {
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-primary">{project.title}</span>
                       {project.featured && (
-                        <Star size={12} className="fill-current text-yellow-500" />
+                        <Star size={12} className="fill-current text-warning" />
                       )}
                     </div>
                   </td>
@@ -170,7 +170,7 @@ function ProjectsContent() {
                       className={cn(
                         'inline-flex rounded-md px-2 py-0.5 text-xs font-medium',
                         project.status === 'published'
-                          ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                          ? 'bg-success-subtle text-success'
                           : 'bg-elevated text-tertiary'
                       )}
                     >
@@ -184,7 +184,7 @@ function ProjectsContent() {
                         className="rounded-lg p-1.5 text-tertiary transition-colors hover:bg-elevated hover:text-secondary"
                         title={project.featured ? 'Remove from featured' : 'Add to featured'}
                       >
-                        <Star size={14} className={project.featured ? 'fill-current text-yellow-500' : ''} />
+                        <Star size={14} className={project.featured ? 'fill-current text-warning' : ''} />
                       </button>
                       <button
                         onClick={() => router.push(`/admin/projects/${project.id}/builder`)}
@@ -195,7 +195,7 @@ function ProjectsContent() {
                       </button>
                       <button
                         onClick={() => handleDelete(project)}
-                        className="rounded-lg p-1.5 text-tertiary transition-colors hover:bg-elevated hover:text-red-500"
+                        className="rounded-lg p-1.5 text-tertiary transition-colors hover:bg-elevated hover:text-error"
                         title="Delete"
                       >
                         <Trash2 size={14} />

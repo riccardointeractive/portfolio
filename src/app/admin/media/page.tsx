@@ -274,7 +274,7 @@ function MediaContent() {
               </a>
               <button
                 onClick={() => handleDelete(selected)}
-                className="flex items-center gap-2 rounded-lg border border-border-default px-3 py-1.5 text-sm text-red-500 transition-colors hover:bg-hover"
+                className="flex items-center gap-2 rounded-lg border border-border-default px-3 py-1.5 text-sm text-error transition-colors hover:bg-hover"
               >
                 <Trash2 size={14} />
                 Delete

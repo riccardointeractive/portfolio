@@ -69,7 +69,7 @@ function BuilderContent({ projectId }: { projectId: string }) {
                 className={cn(
                   'rounded-md px-2 py-0.5 text-xs font-medium',
                   project.status === 'published'
-                    ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                    ? 'bg-success-subtle text-success'
                     : 'bg-elevated text-tertiary'
                 )}
               >

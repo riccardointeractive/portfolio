@@ -12,10 +12,10 @@ interface ShotCardProps {
 }
 
 const typeColors: Record<string, string> = {
-  image: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-  video: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
-  code: 'bg-green-500/10 text-green-600 dark:text-green-400',
-  animation: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
+  image: 'bg-accent-blue-subtle text-accent-blue',
+  video: 'bg-accent-purple-subtle text-accent-purple',
+  code: 'bg-accent-green-subtle text-accent-green',
+  animation: 'bg-accent-orange-subtle text-accent-orange',
 }
 
 export function ShotCard({ shot, onEdit, onDelete, onTogglePublish }: ShotCardProps) {
@@ -81,7 +81,7 @@ export function ShotCard({ shot, onEdit, onDelete, onTogglePublish }: ShotCardPr
           </button>
           <button
             onClick={() => onDelete(shot)}
-            className="rounded-lg p-1.5 text-tertiary transition-colors hover:bg-hover hover:text-red-500"
+            className="rounded-lg p-1.5 text-tertiary transition-colors hover:bg-hover hover:text-error"
             title="Delete"
           >
             <Trash2 size={14} />

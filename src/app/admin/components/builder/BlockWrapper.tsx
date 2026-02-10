@@ -55,7 +55,7 @@ export function BlockWrapper({ type, children, onDelete, dragHandleProps }: Bloc
         {/* Delete */}
         <button
           onClick={onDelete}
-          className="rounded p-0.5 text-tertiary transition-colors hover:text-red-500"
+          className="rounded p-0.5 text-tertiary transition-colors hover:text-error"
         >
           <Trash2 size={14} />
         </button>

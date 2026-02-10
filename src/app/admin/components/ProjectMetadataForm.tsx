@@ -255,7 +255,7 @@ export function ProjectMetadataForm({
           >
             <span
               className={cn(
-                'absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform',
+                'absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-toggle-knob transition-transform',
                 form.featured && 'translate-x-4'
               )}
             />

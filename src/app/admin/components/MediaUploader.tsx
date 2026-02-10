@@ -170,7 +170,7 @@ export function MediaUploader({
       )}
 
       {error && (
-        <p className="text-xs text-red-500">{error}</p>
+        <p className="text-xs text-error">{error}</p>
       )}
     </div>
   )

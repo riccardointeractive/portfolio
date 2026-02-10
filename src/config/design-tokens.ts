@@ -29,6 +29,18 @@ export const colors = {
       default: '#3f3f46',
       hover: '#27272a',
     },
+    status: {
+      error: '#dc2626',
+      success: '#16a34a',
+      warning: '#d97706',
+      info: '#2563eb',
+    },
+    accent: {
+      blue: '#2563eb',
+      purple: '#7c3aed',
+      green: '#16a34a',
+      orange: '#d97706',
+    },
   },
   dark: {
     bg: {
@@ -51,6 +63,18 @@ export const colors = {
     interactive: {
       default: '#d4d4d8',
       hover: '#fafafa',
+    },
+    status: {
+      error: '#f87171',
+      success: '#4ade80',
+      warning: '#fbbf24',
+      info: '#60a5fa',
+    },
+    accent: {
+      blue: '#60a5fa',
+      purple: '#a78bfa',
+      green: '#4ade80',
+      orange: '#fbbf24',
     },
   },
 } as const
