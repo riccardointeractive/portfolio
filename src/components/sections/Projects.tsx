@@ -1,8 +1,10 @@
-import { projects } from '@/config/projects'
 import { Container } from '@/components/layout/Container'
 import { ProjectCard } from '@/components/ui/ProjectCard'
+import { getFeaturedProjectsWithFallback } from '@/lib/data/projects-fallback'
 
-export function Projects() {
+export async function Projects() {
+  const projects = await getFeaturedProjectsWithFallback()
+
   return (
     <section id="projects" className="py-[var(--section-padding)]">
       <Container className="flex flex-col gap-12">

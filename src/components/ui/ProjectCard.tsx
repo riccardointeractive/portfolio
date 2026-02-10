@@ -1,5 +1,5 @@
 import { ArrowUpRight } from 'lucide-react'
-import { type Project } from '@/types'
+import { type Project } from '@/types/content'
 import { Badge } from './Badge'
 import { cn } from '@/lib/utils'
 
@@ -11,9 +11,7 @@ interface ProjectCardProps {
 export function ProjectCard({ project, className }: ProjectCardProps) {
   return (
     <a
-      href={project.url}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={`/projects/${project.slug}`}
       className={cn(
         'group flex flex-col overflow-hidden rounded-xl border border-border-default bg-surface transition-all duration-300',
         'hover:-translate-y-1 hover:border-border-hover hover:shadow-lg',
@@ -22,11 +20,20 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
     >
       {/* Image */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-elevated">
-        <div className="flex h-full items-center justify-center text-tertiary">
-          <span className="font-display text-2xl tracking-tight">
-            {project.title}
-          </span>
-        </div>
+        {project.cover_image ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={project.cover_image}
+            alt={project.title}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center text-tertiary">
+            <span className="font-display text-2xl tracking-tight">
+              {project.title}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Content */}
