@@ -3,6 +3,7 @@
 import { Copy, Check } from 'lucide-react'
 import { useState } from 'react'
 import { AdminAuthGuard } from '../components/AdminAuthGuard'
+import { AdminPageHeader } from '../components/AdminPageHeader'
 import { Badge } from '@/components/ui/Badge'
 import { colors, typography, spacing, radius, transitions, shadows } from '@/config/design-tokens'
 
@@ -11,11 +12,10 @@ export default function DesignSystemPage() {
     <AdminAuthGuard>
       {/* Page Header */}
       <div className="mb-10">
-        <h1 className="mb-2 font-display text-4xl text-primary">Design System</h1>
-        <p className="text-secondary">
-          Live preview of all design tokens, typography, and components.
-          Everything here is rendered from the actual CSS variables and Tailwind classes.
-        </p>
+        <AdminPageHeader
+          title="Design System"
+          description="Live preview of all design tokens, typography, and components. Everything here is rendered from the actual CSS variables and Tailwind classes."
+        />
       </div>
 
       <div className="space-y-16">

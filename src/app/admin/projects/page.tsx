@@ -1,9 +1,14 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Plus, Search, Star, Pencil, Trash2 } from 'lucide-react'
+import { Plus, Star, Pencil, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
+import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
+import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
+import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
+import { AdminEmptyState } from '@/app/admin/components/AdminEmptyState'
+import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/content'
 
@@ -59,69 +64,39 @@ function ProjectsContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-2xl text-primary">Projects</h1>
-          <p className="mt-1 text-sm text-secondary">
-            Study cases — create and manage your portfolio projects.
-          </p>
-        </div>
-        <button
-          onClick={() => router.push('/admin/projects/new')}
-          className="flex items-center gap-1.5 rounded-lg bg-interactive px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-interactive-hover"
-        >
-          <Plus size={16} />
-          New Project
-        </button>
-      </div>
+      <AdminPageHeader
+        title="Projects"
+        description="Study cases — create and manage your portfolio projects."
+        action={{
+          label: 'New Project',
+          icon: <Plus size={16} />,
+          onClick: () => router.push('/admin/projects/new'),
+        }}
+      />
 
       {/* Filters */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-1">
-          {statusFilters.map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => setStatusFilter(value)}
-              className={cn(
-                'rounded-lg px-3 py-1.5 text-sm transition-colors',
-                statusFilter === value
-                  ? 'bg-elevated text-primary font-medium'
-                  : 'text-secondary hover:bg-hover'
-              )}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="relative w-full sm:w-64">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-tertiary" />
-          <input
-            type="text"
-            placeholder="Search projects..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-border-default bg-base pl-9 pr-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
-          />
-        </div>
+        <AdminFilterTabs
+          filters={statusFilters}
+          activeFilter={statusFilter}
+          onFilterChange={setStatusFilter}
+        />
+        <AdminSearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder="Search projects..."
+        />
       </div>
 
       {/* List */}
       {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-border-default border-t-interactive" />
-        </div>
+        <AdminLoadingSpinner />
       ) : projects.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border-default py-20">
-          <p className="text-sm text-secondary">No projects yet</p>
-          <button
-            onClick={() => router.push('/admin/projects/new')}
-            className="mt-3 text-sm text-interactive hover:underline"
-          >
-            Create your first project
-          </button>
-        </div>
+        <AdminEmptyState
+          message="No projects yet"
+          actionLabel="Create your first project"
+          onAction={() => router.push('/admin/projects/new')}
+        />
       ) : (
         <div className="overflow-hidden rounded-xl border border-border-default">
           <table className="w-full">

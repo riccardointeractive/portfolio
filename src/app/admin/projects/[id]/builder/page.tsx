@@ -4,6 +4,7 @@ import { use } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Check, Loader2, Settings2 } from 'lucide-react'
 import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
+import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 import { BlockList } from '@/app/admin/components/builder/BlockList'
 import { useBuilder } from '@/app/admin/hooks/useBuilder'
 import { cn } from '@/lib/utils'
@@ -25,11 +26,7 @@ function BuilderContent({ projectId }: { projectId: string }) {
   } = useBuilder(projectId)
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-border-default border-t-interactive" />
-      </div>
-    )
+    return <AdminLoadingSpinner />
   }
 
   if (!project) {

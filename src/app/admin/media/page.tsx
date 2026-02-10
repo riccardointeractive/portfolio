@@ -1,8 +1,14 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Search, Trash2, Copy, Check, ExternalLink } from 'lucide-react'
+import { Trash2, Copy, Check, ExternalLink } from 'lucide-react'
 import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
+import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
+import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
+import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
+import { AdminEmptyState } from '@/app/admin/components/AdminEmptyState'
+import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
+import { AdminPagination } from '@/app/admin/components/AdminPagination'
 import { MediaUploader } from '@/app/admin/components/MediaUploader'
 import { cn } from '@/lib/utils'
 import type { MediaRecord } from '@/types/content'
@@ -66,23 +72,26 @@ function MediaContent() {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
   }
 
+  const handleFilterChange = (value: string) => {
+    setTypeFilter(value)
+    setPage(1)
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value)
+    setPage(1)
+  }
+
   return (
     <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-2xl text-primary">Media Library</h1>
-          <p className="mt-1 text-sm text-secondary">
-            All uploaded files — images, videos, and more.
-          </p>
-        </div>
-        <button
-          onClick={() => setShowUploader(!showUploader)}
-          className="rounded-lg bg-interactive px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-interactive-hover"
-        >
-          Upload
-        </button>
-      </div>
+      <AdminPageHeader
+        title="Media Library"
+        description="All uploaded files — images, videos, and more."
+        action={{
+          label: 'Upload',
+          onClick: () => setShowUploader(!showUploader),
+        }}
+      />
 
       {/* Upload zone */}
       {showUploader && (
@@ -96,58 +105,29 @@ function MediaContent() {
 
       {/* Filters */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-1">
-          {typeFilters.map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => {
-                setTypeFilter(value)
-                setPage(1)
-              }}
-              className={cn(
-                'rounded-lg px-3 py-1.5 text-sm transition-colors',
-                typeFilter === value
-                  ? 'bg-elevated text-primary font-medium'
-                  : 'text-secondary hover:bg-hover'
-              )}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="relative w-full sm:w-64">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-tertiary" />
-          <input
-            type="text"
-            placeholder="Search files..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value)
-              setPage(1)
-            }}
-            className="w-full rounded-lg border border-border-default bg-base pl-9 pr-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
-          />
-        </div>
+        <AdminFilterTabs
+          filters={typeFilters}
+          activeFilter={typeFilter}
+          onFilterChange={handleFilterChange}
+        />
+        <AdminSearchBar
+          value={search}
+          onChange={handleSearchChange}
+          placeholder="Search files..."
+        />
       </div>
 
       <div className="flex gap-6">
         {/* Grid */}
         <div className="flex-1">
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-border-default border-t-interactive" />
-            </div>
+            <AdminLoadingSpinner />
           ) : items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border-default py-20">
-              <p className="text-sm text-secondary">No media files</p>
-              <button
-                onClick={() => setShowUploader(true)}
-                className="mt-3 text-sm text-interactive hover:underline"
-              >
-                Upload your first file
-              </button>
-            </div>
+            <AdminEmptyState
+              message="No media files"
+              actionLabel="Upload your first file"
+              onAction={() => setShowUploader(true)}
+            />
           ) : (
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
               {items.map((item) => {
@@ -185,32 +165,11 @@ function MediaContent() {
             </div>
           )}
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-4 flex items-center justify-center gap-2">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className={cn(
-                  'rounded-lg px-3 py-1.5 text-sm transition-colors',
-                  page === 1 ? 'cursor-not-allowed text-tertiary' : 'text-secondary hover:bg-hover'
-                )}
-              >
-                Previous
-              </button>
-              <span className="text-sm text-secondary">{page} / {totalPages}</span>
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className={cn(
-                  'rounded-lg px-3 py-1.5 text-sm transition-colors',
-                  page === totalPages ? 'cursor-not-allowed text-tertiary' : 'text-secondary hover:bg-hover'
-                )}
-              >
-                Next
-              </button>
-            </div>
-          )}
+          <AdminPagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
 
         {/* Detail panel */}
