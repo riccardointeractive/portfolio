@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   Wrench,
@@ -17,25 +17,31 @@ import { siteConfig } from '@/config/site'
 
 export default function AdminPage() {
   const mounted = useMounted()
-  const syncValid = mounted ? isSessionValidSync() : false
-  const [isAuthenticated, setIsAuthenticated] = useState(syncValid)
-  const [serverChecked, setServerChecked] = useState(false)
+  const [authState, setAuthState] = useState<'checking' | 'authenticated' | 'unauthenticated'>('checking')
 
-  // Verify session with server once mounted
-  if (mounted && syncValid && !serverChecked) {
-    setServerChecked(true)
-    isSessionValid().then((valid) => {
-      if (!valid) setIsAuthenticated(false)
-    })
-  }
+  // Check session on mount (client-only)
+  useEffect(() => {
+    if (!mounted) return
+
+    const checkSession = async () => {
+      // Quick sync check — if no local session, skip server call
+      if (!isSessionValidSync()) return 'unauthenticated' as const
+
+      // Verify with server (Redis)
+      const valid = await isSessionValid()
+      return valid ? ('authenticated' as const) : ('unauthenticated' as const)
+    }
+
+    checkSession().then(setAuthState)
+  }, [mounted])
 
   const handleLogout = async () => {
     await logout()
-    setIsAuthenticated(false)
+    setAuthState('unauthenticated')
   }
 
-  // Loading
-  if (!mounted) {
+  // Loading (SSR or verifying session)
+  if (!mounted || authState === 'checking') {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="flex items-center gap-3 rounded-xl border border-border-default bg-surface px-6 py-4">
@@ -47,8 +53,8 @@ export default function AdminPage() {
   }
 
   // Login
-  if (!isAuthenticated) {
-    return <LoginForm onSuccess={() => setIsAuthenticated(true)} />
+  if (authState !== 'authenticated') {
+    return <LoginForm onSuccess={() => setAuthState('authenticated')} />
   }
 
   // Stats
