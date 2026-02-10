@@ -13,10 +13,13 @@ const getPageTitle = (pathname: string): string => {
   const titles: Record<string, string> = {
     admin: 'Dashboard',
     projects: 'Projects',
+    shots: 'Shots',
+    media: 'Media',
     content: 'Content',
     'design-system': 'Design System',
     settings: 'Settings',
     profile: 'Profile',
+    builder: 'Study Case Builder',
   }
 
   return (lastSegment && titles[lastSegment]) || 'Admin'
