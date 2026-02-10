@@ -22,7 +22,7 @@ export function About() {
     <section id="about" className="py-[var(--section-padding)] bg-surface">
       <Container className="flex flex-col gap-12">
         <div className="reveal flex flex-col gap-3">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl">
+          <h2 className="font-display text-3xl tracking-tight text-primary sm:text-4xl">
             About
           </h2>
         </div>

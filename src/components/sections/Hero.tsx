@@ -10,7 +10,7 @@ export function Hero() {
           {siteConfig.role}
         </p>
 
-        <h1 className="reveal reveal-delay-1 max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight text-primary sm:text-5xl md:text-6xl lg:text-7xl">
+        <h1 className="reveal reveal-delay-1 max-w-3xl font-display text-4xl leading-tight tracking-tight text-primary sm:text-5xl md:text-6xl lg:text-7xl">
           {siteConfig.tagline}
         </h1>
 

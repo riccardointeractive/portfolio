@@ -78,7 +78,7 @@ export function AdminSidebar({ onLogout }: AdminSidebarProps) {
         {/* Header */}
         <div className="flex min-h-16 items-center justify-between border-b border-border-default p-4">
           <div className="flex items-center gap-2">
-            <span className="whitespace-nowrap font-display text-xl font-semibold tracking-tight text-primary">
+            <span className="whitespace-nowrap font-display text-xl tracking-tight text-primary">
               {isCollapsed && !isMobileOpen ? siteConfig.name.charAt(0) : siteConfig.name.split(' ')[0]}
             </span>
             {showLabel && (

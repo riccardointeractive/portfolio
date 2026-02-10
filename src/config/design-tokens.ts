@@ -61,6 +61,9 @@ export const typography = {
     sans: '"Switzer", system-ui, sans-serif',
     mono: '"Geist Mono", ui-monospace, monospace',
   },
+  fontWeight: {
+    display: '400',
+  },
 } as const
 
 export const spacing = {

@@ -84,7 +84,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-elevated border border-border-default">
             <Lock className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="mb-2 font-display text-4xl font-semibold tracking-tight text-primary">
+          <h1 className="mb-2 font-display text-4xl tracking-tight text-primary">
             Admin Access
           </h1>
           <p className="text-secondary">{siteConfig.name} — Secure authentication required</p>

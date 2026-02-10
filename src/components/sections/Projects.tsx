@@ -7,7 +7,7 @@ export function Projects() {
     <section id="projects" className="py-[var(--section-padding)]">
       <Container className="flex flex-col gap-12">
         <div className="reveal flex flex-col gap-3">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl">
+          <h2 className="font-display text-3xl tracking-tight text-primary sm:text-4xl">
             Selected Projects
           </h2>
           <p className="max-w-lg text-secondary">

@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   Wrench,
@@ -8,55 +7,11 @@ import {
   Clock,
   ChevronRight,
 } from 'lucide-react'
-import { useMounted } from '@/hooks/useMounted'
-import { isSessionValidSync, isSessionValid, logout } from './utils/adminAuth'
 import { tools, quickLinks, getQuickLinkIcon } from './config/admin.config'
-import { LoginForm } from './components/LoginForm'
-import { AdminLayout } from './components/AdminLayout'
+import { AdminAuthGuard } from './components/AdminAuthGuard'
 import { siteConfig } from '@/config/site'
 
 export default function AdminPage() {
-  const mounted = useMounted()
-  const [authState, setAuthState] = useState<'checking' | 'authenticated' | 'unauthenticated'>('checking')
-
-  // Check session on mount (client-only)
-  useEffect(() => {
-    if (!mounted) return
-
-    const checkSession = async () => {
-      // Quick sync check — if no local session, skip server call
-      if (!isSessionValidSync()) return 'unauthenticated' as const
-
-      // Verify with server (Redis)
-      const valid = await isSessionValid()
-      return valid ? ('authenticated' as const) : ('unauthenticated' as const)
-    }
-
-    checkSession().then(setAuthState)
-  }, [mounted])
-
-  const handleLogout = async () => {
-    await logout()
-    setAuthState('unauthenticated')
-  }
-
-  // Loading (SSR or verifying session)
-  if (!mounted || authState === 'checking') {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="flex items-center gap-3 rounded-xl border border-border-default bg-surface px-6 py-4">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-          <span className="font-medium text-primary">Loading...</span>
-        </div>
-      </div>
-    )
-  }
-
-  // Login
-  if (authState !== 'authenticated') {
-    return <LoginForm onSuccess={() => setAuthState('authenticated')} />
-  }
-
   // Stats
   const totalTools = tools.reduce((acc, cat) => acc + cat.items.length, 0)
   const activeTools = tools.reduce(
@@ -69,10 +24,10 @@ export default function AdminPage() {
   )
 
   return (
-    <AdminLayout onLogout={handleLogout}>
+    <AdminAuthGuard>
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="mb-2 font-display text-4xl font-bold text-primary">Admin Dashboard</h1>
+        <h1 className="mb-2 font-display text-4xl text-primary">Admin Dashboard</h1>
         <p className="text-secondary">Manage portfolio content, projects, and settings</p>
       </div>
 
@@ -88,7 +43,7 @@ export default function AdminPage() {
       <div className="mb-12 space-y-12">
         {tools.map((category) => (
           <div key={category.category}>
-            <h2 className="mb-6 font-display text-lg font-semibold text-primary">
+            <h2 className="mb-6 font-display text-lg text-primary">
               {category.category}
             </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -113,7 +68,7 @@ export default function AdminPage() {
                         {tool.badge}
                       </span>
                     </div>
-                    <h3 className="mb-1 font-display text-base font-semibold text-primary">
+                    <h3 className="mb-1 font-display text-base text-primary">
                       {tool.title}
                     </h3>
                     <p className="text-sm leading-relaxed text-secondary">{tool.description}</p>
@@ -127,7 +82,7 @@ export default function AdminPage() {
 
       {/* Quick Links */}
       <div className="mb-12 rounded-xl border border-border-default bg-surface p-6">
-        <h3 className="mb-4 font-display text-lg font-semibold text-primary">Quick Links</h3>
+        <h3 className="mb-4 font-display text-lg text-primary">Quick Links</h3>
         <div className="space-y-2">
           {quickLinks.map((link, idx) =>
             link.url.startsWith('http') || link.url.startsWith('mailto') ? (
@@ -157,7 +112,7 @@ export default function AdminPage() {
 
       {/* System Info */}
       <div className="rounded-xl border border-border-default bg-surface p-6">
-        <h3 className="mb-6 font-display text-lg font-semibold text-primary">
+        <h3 className="mb-6 font-display text-lg text-primary">
           System Information
         </h3>
         <div className="grid gap-6 md:grid-cols-2">
@@ -173,7 +128,7 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </AdminAuthGuard>
   )
 }
 
@@ -195,7 +150,7 @@ function StatCard({
       <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-elevated text-secondary">
         {icon}
       </div>
-      <div className="font-display text-2xl font-bold text-primary">{value}</div>
+      <div className="font-display text-2xl text-primary">{value}</div>
       <div className="mt-1 text-sm text-tertiary">{label}</div>
     </div>
   )

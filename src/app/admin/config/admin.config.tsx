@@ -101,8 +101,8 @@ export const tools: ToolCategory[] = [
         description: 'Preview all design tokens, colors, typography, and components.',
         icon: <Palette className="h-5 w-5" />,
         href: '/admin/design-system',
-        status: 'coming',
-        badge: 'Coming Soon',
+        status: 'active',
+        badge: 'Active',
       },
       {
         id: 'settings',

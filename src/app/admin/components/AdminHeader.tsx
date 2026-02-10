@@ -35,7 +35,7 @@ export function AdminHeader() {
       <div
         className={`flex h-full items-center justify-between px-6 pl-16 transition-all duration-300 lg:pl-6 ${marginClass}`}
       >
-        <h1 className="font-display text-lg font-semibold text-primary">{pageTitle}</h1>
+        <h1 className="font-display text-lg text-primary">{pageTitle}</h1>
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 rounded-lg border border-border-default bg-elevated px-3 py-1.5">

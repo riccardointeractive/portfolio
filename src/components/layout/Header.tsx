@@ -15,7 +15,7 @@ export function Header() {
       <Container className="flex h-16 items-center justify-between">
         <a
           href="#"
-          className="font-display text-lg font-semibold text-primary tracking-tight"
+          className="font-display text-lg text-primary tracking-tight"
         >
           {siteConfig.name}
         </a>

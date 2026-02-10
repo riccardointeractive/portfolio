@@ -14,7 +14,7 @@ export function Contact() {
     <section id="contact" className="py-[var(--section-padding)]">
       <Container className="flex flex-col items-center gap-8 text-center">
         <div className="reveal flex flex-col gap-3">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl">
+          <h2 className="font-display text-3xl tracking-tight text-primary sm:text-4xl">
             Get in Touch
           </h2>
           <p className="max-w-md text-secondary">

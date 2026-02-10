@@ -64,6 +64,7 @@
 /* --- Typography --- */
 :root {
   --font-display: "Clash Display", system-ui, sans-serif;
+  --font-display-weight: 400;
   --font-sans: "Switzer", system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
 }
@@ -166,6 +167,11 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display font — weight controlled by token */
+.font-display {
+  font-weight: var(--font-display-weight);
 }
 
 /* Selection */

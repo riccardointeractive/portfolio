@@ -23,7 +23,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
       {/* Image */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-elevated">
         <div className="flex h-full items-center justify-center text-tertiary">
-          <span className="font-display text-2xl font-semibold tracking-tight">
+          <span className="font-display text-2xl tracking-tight">
             {project.title}
           </span>
         </div>
@@ -32,7 +32,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
       {/* Content */}
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-display text-lg font-semibold text-primary tracking-tight">
+          <h3 className="font-display text-lg text-primary tracking-tight">
             {project.title}
           </h3>
           <ArrowUpRight
