@@ -76,7 +76,7 @@ const initialState: BuilderState = {
 
 export function useBuilder(projectId: string) {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const saveTimeoutRef = useRef<NodeJS.Timeout>()
+  const saveTimeoutRef = useRef<NodeJS.Timeout>(null)
 
   // Load project and blocks
   const load = useCallback(async () => {
