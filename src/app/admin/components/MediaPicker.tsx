@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { X, Search, Upload } from 'lucide-react'
 import { MediaUploader } from './MediaUploader'
 import { cn } from '@/lib/utils'
+import { imageSizes } from '@/config/image'
 import type { MediaRecord } from '@/types/content'
 
 interface MediaPickerProps {
@@ -121,11 +123,12 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
                     className="group relative aspect-square overflow-hidden rounded-lg border border-border-default transition-all hover:border-border-hover hover:shadow-sm"
                   >
                     {isImage ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
+                      <Image
                         src={item.url}
                         alt={item.alt_text || item.original_name}
-                        className="h-full w-full object-cover"
+                        fill
+                        sizes={imageSizes.adminThumbnail}
+                        className="object-cover"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-elevated">

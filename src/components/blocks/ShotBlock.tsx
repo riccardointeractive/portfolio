@@ -1,5 +1,7 @@
+import Image from 'next/image'
 import { getShotById } from '@/lib/data/projects'
 import type { ShotBlockContent } from '@/types/content'
+import { imageSizes } from '@/config/image'
 
 interface ShotBlockProps {
   content: ShotBlockContent
@@ -26,12 +28,15 @@ export async function ShotBlock({ content }: ShotBlockProps) {
             playsInline
           />
         ) : (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={shot.media_url}
-            alt={shot.title}
-            className="w-full"
-          />
+          <div className="relative aspect-video">
+            <Image
+              src={shot.media_url}
+              alt={shot.title}
+              fill
+              sizes={imageSizes.content}
+              className="object-cover"
+            />
+          </div>
         )}
       </div>
       {content.caption && (

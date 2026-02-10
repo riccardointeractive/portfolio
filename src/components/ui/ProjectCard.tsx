@@ -1,7 +1,9 @@
+import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import { type Project } from '@/types/content'
 import { Badge } from './Badge'
 import { cn } from '@/lib/utils'
+import { imageSizes } from '@/config/image'
 
 interface ProjectCardProps {
   project: Project
@@ -21,11 +23,12 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
       {/* Image */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-elevated">
         {project.cover_image ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
+          <Image
             src={project.cover_image}
             alt={project.title}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            sizes={imageSizes.card}
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-tertiary">

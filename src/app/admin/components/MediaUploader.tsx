@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
+import NextImage from 'next/image'
 import { Upload, X, Image as ImageIcon, Film } from 'lucide-react'
 import { uploadFile } from '@/lib/upload'
 import { cn } from '@/lib/utils'
@@ -92,8 +93,15 @@ export function MediaUploader({
     return (
       <div className={cn('relative overflow-hidden rounded-lg border border-border-default', className)}>
         {isImage && (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={value} alt="Uploaded" className="h-48 w-full object-cover" />
+          <div className="relative h-48 w-full">
+            <NextImage
+              src={value}
+              alt="Uploaded"
+              fill
+              sizes="480px"
+              className="object-cover"
+            />
+          </div>
         )}
         {isVideo && (
           <video src={value} className="h-48 w-full object-cover" muted />

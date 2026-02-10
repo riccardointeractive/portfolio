@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import NextImage from 'next/image'
 import { Image } from 'lucide-react'
 import type { ShotBlockContent, Shot } from '@/types/content'
 
@@ -40,11 +41,12 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
       {shot ? (
         <div className="flex items-center gap-3 rounded-lg border border-border-default bg-base p-3">
           {(shot.thumbnail_url || shot.media_url) ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
+            <NextImage
               src={shot.thumbnail_url || shot.media_url!}
               alt={shot.title}
-              className="h-16 w-24 rounded-md object-cover"
+              width={96}
+              height={64}
+              className="rounded-md object-cover"
             />
           ) : (
             <div className="flex h-16 w-24 items-center justify-center rounded-md bg-elevated">
@@ -91,11 +93,12 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
                   className="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-hover"
                 >
                   {(s.thumbnail_url || s.media_url) ? (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
+                    <NextImage
                       src={s.thumbnail_url || s.media_url!}
                       alt={s.title}
-                      className="h-10 w-16 rounded object-cover"
+                      width={64}
+                      height={40}
+                      className="rounded object-cover"
                     />
                   ) : (
                     <div className="flex h-10 w-16 items-center justify-center rounded bg-elevated">

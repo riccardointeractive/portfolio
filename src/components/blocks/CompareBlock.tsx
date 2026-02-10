@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
+import Image from 'next/image'
 import type { CompareBlockContent } from '@/types/content'
 
 interface CompareBlockProps {
@@ -51,24 +52,28 @@ export function CompareBlock({ content }: CompareBlockProps) {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
       >
-        {/* After image (full width) */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        {/* After image (full width) — unoptimized to stay in-flow and set container height */}
+        <Image
           src={content.after_url}
           alt={content.after_label || 'After'}
+          width={1200}
+          height={800}
+          unoptimized
           className="block w-full"
           draggable={false}
         />
 
-        {/* Before image (clipped) */}
+        {/* Before image (clipped) — unoptimized, width set by JS for slider */}
         <div
           className="absolute inset-0 overflow-hidden"
           style={{ width: `${position}%` }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={content.before_url}
             alt={content.before_label || 'Before'}
+            width={1200}
+            height={800}
+            unoptimized
             className="block w-full"
             style={{ width: containerRef.current?.offsetWidth }}
             draggable={false}

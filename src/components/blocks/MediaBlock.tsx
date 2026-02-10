@@ -1,4 +1,6 @@
+import Image from 'next/image'
 import type { MediaBlockContent } from '@/types/content'
+import { imageSizes } from '@/config/image'
 
 interface MediaBlockProps {
   content: MediaBlockContent
@@ -21,15 +23,25 @@ export function MediaBlock({ content }: MediaBlockProps) {
             muted
             playsInline
           />
-        ) : (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
+        ) : content.width && content.height ? (
+          <Image
             src={content.url}
             alt={content.alt}
-            className="w-full"
             width={content.width}
             height={content.height}
+            sizes={imageSizes.content}
+            className="w-full"
           />
+        ) : (
+          <div className="relative aspect-video">
+            <Image
+              src={content.url}
+              alt={content.alt}
+              fill
+              sizes={imageSizes.content}
+              className="object-cover"
+            />
+          </div>
         )}
       </div>
       {content.caption && (

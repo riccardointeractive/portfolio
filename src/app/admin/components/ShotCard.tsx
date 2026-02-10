@@ -1,7 +1,9 @@
 'use client'
 
+import Image from 'next/image'
 import { Eye, EyeOff, Pencil, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { imageSizes } from '@/config/image'
 import type { Shot } from '@/types/content'
 
 interface ShotCardProps {
@@ -26,11 +28,12 @@ export function ShotCard({ shot, onEdit, onDelete, onTogglePublish }: ShotCardPr
       {/* Thumbnail */}
       <div className="relative aspect-video w-full overflow-hidden bg-elevated">
         {shot.thumbnail_url || (shot.media_url && isImage) ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
+          <Image
             src={shot.thumbnail_url || shot.media_url!}
             alt={shot.title}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            sizes={imageSizes.adminPreview}
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center">

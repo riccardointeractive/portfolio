@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { Trash2, Copy, Check, ExternalLink } from 'lucide-react'
 import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
 import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
@@ -11,6 +12,7 @@ import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 import { AdminPagination } from '@/app/admin/components/AdminPagination'
 import { MediaUploader } from '@/app/admin/components/MediaUploader'
 import { cn } from '@/lib/utils'
+import { imageSizes } from '@/config/image'
 import type { MediaRecord } from '@/types/content'
 
 const typeFilters = [
@@ -146,11 +148,12 @@ function MediaContent() {
                     )}
                   >
                     {isImage ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
+                      <Image
                         src={item.url}
                         alt={item.alt_text || item.original_name}
-                        className="h-full w-full object-cover"
+                        fill
+                        sizes={imageSizes.adminThumbnail}
+                        className="object-cover"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-elevated">
@@ -177,12 +180,15 @@ function MediaContent() {
           <div className="hidden w-72 shrink-0 flex-col gap-4 rounded-xl border border-border-default bg-surface p-4 lg:flex">
             {/* Preview */}
             {selected.mime_type.startsWith('image/') ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={selected.url}
-                alt={selected.alt_text || selected.original_name}
-                className="w-full rounded-lg"
-              />
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                <Image
+                  src={selected.url}
+                  alt={selected.alt_text || selected.original_name}
+                  fill
+                  sizes={imageSizes.adminPreview}
+                  className="object-cover"
+                />
+              </div>
             ) : (
               <div className="flex aspect-video w-full items-center justify-center rounded-lg bg-elevated">
                 <span className="text-sm text-tertiary">

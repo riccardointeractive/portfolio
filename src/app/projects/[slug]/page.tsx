@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Container } from '@/components/layout/Container'
 import { BlockRenderer } from '@/components/blocks/BlockRenderer'
@@ -5,6 +6,7 @@ import { Badge } from '@/components/ui/Badge'
 import { getProjectBySlug, getAllProjectSlugs } from '@/lib/data/projects'
 import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
+import { imageSizes } from '@/config/image'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -75,12 +77,14 @@ export default async function ProjectPage({ params }: PageProps) {
 
           {/* Cover image */}
           {project.cover_image && (
-            <div className="overflow-hidden rounded-xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+            <div className="relative overflow-hidden rounded-xl aspect-[16/9]">
+              <Image
                 src={project.cover_image}
                 alt={project.title}
-                className="w-full"
+                fill
+                priority
+                sizes={imageSizes.hero}
+                className="object-cover"
               />
             </div>
           )}
