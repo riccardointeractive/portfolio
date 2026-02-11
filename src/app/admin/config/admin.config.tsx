@@ -8,6 +8,7 @@ import {
   ExternalLink,
   Camera,
   Upload,
+  BarChart3,
 } from 'lucide-react'
 import { type ToolCategory, type QuickLink } from '../types/admin.types'
 import { siteConfig } from '@/config/site'
@@ -48,6 +49,12 @@ export const navigationItems: AdminNavItem[] = [
     label: 'Media',
     href: '/admin/media',
     icon: <Upload className="h-5 w-5" />,
+  },
+  {
+    id: 'analytics',
+    label: 'Analytics',
+    href: '/admin/analytics',
+    icon: <BarChart3 className="h-5 w-5" />,
   },
   {
     id: 'design-system',
@@ -117,6 +124,15 @@ export const tools: ToolCategory[] = [
         description: 'Preview all design tokens, colors, typography, and components.',
         icon: <Palette className="h-5 w-5" />,
         href: '/admin/design-system',
+        status: 'active',
+        badge: 'Active',
+      },
+      {
+        id: 'analytics',
+        title: 'Analytics',
+        description: 'R2 storage and Supabase usage stats.',
+        icon: <BarChart3 className="h-5 w-5" />,
+        href: '/admin/analytics',
         status: 'active',
         badge: 'Active',
       },
