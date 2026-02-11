@@ -78,9 +78,9 @@ async function fetchR2Usage(): Promise<AnalyticsResponse['r2']> {
     return {
       available: true,
       storage: {
-        payloadSize: data.result.payloadSize,
-        metadataSize: data.result.metadataSize,
-        objectCount: data.result.objectCount,
+        payloadSize: Number(data.result.payloadSize) || 0,
+        metadataSize: Number(data.result.metadataSize) || 0,
+        objectCount: Number(data.result.objectCount) || 0,
       },
     }
   } catch (err) {

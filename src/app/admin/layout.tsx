@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { AdminShell } from './components/AdminShell'
 
 export const metadata: Metadata = {
   title: 'Admin — Portfolio',
@@ -8,14 +9,17 @@ export const metadata: Metadata = {
 /**
  * Admin Layout
  *
- * Wraps all /admin/* routes.
- * Does NOT include html/body — the root layout provides those.
- * Individual admin pages add AdminSidebar + AdminHeader via AdminLayout component.
+ * Wraps all /admin/* routes with AdminShell (auth + sidebar + header).
+ * The shell persists across navigations — only the page content re-renders.
  */
 export default function AdminRootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <div className="min-h-screen bg-base">{children}</div>
+  return (
+    <div className="min-h-screen bg-base">
+      <AdminShell>{children}</AdminShell>
+    </div>
+  )
 }

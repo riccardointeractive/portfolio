@@ -1,10 +1,19 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { RefreshCw } from 'lucide-react'
-import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
+import {
+  RefreshCw,
+  FolderOpen,
+  Camera,
+  Upload,
+  Layers,
+  HardDrive,
+  Database,
+  FileImage,
+  FileVideo,
+  Server,
+} from 'lucide-react'
 import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
-import { SettingsSection } from '@/app/admin/components/SettingsSection'
 import { EnvIndicator } from '@/app/admin/components/EnvIndicator'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 
@@ -30,23 +39,149 @@ interface AnalyticsData {
   }
 }
 
-function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 B'
+function formatBytes(bytes: number | null | undefined): string {
+  if (!bytes || bytes === 0) return '0 B'
   const k = 1024
   const sizes = ['B', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`
 }
 
-function StatRow({ label, value, detail }: { label: string; value: string | number; detail?: string }) {
+// ============================================================================
+// Local components
+// ============================================================================
+
+function MetricCard({
+  icon,
+  label,
+  value,
+  detail,
+  accentClass,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: string | number
+  detail?: string
+  accentClass: string
+}) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-border-default px-4 py-3">
-      <span className="text-sm text-secondary">{label}</span>
-      <div className="text-right">
-        <span className="text-sm font-medium text-primary font-mono">{value}</span>
-        {detail && (
-          <p className="text-xs text-tertiary">{detail}</p>
+    <div className="rounded-xl border border-border-default bg-surface p-5">
+      <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${accentClass}`}>
+        {icon}
+      </div>
+      <div className="font-display text-2xl text-primary">{value}</div>
+      <div className="mt-1 text-sm text-tertiary">{label}</div>
+      {detail && (
+        <div className="mt-0.5 text-xs text-tertiary">{detail}</div>
+      )}
+    </div>
+  )
+}
+
+function SectionCard({
+  title,
+  description,
+  children,
+}: {
+  title: string
+  description?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="rounded-xl border border-border-default bg-surface">
+      <div className="border-b border-border-default px-5 py-4">
+        <h2 className="text-sm font-medium text-primary">{title}</h2>
+        {description && (
+          <p className="mt-0.5 text-xs text-tertiary">{description}</p>
         )}
+      </div>
+      <div className="flex flex-col gap-3 px-5 py-4">{children}</div>
+    </div>
+  )
+}
+
+function StorageRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: string | number
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-border-default px-4 py-3">
+      <span className="text-tertiary">{icon}</span>
+      <span className="flex-1 text-sm text-secondary">{label}</span>
+      <span className="text-sm font-medium text-primary font-mono">{value}</span>
+    </div>
+  )
+}
+
+const R2_FREE_TIER_BYTES = 10 * 1024 * 1024 * 1024 // 10 GB
+
+function StorageUsageCard({
+  r2Bytes,
+  dbBytes,
+}: {
+  r2Bytes: number
+  dbBytes: number
+}) {
+  // R2 and DB track the same files — use the larger value to avoid double-counting
+  const totalUsed = Math.max(r2Bytes, dbBytes)
+  const percentage = Math.min((totalUsed / R2_FREE_TIER_BYTES) * 100, 100)
+  const usedWidth = R2_FREE_TIER_BYTES > 0 ? (totalUsed / R2_FREE_TIER_BYTES) * 100 : 0
+  const source = r2Bytes >= dbBytes ? 'R2' : 'DB'
+
+  return (
+    <div className="rounded-xl border border-border-default bg-surface p-5">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-blue-subtle">
+            <HardDrive size={18} className="text-accent-blue" />
+          </div>
+          <div>
+            <h2 className="text-sm font-medium text-primary">Storage Usage</h2>
+            <p className="text-xs text-tertiary">R2 free tier — 10 GB included</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="font-display text-2xl text-primary">
+            {formatBytes(totalUsed)}
+          </div>
+          <p className="text-xs text-tertiary">
+            of {formatBytes(R2_FREE_TIER_BYTES)} ({percentage.toFixed(1)}%)
+          </p>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-4 h-3 overflow-hidden rounded-full bg-elevated">
+        <div
+          className="h-full rounded-full bg-accent-blue transition-all duration-500"
+          style={{ width: `${Math.min(usedWidth, 100)}%` }}
+        />
+      </div>
+
+      {/* Legend */}
+      <div className="mt-3 flex items-center gap-5">
+        <div className="flex items-center gap-2">
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-accent-blue" />
+          <span className="text-xs text-secondary">
+            Used — {formatBytes(totalUsed)}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-tertiary">
+            (via {source}: {r2Bytes > 0 && dbBytes > 0 ? `R2 ${formatBytes(r2Bytes)} / DB ${formatBytes(dbBytes)}` : formatBytes(totalUsed)})
+          </span>
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-elevated" />
+          <span className="text-xs text-tertiary">
+            Available — {formatBytes(R2_FREE_TIER_BYTES - totalUsed)}
+          </span>
+        </div>
       </div>
     </div>
   )
@@ -59,6 +194,10 @@ function ErrorBanner({ message }: { message: string }) {
     </div>
   )
 }
+
+// ============================================================================
+// Page
+// ============================================================================
 
 function AnalyticsContent() {
   const [data, setData] = useState<AnalyticsData | null>(null)
@@ -91,6 +230,9 @@ function AnalyticsContent() {
     fetchAnalytics()
   }, [fetchAnalytics])
 
+  const tables = data?.supabase.tables
+  const storage = data?.r2.storage
+
   return (
     <div className="flex flex-col gap-6">
       <AdminPageHeader
@@ -103,118 +245,140 @@ function AnalyticsContent() {
         }}
       />
 
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
-        {/* Loading */}
-        {loading && !data && <AdminLoadingSpinner />}
+      {/* Loading */}
+      {loading && !data && <AdminLoadingSpinner />}
 
-        {/* Global error */}
-        {error && !data && <ErrorBanner message={error} />}
+      {/* Global error */}
+      {error && !data && <ErrorBanner message={error} />}
 
-        {data && (
-          <>
-            {/* Infrastructure Status */}
-            <SettingsSection
+      {data && (
+        <>
+          {/* Content Metrics — Top Grid */}
+          {tables && (
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+              <MetricCard
+                icon={<FolderOpen size={18} />}
+                label="Projects"
+                value={tables.projects.total ?? 0}
+                detail={`${tables.projects.published ?? 0} published, ${tables.projects.draft ?? 0} draft`}
+                accentClass="bg-accent-blue-subtle text-accent-blue"
+              />
+              <MetricCard
+                icon={<Camera size={18} />}
+                label="Shots"
+                value={tables.shots.total ?? 0}
+                accentClass="bg-accent-purple-subtle text-accent-purple"
+              />
+              <MetricCard
+                icon={<Upload size={18} />}
+                label="Media Files"
+                value={tables.media.total ?? 0}
+                detail={`${tables.media.images ?? 0} images, ${tables.media.videos ?? 0} videos`}
+                accentClass="bg-accent-green-subtle text-accent-green"
+              />
+              <MetricCard
+                icon={<Layers size={18} />}
+                label="Content Blocks"
+                value={tables.project_blocks.total ?? 0}
+                accentClass="bg-accent-orange-subtle text-accent-orange"
+              />
+            </div>
+          )}
+
+          {/* Storage Usage — Full Width */}
+          <StorageUsageCard
+            r2Bytes={storage?.payloadSize ?? 0}
+            dbBytes={tables?.media.totalSizeBytes ?? 0}
+          />
+
+          {/* Bottom Grid — Storage + Infrastructure side by side */}
+          <div className="grid gap-4 lg:grid-cols-2">
+            {/* Storage */}
+            <SectionCard
+              title="Storage"
+              description="File storage across R2 and database"
+            >
+              {storage && (
+                <StorageRow
+                  icon={<HardDrive size={14} />}
+                  label="R2 Storage Used"
+                  value={formatBytes(storage.payloadSize)}
+                />
+              )}
+              {storage && (
+                <StorageRow
+                  icon={<Server size={14} />}
+                  label="R2 Objects"
+                  value={(storage.objectCount ?? 0).toLocaleString()}
+                />
+              )}
+              {tables && (
+                <StorageRow
+                  icon={<FileImage size={14} />}
+                  label="Media Size (DB)"
+                  value={formatBytes(tables.media.totalSizeBytes)}
+                />
+              )}
+              {tables && (
+                <StorageRow
+                  icon={<FileVideo size={14} />}
+                  label="Media Breakdown"
+                  value={`${tables.media.images ?? 0} img / ${tables.media.videos ?? 0} vid`}
+                />
+              )}
+              {storage && (
+                <StorageRow
+                  icon={<Database size={14} />}
+                  label="R2 Metadata"
+                  value={formatBytes(storage.metadataSize)}
+                />
+              )}
+              {data.r2.error && (
+                <ErrorBanner message={data.r2.error} />
+              )}
+              {!data.r2.available && !data.r2.error && (
+                <p className="text-xs text-tertiary">
+                  Add <code className="rounded bg-elevated px-1 py-0.5 font-mono text-xs">CLOUDFLARE_API_TOKEN</code> to enable R2 stats.
+                </p>
+              )}
+            </SectionCard>
+
+            {/* Infrastructure */}
+            <SectionCard
               title="Infrastructure"
               description="Service connection status"
             >
-              <div className="grid grid-cols-2 gap-3">
-                <EnvIndicator
-                  label="Supabase"
-                  connected={data.supabase.available}
-                />
-                <EnvIndicator
-                  label="Cloudflare R2"
-                  connected={!!process.env.NEXT_PUBLIC_R2_PUBLIC_URL}
-                />
-                <EnvIndicator
-                  label="R2 Analytics"
-                  connected={data.r2.available && !data.r2.error}
-                />
-              </div>
-            </SettingsSection>
+              <EnvIndicator
+                label="Supabase"
+                connected={data.supabase.available}
+              />
+              <EnvIndicator
+                label="Cloudflare R2"
+                connected={!!process.env.NEXT_PUBLIC_R2_PUBLIC_URL}
+              />
+              <EnvIndicator
+                label="R2 Analytics"
+                connected={data.r2.available && !data.r2.error}
+              />
+            </SectionCard>
+          </div>
 
-            {/* R2 Storage */}
-            <SettingsSection
-              title="R2 Storage"
-              description="Cloudflare R2 bucket usage"
-            >
-              {data.r2.error ? (
-                <ErrorBanner message={data.r2.error} />
-              ) : data.r2.storage ? (
-                <>
-                  <StatRow
-                    label="Storage Used"
-                    value={formatBytes(data.r2.storage.payloadSize)}
-                  />
-                  <StatRow
-                    label="Objects"
-                    value={data.r2.storage.objectCount.toLocaleString()}
-                  />
-                  <StatRow
-                    label="Metadata"
-                    value={formatBytes(data.r2.storage.metadataSize)}
-                  />
-                </>
-              ) : (
-                <p className="text-sm text-tertiary">
-                  Add <code className="rounded bg-elevated px-1 py-0.5 font-mono text-xs">CLOUDFLARE_API_TOKEN</code> to enable R2 analytics.
-                </p>
-              )}
-            </SettingsSection>
+          {data.supabase.error && (
+            <ErrorBanner message={data.supabase.error} />
+          )}
 
-            {/* Content Overview */}
-            {data.supabase.tables && (
-              <SettingsSection
-                title="Content"
-                description="Database content overview"
-              >
-                <StatRow
-                  label="Projects"
-                  value={data.supabase.tables.projects.total}
-                  detail={`${data.supabase.tables.projects.published} published, ${data.supabase.tables.projects.draft} draft`}
-                />
-                <StatRow
-                  label="Shots"
-                  value={data.supabase.tables.shots.total}
-                />
-                <StatRow
-                  label="Media Files"
-                  value={data.supabase.tables.media.total}
-                  detail={`${data.supabase.tables.media.images} images, ${data.supabase.tables.media.videos} videos`}
-                />
-                <StatRow
-                  label="Media Size"
-                  value={formatBytes(data.supabase.tables.media.totalSizeBytes)}
-                  detail="Total uploaded size"
-                />
-                <StatRow
-                  label="Content Blocks"
-                  value={data.supabase.tables.project_blocks.total}
-                />
-              </SettingsSection>
-            )}
-
-            {data.supabase.error && (
-              <ErrorBanner message={data.supabase.error} />
-            )}
-
-            {/* Last Updated */}
-            {lastUpdated && (
-              <p className="text-center text-xs text-tertiary">
-                Last updated: {lastUpdated.toLocaleTimeString()}
-              </p>
-            )}
-          </>
-        )}
-      </div>
+          {/* Last Updated */}
+          {lastUpdated && (
+            <p className="text-center text-xs text-tertiary">
+              Last updated: {lastUpdated.toLocaleTimeString()}
+            </p>
+          )}
+        </>
+      )}
     </div>
   )
 }
 
 export default function AnalyticsPage() {
-  return (
-    <AdminAuthGuard>
-      <AnalyticsContent />
-    </AdminAuthGuard>
-  )
+  return <AnalyticsContent />
 }

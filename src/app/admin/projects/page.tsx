@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, Star, Pencil, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
 import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
@@ -188,9 +187,5 @@ function ProjectsContent() {
 }
 
 export default function ProjectsPage() {
-  return (
-    <AdminAuthGuard>
-      <ProjectsContent />
-    </AdminAuthGuard>
-  )
+  return <ProjectsContent />
 }

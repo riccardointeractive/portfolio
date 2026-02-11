@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Plus } from 'lucide-react'
-import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
 import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
@@ -181,9 +180,5 @@ function ShotsContent() {
 }
 
 export default function ShotsPage() {
-  return (
-    <AdminAuthGuard>
-      <ShotsContent />
-    </AdminAuthGuard>
-  )
+  return <ShotsContent />
 }

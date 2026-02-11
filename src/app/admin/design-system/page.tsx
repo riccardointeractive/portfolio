@@ -2,14 +2,13 @@
 
 import { Copy, Check } from 'lucide-react'
 import { useState } from 'react'
-import { AdminAuthGuard } from '../components/AdminAuthGuard'
 import { AdminPageHeader } from '../components/AdminPageHeader'
 import { Badge } from '@/components/ui/Badge'
 import { colors, typography, spacing, radius, transitions, shadows } from '@/config/design-tokens'
 
 export default function DesignSystemPage() {
   return (
-    <AdminAuthGuard>
+    <>
       {/* Page Header */}
       <div className="mb-10">
         <AdminPageHeader
@@ -27,7 +26,7 @@ export default function DesignSystemPage() {
         <TransitionsSection />
         <ComponentsSection />
       </div>
-    </AdminAuthGuard>
+    </>
   )
 }
 

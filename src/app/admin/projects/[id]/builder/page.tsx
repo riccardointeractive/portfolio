@@ -3,7 +3,6 @@
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Check, Loader2, Settings2 } from 'lucide-react'
-import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 import { BlockList } from '@/app/admin/components/builder/BlockList'
 import { useBuilder } from '@/app/admin/hooks/useBuilder'
@@ -142,9 +141,5 @@ export default function BuilderPage({
 }) {
   const { id } = use(params)
 
-  return (
-    <AdminAuthGuard>
-      <BuilderContent projectId={id} />
-    </AdminAuthGuard>
-  )
+  return <BuilderContent projectId={id} />
 }

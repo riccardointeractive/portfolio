@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
 import {
   ProjectMetadataForm,
   type ProjectFormData,
@@ -60,9 +59,5 @@ function NewProjectContent() {
 }
 
 export default function NewProjectPage() {
-  return (
-    <AdminAuthGuard>
-      <NewProjectContent />
-    </AdminAuthGuard>
-  )
+  return <NewProjectContent />
 }

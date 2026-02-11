@@ -1,7 +1,6 @@
 'use client'
 
 import { Globe, Github, Linkedin, Twitter, Mail, ExternalLink } from 'lucide-react'
-import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
 import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
 import { SettingsSection } from '@/app/admin/components/SettingsSection'
 import { SettingsField } from '@/app/admin/components/SettingsField'
@@ -141,9 +140,5 @@ function SettingsContent() {
 }
 
 export default function SettingsPage() {
-  return (
-    <AdminAuthGuard>
-      <SettingsContent />
-    </AdminAuthGuard>
-  )
+  return <SettingsContent />
 }

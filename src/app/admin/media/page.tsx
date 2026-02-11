@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { Trash2, Copy, Check, ExternalLink } from 'lucide-react'
-import { AdminAuthGuard } from '@/app/admin/components/AdminAuthGuard'
 import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
@@ -253,9 +252,5 @@ function MediaContent() {
 }
 
 export default function MediaPage() {
-  return (
-    <AdminAuthGuard>
-      <MediaContent />
-    </AdminAuthGuard>
-  )
+  return <MediaContent />
 }

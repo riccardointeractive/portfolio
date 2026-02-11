@@ -8,7 +8,6 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { tools, quickLinks, getQuickLinkIcon } from './config/admin.config'
-import { AdminAuthGuard } from './components/AdminAuthGuard'
 import { siteConfig } from '@/config/site'
 
 export default function AdminPage() {
@@ -24,7 +23,7 @@ export default function AdminPage() {
   )
 
   return (
-    <AdminAuthGuard>
+    <>
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="mb-2 font-display text-4xl text-primary">Admin Dashboard</h1>
@@ -128,7 +127,7 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
-    </AdminAuthGuard>
+    </>
   )
 }
 
