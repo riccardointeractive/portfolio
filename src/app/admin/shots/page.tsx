@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Plus } from 'lucide-react'
-import { PageHeader } from '@/app/admin/components/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
@@ -112,16 +111,12 @@ function ShotsContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader
-        title="Shots"
-        description="Manage your visual content — images, videos, code snippets, animations."
-        action={
-          <Button onClick={() => openEditor()}>
-            <Plus size={16} />
-            New Shot
-          </Button>
-        }
-      />
+      <div className="flex justify-end">
+        <Button onClick={() => openEditor()}>
+          <Plus size={16} />
+          New Shot
+        </Button>
+      </div>
 
       {/* Filters */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

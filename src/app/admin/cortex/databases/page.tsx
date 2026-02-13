@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
-import { PageHeader } from '@/app/admin/cortex/components/layout'
 import {
   Card, Button, Modal, Input, Textarea, Badge,
   ColorPicker, IconPicker, EmptyState
@@ -170,16 +169,12 @@ export default function DatabasesPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Databases"
-        description="Create and manage structured data collections"
-        action={
-          <Button onClick={openCreateModal}>
-            <Icon name="plus" size={18} />
-            New Database
-          </Button>
-        }
-      />
+      <div className="flex justify-end">
+        <Button onClick={openCreateModal}>
+          <Icon name="plus" size={18} />
+          New Database
+        </Button>
+      </div>
 
       {databases.length === 0 ? (
         <EmptyState

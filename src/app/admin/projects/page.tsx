@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, Star, Pencil, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { PageHeader } from '@/app/admin/components/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
@@ -64,16 +63,12 @@ function ProjectsContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader
-        title="Projects"
-        description="Study cases — create and manage your portfolio projects."
-        action={
-          <Button onClick={() => router.push('/admin/projects/new')}>
-            <Plus size={16} />
-            New Project
-          </Button>
-        }
-      />
+      <div className="flex justify-end">
+        <Button onClick={() => router.push('/admin/projects/new')}>
+          <Plus size={16} />
+          New Project
+        </Button>
+      </div>
 
       {/* Filters */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
