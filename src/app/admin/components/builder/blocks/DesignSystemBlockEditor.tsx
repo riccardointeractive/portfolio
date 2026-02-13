@@ -77,7 +77,7 @@ export function DesignSystemBlockEditor({ content, onChange }: DesignSystemBlock
             </select>
             <button
               onClick={() => removeToken(i)}
-              className="rounded p-1 text-tertiary transition-colors hover:text-red-500"
+              className="rounded p-1 text-tertiary transition-colors hover:text-error"
             >
               <X size={14} />
             </button>
