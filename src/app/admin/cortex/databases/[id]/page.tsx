@@ -11,9 +11,10 @@ import {
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
 import { cn, generateId, customColorBg } from '@/app/admin/cortex/lib/utils'
-import type {
-  Database, DatabaseRecord, DatabaseView, Field, FieldType,
-  FilterCondition, SortCondition, FieldOption, CardsViewConfig, TodoViewConfig, MyDayViewConfig
+import {
+  DATABASE_COLORS,
+  type Database, type DatabaseRecord, type DatabaseView, type Field, type FieldType,
+  type FilterCondition, type SortCondition, type FieldOption, type CardsViewConfig, type TodoViewConfig, type MyDayViewConfig
 } from '@/app/admin/cortex/lib/types'
 
 // Field type icons
@@ -90,27 +91,8 @@ const FILTER_OPERATORS: Record<FieldType, { value: string; label: string }[]> = 
   ],
 }
 
-// Select option colors
-const OPTION_COLORS = [
-  { name: 'Red', value: '#ef4444' },
-  { name: 'Orange', value: '#f97316' },
-  { name: 'Amber', value: '#f59e0b' },
-  { name: 'Yellow', value: '#eab308' },
-  { name: 'Lime', value: '#84cc16' },
-  { name: 'Green', value: '#22c55e' },
-  { name: 'Emerald', value: '#10b981' },
-  { name: 'Teal', value: '#14b8a6' },
-  { name: 'Cyan', value: '#06b6d4' },
-  { name: 'Sky', value: '#0ea5e9' },
-  { name: 'Blue', value: '#3b82f6' },
-  { name: 'Indigo', value: '#6366f1' },
-  { name: 'Violet', value: '#8b5cf6' },
-  { name: 'Purple', value: '#a855f7' },
-  { name: 'Fuchsia', value: '#d946ef' },
-  { name: 'Pink', value: '#ec4899' },
-  { name: 'Rose', value: '#f43f5e' },
-  { name: 'Gray', value: '#6b7280' },
-]
+// Select option colors — reuse shared palette
+const OPTION_COLORS = DATABASE_COLORS
 
 export default function DatabaseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)

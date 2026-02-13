@@ -1,11 +1,12 @@
 import { createAdminClient } from '@/lib/supabase/server'
-import type {
-  Database,
-  Field,
-  DatabaseRecord,
-  DatabaseView,
-  DashboardStats,
-  CortexData,
+import {
+  DEFAULT_DATABASE_COLOR,
+  type Database,
+  type Field,
+  type DatabaseRecord,
+  type DatabaseView,
+  type DashboardStats,
+  type CortexData,
 } from './types'
 import { generateId } from './utils'
 
@@ -71,7 +72,7 @@ export async function createDatabase(input: {
     name: input.name,
     description: input.description || '',
     icon: input.icon || 'folder',
-    color: input.color || '#3b82f6',
+    color: input.color || DEFAULT_DATABASE_COLOR,
     created_at: now,
     updated_at: now,
   })
@@ -127,7 +128,7 @@ export async function createDatabase(input: {
     name: input.name,
     description: input.description || '',
     icon: input.icon || 'folder',
-    color: input.color || '#3b82f6',
+    color: input.color || DEFAULT_DATABASE_COLOR,
     fields,
     records: [],
     views: [

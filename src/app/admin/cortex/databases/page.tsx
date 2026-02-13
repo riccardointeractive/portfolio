@@ -10,7 +10,7 @@ import {
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
 import { formatRelativeDate, customColorBg } from '@/app/admin/cortex/lib/utils'
-import type { Database } from '@/app/admin/cortex/lib/types'
+import { DEFAULT_DATABASE_COLOR, type Database } from '@/app/admin/cortex/lib/types'
 
 type SortField = 'name' | 'updatedAt' | 'records'
 type SortDirection = 'asc' | 'desc'
@@ -32,7 +32,7 @@ export default function DatabasesPage() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    color: '#3b82f6',
+    color: DEFAULT_DATABASE_COLOR,
     icon: 'folder'
   })
 
@@ -115,7 +115,7 @@ export default function DatabasesPage() {
       }
       setModalOpen(false)
       setEditingDatabase(null)
-      setFormData({ name: '', description: '', color: '#3b82f6', icon: 'folder' })
+      setFormData({ name: '', description: '', color: DEFAULT_DATABASE_COLOR, icon: 'folder' })
       loadData()
     } catch (error) {
       console.error('Failed to save database:', error)
@@ -124,7 +124,7 @@ export default function DatabasesPage() {
 
   const openCreateModal = () => {
     setEditingDatabase(null)
-    setFormData({ name: '', description: '', color: '#3b82f6', icon: 'folder' })
+    setFormData({ name: '', description: '', color: DEFAULT_DATABASE_COLOR, icon: 'folder' })
     setModalOpen(true)
   }
 

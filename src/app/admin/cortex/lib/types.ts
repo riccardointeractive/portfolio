@@ -135,3 +135,5 @@ export const DATABASE_COLORS = [
   { name: 'Rose', value: '#f43f5e' },
   { name: 'Gray', value: '#6b7280' },
 ] as const
+
+export const DEFAULT_DATABASE_COLOR = '#3b82f6' // Blue

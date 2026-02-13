@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Icon, AVAILABLE_ICONS } from './Icon'
+import { DEFAULT_DATABASE_COLOR } from '@/app/admin/cortex/lib/types'
 
 // Icon categories with keywords for search
 const ICON_DATA: { name: string; keywords: string[] }[] = [
@@ -155,7 +156,7 @@ export interface IconPickerProps {
   label?: string
 }
 
-export function IconPicker({ value, onChange, color = '#3b82f6', label }: IconPickerProps) {
+export function IconPicker({ value, onChange, color = DEFAULT_DATABASE_COLOR, label }: IconPickerProps) {
   const [search, setSearch] = useState('')
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null)
 
