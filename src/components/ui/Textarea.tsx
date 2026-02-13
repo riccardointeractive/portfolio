@@ -33,7 +33,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             'focus:outline-none focus:ring-1 transition-all duration-150',
             error
               ? 'border-error focus:border-error focus:ring-error'
-              : 'border-default focus:border-info focus:ring-info',
+              : 'border-border-default focus:border-info focus:ring-info',
             className
           )}
           {...props}

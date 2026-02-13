@@ -1,11 +1,11 @@
 export { Button } from '@/components/ui/Button'
 export type { ButtonProps } from '@/components/ui/Button'
 
-export { Input } from './Input'
-export type { InputProps } from './Input'
+export { Input } from '@/components/ui/Input'
+export type { InputProps } from '@/components/ui/Input'
 
-export { Textarea } from './Textarea'
-export type { TextareaProps } from './Textarea'
+export { Textarea } from '@/components/ui/Textarea'
+export type { TextareaProps } from '@/components/ui/Textarea'
 
 export { Select } from './Select'
 export type { SelectProps } from './Select'
