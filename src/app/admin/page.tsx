@@ -25,12 +25,6 @@ export default function AdminPage() {
 
   return (
     <>
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="mb-2 font-display text-4xl text-primary">Admin Dashboard</h1>
-        <p className="text-secondary">Manage portfolio content, projects, and settings</p>
-      </div>
-
       {/* Quick Stats */}
       <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatCard label="Total Tools" value={totalTools} icon={<Wrench size={20} />} />
