@@ -1,7 +1,6 @@
 'use client'
 
 import { forwardRef, InputHTMLAttributes } from 'react'
-import { Icon } from './Icon'
 import { cn } from '@/lib/utils'
 
 export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
@@ -24,13 +23,17 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           <div
             className={cn(
               'w-5 h-5 rounded border-2 flex items-center justify-center transition-colors',
-              'border-default peer-focus:ring-2 peer-focus:ring-info/50',
+              'border-border-default peer-focus:ring-2 peer-focus:ring-info/50',
               checked
                 ? 'bg-info border-info'
-                : 'bg-transparent hover:border-hover'
+                : 'bg-transparent hover:border-border-hover'
             )}
           >
-            {checked && <Icon name="check" size={14} weight="bold" className="text-toggle-knob" />}
+            {checked && (
+              <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" className="text-toggle-knob">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            )}
           </div>
         </div>
         {label && (

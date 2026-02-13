@@ -3,7 +3,7 @@
 import { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, ReactNode, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Icon } from './Icon'
-import { Checkbox } from './Checkbox'
+import { Checkbox } from '@/components/ui/Checkbox'
 
 // ============================================================================
 // TABLE WRAPPER

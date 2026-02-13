@@ -1,7 +1,6 @@
 'use client'
 
 import { forwardRef, SelectHTMLAttributes } from 'react'
-import { Icon } from './Icon'
 import { cn } from '@/lib/utils'
 
 export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
@@ -38,11 +37,19 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               </option>
             ))}
           </select>
-          <Icon
-            name="chevron-down"
-            size={16}
+          <svg
+            width={16}
+            height={16}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-tertiary pointer-events-none"
-          />
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
         </div>
         {error && (
           <p className="mt-1 text-sm text-error">{error}</p>
