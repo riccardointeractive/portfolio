@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import {
-  RefreshCw,
   FolderOpen,
   Camera,
   Upload,
@@ -13,7 +12,6 @@ import {
   FileVideo,
   Server,
 } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
 import { EnvIndicator } from '@/app/admin/components/EnvIndicator'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
@@ -209,13 +207,6 @@ function AnalyticsContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-end">
-        <Button variant="secondary" onClick={fetchAnalytics}>
-          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
-          Refresh
-        </Button>
-      </div>
-
       {/* Loading */}
       {loading && !data && <AdminLoadingSpinner />}
 
