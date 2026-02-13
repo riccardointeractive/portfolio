@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# old standalone cortex repo
+/cortex
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
