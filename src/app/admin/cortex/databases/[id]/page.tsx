@@ -1314,9 +1314,9 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                             <span>{completedCount}/{childRecords.length} completed</span>
                             <span>{progress}%</span>
                           </div>
-                          <div className="h-1.5 bg-elevated rounded-full overflow-hidden">
+                          <div className="h-2 bg-elevated rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-success rounded-full transition-all"
+                              className="h-full bg-success rounded-full transition-all duration-300 ease-out"
                               style={{ width: `${progress}%` }}
                             />
                           </div>
@@ -1433,7 +1433,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                         </div>
                         <div className="h-2 bg-elevated rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-success rounded-full transition-all"
+                            className="h-full bg-success rounded-full transition-all duration-300 ease-out"
                             style={{ width: `${progress}%` }}
                           />
                         </div>
@@ -1651,7 +1651,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
               </div>
               <div className="h-2 bg-elevated rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-success transition-all duration-300 ease-out"
+                  className="h-full bg-success rounded-full transition-all duration-300 ease-out"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -2009,14 +2009,9 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                   {completedToday.length}/{filteredRecords.length} completed
                 </span>
               </div>
-              <div className="h-3 bg-elevated rounded-full overflow-hidden">
+              <div className="h-2 bg-elevated rounded-full overflow-hidden">
                 <div
-                  className={cn(
-                    "h-full transition-all duration-500 ease-out rounded-full",
-                    allCompletedToday
-                      ? "bg-success"
-                      : "bg-interactive"
-                  )}
+                  className="h-full bg-success rounded-full transition-all duration-300 ease-out"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
