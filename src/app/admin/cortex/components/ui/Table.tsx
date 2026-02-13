@@ -99,7 +99,7 @@ export function TableRow({
       className={cn(
         'border-b border-border-default transition-colors',
         hoverable && 'hover:bg-elevated/50',
-        selected && 'bg-info/10',
+        selected && 'bg-elevated',
         className
       )}
       {...props}
@@ -385,7 +385,7 @@ export function TablePagination({
             <select
               value={pageSize}
               onChange={(e) => onPageSizeChange(Number(e.target.value))}
-              className="bg-base border border-border-default rounded-lg px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-info/50"
+              className="bg-base border border-border-default rounded-lg px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-border-active/50"
             >
               {pageSizes.map((size) => (
                 <option key={size} value={size}>{size}</option>
@@ -436,7 +436,7 @@ export function TablePagination({
                 className={cn(
                   'min-w-8 h-8 px-2 rounded-lg text-sm font-medium transition-colors',
                   page === pageNum
-                    ? 'bg-info text-toggle-knob'
+                    ? 'bg-inverted text-on-inverted'
                     : 'text-secondary hover:text-primary hover:bg-elevated'
                 )}
               >
