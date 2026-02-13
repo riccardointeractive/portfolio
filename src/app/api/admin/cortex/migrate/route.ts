@@ -16,7 +16,9 @@ import type { CortexData } from '@/app/admin/cortex/lib/types'
 /**
  * GET /api/admin/cortex/migrate
  *
- * Debug: shows what's in Redis (without migrating)
+ * Debug: shows what's in Redis (without migrating).
+ * Reads both current `cortex-databases` and legacy keys
+ * (`cortex-spheres`, `cortex-projects`, `cortex-tasks`).
  */
 export async function GET(request: NextRequest) {
   const auth = await verifyAdminRequest(request)
@@ -28,25 +30,36 @@ export async function GET(request: NextRequest) {
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
     })
 
+    // Read current databases key
     const databases = await redis.get<CortexData['databases']>('cortex-databases')
 
-    if (!databases || databases.length === 0) {
-      return NextResponse.json({ success: true, data: { message: 'Redis is empty', databases: [] } })
-    }
+    // Read legacy keys (pre-Jan 7 format: separate spheres/projects/tasks)
+    const [spheres, projects, tasks] = await Promise.all([
+      redis.get<unknown[]>('cortex-spheres'),
+      redis.get<unknown[]>('cortex-projects'),
+      redis.get<unknown[]>('cortex-tasks'),
+    ])
 
     return NextResponse.json({
       success: true,
       data: {
-        totalDatabases: databases.length,
-        databases: databases.map(db => ({
-          id: db.id,
-          name: db.name,
-          icon: db.icon,
-          color: db.color,
-          fieldCount: db.fields.length,
-          recordCount: db.records.length,
-          viewCount: db.views.length,
-        })),
+        databases: {
+          total: databases?.length ?? 0,
+          items: (databases || []).map(db => ({
+            id: db.id,
+            name: db.name,
+            icon: db.icon,
+            color: db.color,
+            fieldCount: db.fields.length,
+            recordCount: db.records.length,
+            viewCount: db.views.length,
+          })),
+        },
+        legacy: {
+          spheres: spheres || [],
+          projects: projects || [],
+          tasks: tasks || [],
+        },
       },
     })
   } catch (error) {
