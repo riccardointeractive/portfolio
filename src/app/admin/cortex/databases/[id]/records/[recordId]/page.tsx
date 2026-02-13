@@ -227,7 +227,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
                 className={cn(
                   'px-3 py-1 rounded-full text-sm transition-colors',
                   selectedValues.includes(opt.id)
-                    ? 'ring-2 ring-info'
+                    ? 'ring-2 ring-border-active'
                     : 'opacity-50 hover:opacity-100'
                 )}
                 style={{ backgroundColor: `${opt.color}30`, color: opt.color }}
@@ -267,7 +267,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
                   className={cn(
                     'px-3 py-1 rounded-lg text-sm bg-elevated transition-all',
                     selectedIds.includes(rec.id)
-                      ? 'ring-2 ring-info text-primary'
+                      ? 'ring-2 ring-border-active text-primary'
                       : 'opacity-50 hover:opacity-100 text-tertiary'
                   )}
                 >
@@ -307,14 +307,14 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
 
       case 'email':
         return (
-          <a href={`mailto:${value}`} className="text-info hover:underline" onClick={e => e.stopPropagation()}>
+          <a href={`mailto:${value}`} className="text-interactive hover:underline" onClick={e => e.stopPropagation()}>
             {String(value)}
           </a>
         )
 
       case 'url':
         return (
-          <a href={String(value)} target="_blank" rel="noopener noreferrer" className="text-info hover:underline" onClick={e => e.stopPropagation()}>
+          <a href={String(value)} target="_blank" rel="noopener noreferrer" className="text-interactive hover:underline" onClick={e => e.stopPropagation()}>
             {String(value)}
           </a>
         )

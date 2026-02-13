@@ -255,7 +255,7 @@ export default function DatabasesPage() {
                           <Icon
                             name={sortDirection === 'asc' ? 'sort-ascending' : 'sort-descending'}
                             size={14}
-                            className="text-info"
+                            className="text-primary"
                           />
                         )}
                       </button>

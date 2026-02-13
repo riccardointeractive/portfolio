@@ -672,14 +672,14 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
             href={String(value)}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-info hover:underline truncate block max-w-48"
+            className="text-interactive hover:underline truncate block max-w-48"
           >
             {String(value)}
           </a>
         ) : <span className="text-tertiary">-</span>
       case 'email':
         return value ? (
-          <a href={`mailto:${value}`} className="text-info hover:underline">
+          <a href={`mailto:${value}`} className="text-interactive hover:underline">
             {String(value)}
           </a>
         ) : <span className="text-tertiary">-</span>
@@ -777,7 +777,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                   className={cn(
                     'px-3 py-1 rounded-full text-sm border transition-colors',
                     selected.includes(opt.id)
-                      ? 'border-transparent text-white'
+                      ? 'border-transparent text-on-inverted'
                       : 'border-default text-tertiary hover:border-hover'
                   )}
                   style={selected.includes(opt.id) ? { backgroundColor: opt.color } : undefined}
@@ -865,7 +865,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       className={cn(
                         'px-3 py-1 rounded-full text-sm border transition-colors',
                         isSelected
-                          ? 'bg-info border-info text-white'
+                          ? 'bg-inverted border-inverted text-on-inverted'
                           : 'border-default text-tertiary hover:border-hover'
                       )}
                     >
@@ -948,7 +948,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
             className={cn(
               'group px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors flex items-center gap-2',
               activeViewId === view.id
-                ? 'border-info text-primary'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-tertiary hover:text-secondary'
             )}
           >
@@ -1126,7 +1126,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                     <TableHead className="w-8 px-2"></TableHead>
                   )}
                   {visibleFields.map(field => (
-                    <TableHead key={field.id} className="min-w-[150px]">
+                    <TableHead key={field.id} className="min-w-40">
                       <div className="flex items-center gap-2 group">
                         <Icon name={FIELD_TYPE_ICONS[field.type]} size={14} className="text-tertiary" />
                         <span className="flex-1">{field.name}</span>
@@ -1692,7 +1692,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
               </form>
 
               {/* Incomplete Items (todo) */}
-              <div className="divide-y divide-default">
+              <div className="divide-y divide-border-default">
                 {todoItems.length === 0 && doneItems.length === 0 && (
                   <div className="px-4 py-8 text-center text-tertiary">
                     <Icon name="check-circle" size={32} className="mx-auto mb-2 opacity-50" />
@@ -1742,7 +1742,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       </button>
                       <button
                         onClick={() => handleDeleteRecord(rec.id)}
-                        className="p-1.5 text-tertiary hover:text-red-400 hover:bg-red-500/10 rounded"
+                        className="p-1.5 text-tertiary hover:text-error hover:bg-error/10 rounded"
                         title="Delete"
                       >
                         <Icon name="trash" size={14} />
@@ -1766,7 +1766,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                     <span>Completed ({doneItems.length})</span>
                   </button>
                   {!todoCompletedCollapsed && (
-                    <div className="divide-y divide-default bg-base/50">
+                    <div className="divide-y divide-border-default bg-base/50">
                       {doneItems.map(rec => (
                         <div
                           key={rec.id}
@@ -1804,7 +1804,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                             </button>
                             <button
                               onClick={() => handleDeleteRecord(rec.id)}
-                              className="p-1.5 text-tertiary hover:text-red-400 hover:bg-red-500/10 rounded"
+                              className="p-1.5 text-tertiary hover:text-error hover:bg-error/10 rounded"
                               title="Delete"
                             >
                               <Icon name="trash" size={14} />
@@ -2015,7 +2015,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                     "h-full transition-all duration-500 ease-out rounded-full",
                     allCompletedToday
                       ? "bg-success"
-                      : "bg-info"
+                      : "bg-interactive"
                   )}
                   style={{ width: `${progressPercent}%` }}
                 />
@@ -2037,7 +2037,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                   <p className="text-sm mt-1">Add records to start tracking your day!</p>
                 </div>
               ) : (
-                <div className="divide-y divide-default">
+                <div className="divide-y divide-border-default">
                   {/* Pending habits first */}
                   {pendingToday.map(rec => (
                     <div
