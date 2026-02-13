@@ -237,26 +237,22 @@ function AnalyticsContent() {
                 label="Projects"
                 value={tables.projects.total ?? 0}
                 detail={`${tables.projects.published ?? 0} published, ${tables.projects.draft ?? 0} draft`}
-                accentClass="bg-accent-blue-subtle text-accent-blue"
               />
               <StatCard
                 icon={<Camera size={18} />}
                 label="Shots"
                 value={tables.shots.total ?? 0}
-                accentClass="bg-accent-purple-subtle text-accent-purple"
               />
               <StatCard
                 icon={<Upload size={18} />}
                 label="Media Files"
                 value={tables.media.total ?? 0}
                 detail={`${tables.media.images ?? 0} images, ${tables.media.videos ?? 0} videos`}
-                accentClass="bg-accent-green-subtle text-accent-green"
               />
               <StatCard
                 icon={<Layers size={18} />}
                 label="Content Blocks"
                 value={tables.project_blocks.total ?? 0}
-                accentClass="bg-accent-orange-subtle text-accent-orange"
               />
             </div>
           )}
