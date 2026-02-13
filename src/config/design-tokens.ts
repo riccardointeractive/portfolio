@@ -29,6 +29,10 @@ export const colors = {
       default: '#3f3f46',
       hover: '#27272a',
     },
+    inverted: {
+      bg: '#18181b',
+      text: '#fafafa',
+    },
     status: {
       error: '#dc2626',
       success: '#16a34a',
@@ -63,6 +67,10 @@ export const colors = {
     interactive: {
       default: '#d4d4d8',
       hover: '#fafafa',
+    },
+    inverted: {
+      bg: '#fafafa',
+      text: '#09090b',
     },
     status: {
       error: '#f87171',

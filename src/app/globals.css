@@ -53,6 +53,10 @@
   /* Toggle */
   --toggle-knob: #ffffff;
 
+  /* Inverted (primary buttons: dark bg + light text in light, reversed in dark) */
+  --bg-inverted: #18181b;
+  --text-inverted: #fafafa;
+
   /* Overlay */
   --overlay: rgba(0, 0, 0, 0.5);
 
@@ -103,6 +107,10 @@
 
   /* Toggle */
   --toggle-knob: #ffffff;
+
+  /* Inverted */
+  --bg-inverted: #fafafa;
+  --text-inverted: #09090b;
 
   --overlay: rgba(0, 0, 0, 0.7);
 
@@ -204,6 +212,10 @@
 
   /* Toggle */
   --color-toggle-knob: var(--toggle-knob);
+
+  /* Inverted */
+  --color-inverted: var(--bg-inverted);
+  --color-on-inverted: var(--text-inverted);
 
   /* Typography */
   --font-display: var(--font-display);
