@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Card, Button, Input, Select, Badge, Checkbox } from '@/app/admin/cortex/components/ui'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
-import { cn } from '@/app/admin/cortex/lib/utils'
+import { cn, customColorBg, customColorStyle } from '@/app/admin/cortex/lib/utils'
 import type { Database, DatabaseRecord, Field, FieldType } from '@/app/admin/cortex/lib/types'
 
 // Field type icons
@@ -230,7 +230,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
                     ? 'ring-2 ring-border-active'
                     : 'opacity-50 hover:opacity-100'
                 )}
-                style={{ backgroundColor: `${opt.color}30`, color: opt.color }}
+                style={customColorStyle(opt.color, '30')}
               >
                 {opt.label}
               </button>
@@ -443,7 +443,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
         <div className="flex items-center gap-3 flex-1">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ backgroundColor: `${database.color}20` }}
+            style={customColorBg(database.color)}
           >
             <Icon name={database.icon} size={24} color={database.color} weight="fill" />
           </div>

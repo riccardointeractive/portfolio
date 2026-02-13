@@ -10,7 +10,7 @@ import {
 } from '@/app/admin/cortex/components/ui'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
-import { cn, generateId } from '@/app/admin/cortex/lib/utils'
+import { cn, generateId, customColorBg } from '@/app/admin/cortex/lib/utils'
 import type {
   Database, DatabaseRecord, DatabaseView, Field, FieldType,
   FilterCondition, SortCondition, FieldOption, CardsViewConfig, TodoViewConfig, MyDayViewConfig
@@ -927,7 +927,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
         </button>
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ backgroundColor: `${database.color}20` }}
+          style={customColorBg(database.color)}
         >
           <Icon name={database.icon} size={24} color={database.color} weight="fill" />
         </div>

@@ -9,7 +9,7 @@ import {
 } from '@/app/admin/cortex/components/ui'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
-import { formatRelativeDate } from '@/app/admin/cortex/lib/utils'
+import { formatRelativeDate, customColorBg } from '@/app/admin/cortex/lib/utils'
 import type { Database } from '@/app/admin/cortex/lib/types'
 
 type SortField = 'name' | 'updatedAt' | 'records'
@@ -296,7 +296,7 @@ export default function DatabasesPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div
                         className="w-12 h-12 rounded-xl flex items-center justify-center"
-                        style={{ backgroundColor: `${db.color}20` }}
+                        style={customColorBg(db.color)}
                       >
                         <Icon name={db.icon} size={24} color={db.color} weight="fill" />
                       </div>

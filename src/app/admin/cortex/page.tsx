@@ -7,7 +7,7 @@ import { Card, Button } from '@/app/admin/cortex/components/ui'
 import { StatCard } from '@/components/ui/StatCard'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { dashboardApi } from '@/app/admin/cortex/lib/api'
-import { formatRelativeDate } from '@/app/admin/cortex/lib/utils'
+import { formatRelativeDate, customColorBg } from '@/app/admin/cortex/lib/utils'
 import type { DashboardStats } from '@/app/admin/cortex/lib/types'
 
 export default function DashboardPage() {
@@ -96,7 +96,7 @@ export default function DashboardPage() {
                 >
                   <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: `${db.color}20` }}
+                    style={customColorBg(db.color)}
                   >
                     <Icon name={db.icon} size={20} color={db.color} weight="fill" />
                   </div>

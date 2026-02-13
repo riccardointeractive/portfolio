@@ -76,6 +76,18 @@ export function getStatusColor(status: 'active' | 'completed' | 'archived'): 'in
   }
 }
 
+// Custom color styles — for user-defined colors (database icons, select options, etc.)
+export function customColorBg(color: string, opacity: string = '20'): React.CSSProperties {
+  return { backgroundColor: `${color}${opacity}` }
+}
+
+export function customColorStyle(color: string, opacity?: string): React.CSSProperties {
+  if (opacity) {
+    return { backgroundColor: `${color}${opacity}`, color }
+  }
+  return { backgroundColor: color }
+}
+
 // Download JSON helper
 export function downloadJson(data: object, filename: string): void {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
