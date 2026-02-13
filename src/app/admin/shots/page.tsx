@@ -6,7 +6,7 @@ import { PageHeader } from '@/app/admin/components/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
-import { AdminEmptyState } from '@/app/admin/components/AdminEmptyState'
+import { EmptyState } from '@/app/admin/components/EmptyState'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 import { AdminPagination } from '@/app/admin/components/AdminPagination'
 import { ShotCard } from '@/app/admin/components/ShotCard'
@@ -141,10 +141,14 @@ function ShotsContent() {
       {loading ? (
         <AdminLoadingSpinner />
       ) : shots.length === 0 ? (
-        <AdminEmptyState
-          message="No shots yet"
-          actionLabel="Create your first shot"
-          onAction={() => openEditor()}
+        <EmptyState
+          title="No shots yet"
+          action={
+            <Button variant="ghost" onClick={() => openEditor()}>
+              Create your first shot
+            </Button>
+          }
+          className="rounded-xl border border-dashed border-border-default"
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

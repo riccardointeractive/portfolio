@@ -7,7 +7,7 @@ import { PageHeader } from '@/app/admin/components/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
-import { AdminEmptyState } from '@/app/admin/components/AdminEmptyState'
+import { EmptyState } from '@/app/admin/components/EmptyState'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/content'
@@ -93,10 +93,14 @@ function ProjectsContent() {
       {loading ? (
         <AdminLoadingSpinner />
       ) : projects.length === 0 ? (
-        <AdminEmptyState
-          message="No projects yet"
-          actionLabel="Create your first project"
-          onAction={() => router.push('/admin/projects/new')}
+        <EmptyState
+          title="No projects yet"
+          action={
+            <Button variant="ghost" onClick={() => router.push('/admin/projects/new')}>
+              Create your first project
+            </Button>
+          }
+          className="rounded-xl border border-dashed border-border-default"
         />
       ) : (
         <div className="overflow-hidden rounded-xl border border-border-default">

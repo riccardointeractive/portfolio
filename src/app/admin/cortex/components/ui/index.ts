@@ -19,8 +19,8 @@ export type { CardProps } from '@/components/ui/Card'
 export { Modal } from '@/components/ui/Modal'
 export type { ModalProps } from '@/components/ui/Modal'
 
-export { EmptyState } from './EmptyState'
-export type { EmptyStateProps } from './EmptyState'
+export { EmptyState } from '@/app/admin/components/EmptyState'
+export type { EmptyStateProps } from '@/app/admin/components/EmptyState'
 
 export { Checkbox } from '@/components/ui/Checkbox'
 export type { CheckboxProps } from '@/components/ui/Checkbox'

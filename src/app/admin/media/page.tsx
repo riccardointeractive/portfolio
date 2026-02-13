@@ -7,7 +7,7 @@ import { PageHeader } from '@/app/admin/components/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
-import { AdminEmptyState } from '@/app/admin/components/AdminEmptyState'
+import { EmptyState } from '@/app/admin/components/EmptyState'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 import { AdminPagination } from '@/app/admin/components/AdminPagination'
 import { MediaUploader } from '@/app/admin/components/MediaUploader'
@@ -126,10 +126,14 @@ function MediaContent() {
           {loading ? (
             <AdminLoadingSpinner />
           ) : items.length === 0 ? (
-            <AdminEmptyState
-              message="No media files"
-              actionLabel="Upload your first file"
-              onAction={() => setShowUploader(true)}
+            <EmptyState
+              title="No media files"
+              action={
+                <Button variant="ghost" onClick={() => setShowUploader(true)}>
+                  Upload your first file
+                </Button>
+              }
+              className="rounded-xl border border-dashed border-border-default"
             />
           ) : (
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
