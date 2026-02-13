@@ -957,7 +957,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
             <span className="hidden group-hover:inline-flex items-center gap-1 ml-1">
               <span
                 onClick={(e) => { e.stopPropagation(); openEditView(view) }}
-                className="p-0.5 hover:bg-elevated hover:text-primary rounded transition-all"
+                className="p-0.5 hover:bg-elevated hover:text-primary rounded transition-all cursor-pointer"
                 title="Edit view"
               >
                 <Icon name="edit" size={12} />
@@ -965,7 +965,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
               {database.views.length > 1 && (
                 <span
                   onClick={(e) => { e.stopPropagation(); handleDeleteView(view.id) }}
-                  className="p-0.5 hover:bg-error-subtle hover:text-error rounded transition-all"
+                  className="p-0.5 hover:bg-error-subtle hover:text-error rounded transition-all cursor-pointer"
                   title="Delete view"
                 >
                   <Icon name="close" size={12} />
