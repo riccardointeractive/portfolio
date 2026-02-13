@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       tables: tables.map((t) => t.table_name),
-      message: `${tables.length} Cortex tables ready. You can now use POST /api/admin/cortex/migrate to transfer Redis data.`,
+      message: `${tables.length} Cortex tables ready.`,
     })
   } catch (error) {
     await sql.end()
