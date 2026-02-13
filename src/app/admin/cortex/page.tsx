@@ -81,7 +81,7 @@ export default function DashboardPage() {
             <Link href="/admin/cortex/databases">
               <Button variant="ghost" size="sm">
                 View All
-                <Icon name="arrow-out" size={16} />
+                <Icon name="chevron-right" size={16} />
               </Button>
             </Link>
           </div>
@@ -106,7 +106,7 @@ export default function DashboardPage() {
                       {db.recordCount} records • Updated {formatRelativeDate(db.updatedAt)}
                     </p>
                   </div>
-                  <Icon name="arrow-out" size={16} className="text-tertiary" />
+                  <Icon name="chevron-right" size={16} className="text-tertiary" />
                 </Link>
               ))}
             </div>
