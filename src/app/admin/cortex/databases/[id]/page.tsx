@@ -1173,7 +1173,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                 >
                   {canDragRecords && (
                     <TableCell className="w-8 px-2">
-                      <Icon name="grip" size={16} className="text-tertiary" />
+                      <Icon name="grip" size={16} className="text-secondary" />
                     </TableCell>
                   )}
                   {visibleFields.map(field => (
@@ -1720,7 +1720,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                     onDrop={e => handleDrop(e, rec.id)}
                   >
                     {canDragRecords && (
-                      <Icon name="grip" size={16} className="text-tertiary opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <Icon name="grip" size={16} className="text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                     )}
                     <Checkbox
                       checked={isDone(rec.values[checkboxField.id])}
@@ -1782,7 +1782,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                           onDrop={e => handleDrop(e, rec.id)}
                         >
                           {canDragRecords && (
-                            <Icon name="grip" size={16} className="text-tertiary opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <Icon name="grip" size={16} className="text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                           )}
                           <Checkbox
                             checked={isDone(rec.values[checkboxField.id])}
@@ -2054,7 +2054,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       onDrop={e => handleDrop(e, rec.id)}
                     >
                       {canDragRecords && (
-                        <Icon name="grip" size={16} className="text-tertiary opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Icon name="grip" size={16} className="text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                       )}
                       <Checkbox
                         checked={false}
@@ -2100,7 +2100,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       onDrop={e => handleDrop(e, rec.id)}
                     >
                       {canDragRecords && (
-                        <Icon name="grip" size={16} className="text-tertiary opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Icon name="grip" size={16} className="text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                       )}
                       <Checkbox
                         checked={true}
