@@ -13,6 +13,48 @@ import type { CortexData } from '@/app/admin/cortex/lib/types'
  * and inserts it into Supabase tables. Safe to run multiple times
  * (it replaces existing data).
  */
+/**
+ * GET /api/admin/cortex/migrate
+ *
+ * Debug: shows what's in Redis (without migrating)
+ */
+export async function GET(request: NextRequest) {
+  const auth = await verifyAdminRequest(request)
+  if (!auth.authorized) return auth.response
+
+  try {
+    const redis = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    })
+
+    const databases = await redis.get<CortexData['databases']>('cortex-databases')
+
+    if (!databases || databases.length === 0) {
+      return NextResponse.json({ success: true, data: { message: 'Redis is empty', databases: [] } })
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        totalDatabases: databases.length,
+        databases: databases.map(db => ({
+          id: db.id,
+          name: db.name,
+          icon: db.icon,
+          color: db.color,
+          fieldCount: db.fields.length,
+          recordCount: db.records.length,
+          viewCount: db.views.length,
+        })),
+      },
+    })
+  } catch (error) {
+    console.error('Redis read error:', error)
+    return NextResponse.json({ success: false, error: 'Failed to read Redis' }, { status: 500 })
+  }
+}
+
 export async function POST(request: NextRequest) {
   const auth = await verifyAdminRequest(request)
   if (!auth.authorized) return auth.response
