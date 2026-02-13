@@ -35,7 +35,6 @@ function SocialLink({
 function SettingsContent() {
   return (
     <div className="flex flex-col gap-6">
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         {/* General */}
         <SettingsSection
           title="General"
@@ -128,7 +127,6 @@ function SettingsContent() {
             and redeploy.
           </p>
         </div>
-      </div>
     </div>
   )
 }
