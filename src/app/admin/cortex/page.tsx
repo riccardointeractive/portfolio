@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { PageHeader } from '@/app/admin/cortex/components/layout'
 import { Card, Button } from '@/app/admin/cortex/components/ui'
+import { StatCard } from '@/components/ui/StatCard'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { dashboardApi } from '@/app/admin/cortex/lib/api'
 import { formatRelativeDate } from '@/app/admin/cortex/lib/utils'
@@ -43,33 +44,19 @@ export default function DashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card>
-          <div className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-tertiary">Databases</p>
-                <div className="font-display text-2xl text-primary mt-1">{stats?.totalDatabases || 0}</div>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-info-subtle flex items-center justify-center">
-                <Icon name="layers" size={24} className="text-info" />
-              </div>
-            </div>
-          </div>
-        </Card>
+        <StatCard
+          label="Databases"
+          value={stats?.totalDatabases || 0}
+          icon={<Icon name="layers" size={20} className="text-info" />}
+          accentClass="bg-info-subtle text-info"
+        />
 
-        <Card>
-          <div className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-tertiary">Total Records</p>
-                <div className="font-display text-2xl text-primary mt-1">{stats?.totalRecords || 0}</div>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-accent-green-subtle flex items-center justify-center">
-                <Icon name="list" size={24} className="text-accent-green" />
-              </div>
-            </div>
-          </div>
-        </Card>
+        <StatCard
+          label="Total Records"
+          value={stats?.totalRecords || 0}
+          icon={<Icon name="list" size={20} className="text-accent-green" />}
+          accentClass="bg-accent-green-subtle text-accent-green"
+        />
 
         <Card>
           <Link href="/admin/cortex/databases" className="block p-5">
@@ -78,8 +65,8 @@ export default function DashboardPage() {
                 <p className="text-sm text-tertiary">Quick Action</p>
                 <p className="font-display text-lg text-primary mt-1">Create Database</p>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-accent-purple-subtle flex items-center justify-center">
-                <Icon name="plus" size={24} className="text-accent-purple" />
+              <div className="w-10 h-10 rounded-xl bg-accent-purple-subtle flex items-center justify-center">
+                <Icon name="plus" size={20} className="text-accent-purple" />
               </div>
             </div>
           </Link>

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { PageHeader } from '@/app/admin/components/PageHeader'
 import { Button } from '@/components/ui/Button'
+import { StatCard } from '@/components/ui/StatCard'
 import { EnvIndicator } from '@/app/admin/components/EnvIndicator'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 
@@ -51,33 +52,6 @@ function formatBytes(bytes: number | null | undefined): string {
 // ============================================================================
 // Local components
 // ============================================================================
-
-function MetricCard({
-  icon,
-  label,
-  value,
-  detail,
-  accentClass,
-}: {
-  icon: React.ReactNode
-  label: string
-  value: string | number
-  detail?: string
-  accentClass: string
-}) {
-  return (
-    <div className="rounded-xl border border-border-default bg-surface p-5">
-      <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${accentClass}`}>
-        {icon}
-      </div>
-      <div className="font-display text-2xl text-primary">{value}</div>
-      <div className="mt-1 text-sm text-tertiary">{label}</div>
-      {detail && (
-        <div className="mt-0.5 text-xs text-tertiary">{detail}</div>
-      )}
-    </div>
-  )
-}
 
 function SectionCard({
   title,
@@ -258,27 +232,27 @@ function AnalyticsContent() {
           {/* Content Metrics — Top Grid */}
           {tables && (
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-              <MetricCard
+              <StatCard
                 icon={<FolderOpen size={18} />}
                 label="Projects"
                 value={tables.projects.total ?? 0}
                 detail={`${tables.projects.published ?? 0} published, ${tables.projects.draft ?? 0} draft`}
                 accentClass="bg-accent-blue-subtle text-accent-blue"
               />
-              <MetricCard
+              <StatCard
                 icon={<Camera size={18} />}
                 label="Shots"
                 value={tables.shots.total ?? 0}
                 accentClass="bg-accent-purple-subtle text-accent-purple"
               />
-              <MetricCard
+              <StatCard
                 icon={<Upload size={18} />}
                 label="Media Files"
                 value={tables.media.total ?? 0}
                 detail={`${tables.media.images ?? 0} images, ${tables.media.videos ?? 0} videos`}
                 accentClass="bg-accent-green-subtle text-accent-green"
               />
-              <MetricCard
+              <StatCard
                 icon={<Layers size={18} />}
                 label="Content Blocks"
                 value={tables.project_blocks.total ?? 0}

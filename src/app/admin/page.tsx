@@ -7,6 +7,7 @@ import {
   Clock,
   ChevronRight,
 } from 'lucide-react'
+import { StatCard } from '@/components/ui/StatCard'
 import { tools, quickLinks, getQuickLinkIcon } from './config/admin.config'
 import { siteConfig } from '@/config/site'
 
@@ -132,28 +133,8 @@ export default function AdminPage() {
 }
 
 // ============================================================================
-// Local components (admin-specific, not shared)
+// Local components (page-specific, not shared)
 // ============================================================================
-
-function StatCard({
-  label,
-  value,
-  icon,
-}: {
-  label: string
-  value: number | string
-  icon: React.ReactNode
-}) {
-  return (
-    <div className="rounded-xl border border-border-default bg-surface p-5">
-      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-elevated text-secondary">
-        {icon}
-      </div>
-      <div className="font-display text-2xl text-primary">{value}</div>
-      <div className="mt-1 text-sm text-tertiary">{label}</div>
-    </div>
-  )
-}
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
