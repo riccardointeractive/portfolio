@@ -500,7 +500,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
 
             return (
               <Card key={`${relDb.id}-${field.id}`} className="overflow-hidden">
-                <div className="px-4 py-3 bg-elevated border-b border-default flex items-center gap-2">
+                <div className="px-4 py-3 bg-elevated border-b border-border-default flex items-center gap-2">
                   <Icon name={relDb.icon} size={16} color={relDb.color} weight="fill" />
                   <span className="font-medium text-primary">{relDb.name}</span>
                   <span className="text-xs text-tertiary">via {field.name}</span>
@@ -590,7 +590,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
                       console.error('Failed to add record:', error)
                     }
                   }}
-                  className="px-4 py-3 border-t border-default flex items-center gap-2"
+                  className="px-4 py-3 border-t border-border-default flex items-center gap-2"
                 >
                   <Icon name="plus" size={16} className="text-tertiary shrink-0" />
                   <input

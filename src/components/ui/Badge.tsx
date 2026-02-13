@@ -17,7 +17,7 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const variants = {
-    default: 'bg-elevated text-secondary border-default',
+    default: 'bg-elevated text-secondary border-border-default',
     primary: 'bg-info/10 text-info border-info/20',
     success: 'bg-success/10 text-success border-success/20',
     warning: 'bg-warning/10 text-warning border-warning/20',

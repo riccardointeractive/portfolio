@@ -182,7 +182,7 @@ export function IconPicker({ value, onChange, color = '#3b82f6', label }: IconPi
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search icons..."
-          className="w-full px-4 py-2.5 bg-surface text-primary rounded-lg border border-default placeholder-tertiary focus:outline-none focus:border-info focus:ring-1 focus:ring-info transition-all duration-150 pl-9 py-2 text-sm"
+          className="w-full px-4 py-2.5 bg-surface text-primary rounded-lg border border-border-default placeholder-tertiary focus:outline-none focus:border-info focus:ring-1 focus:ring-info transition-all duration-150 pl-9 py-2 text-sm"
         />
       </div>
 
@@ -204,7 +204,7 @@ export function IconPicker({ value, onChange, color = '#3b82f6', label }: IconPi
                 'hover:bg-elevated focus:outline-none',
                 isSelected
                   ? 'bg-elevated border-2'
-                  : 'border border-default hover:border-hover'
+                  : 'border border-border-default hover:border-hover'
               )}
               style={isSelected ? { borderColor: color } : {}}
               title={icon.name}

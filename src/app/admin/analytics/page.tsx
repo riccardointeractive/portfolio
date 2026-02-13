@@ -65,7 +65,7 @@ function MetricCard({
   accentClass: string
 }) {
   return (
-    <div className="rounded-xl border border-default bg-surface p-5">
+    <div className="rounded-xl border border-border-default bg-surface p-5">
       <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${accentClass}`}>
         {icon}
       </div>
@@ -88,8 +88,8 @@ function SectionCard({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-xl border border-default bg-surface">
-      <div className="border-b border-default px-5 py-4">
+    <div className="rounded-xl border border-border-default bg-surface">
+      <div className="border-b border-border-default px-5 py-4">
         <h2 className="text-sm font-medium text-primary">{title}</h2>
         {description && (
           <p className="mt-0.5 text-xs text-tertiary">{description}</p>
@@ -110,7 +110,7 @@ function StorageRow({
   value: string | number
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-default px-4 py-3">
+    <div className="flex items-center gap-3 rounded-lg border border-border-default px-4 py-3">
       <span className="text-tertiary">{icon}</span>
       <span className="flex-1 text-sm text-secondary">{label}</span>
       <span className="text-sm font-medium text-primary font-mono">{value}</span>
@@ -134,7 +134,7 @@ function StorageUsageCard({
   const source = r2Bytes >= dbBytes ? 'R2' : 'DB'
 
   return (
-    <div className="rounded-xl border border-default bg-surface p-5">
+    <div className="rounded-xl border border-border-default bg-surface p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-blue-subtle">

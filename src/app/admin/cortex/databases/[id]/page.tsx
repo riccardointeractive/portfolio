@@ -940,7 +940,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* View Tabs */}
-      <div className="flex items-center gap-2 border-b border-default">
+      <div className="flex items-center gap-2 border-b border-border-default">
         {database.views.map(view => (
           <button
             key={view.id}
@@ -1298,7 +1298,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                     className="flex flex-col cursor-pointer hover:bg-elevated transition-colors"
                     onClick={() => setExpandedCardId(parentRecord.id)}
                   >
-                    <div className="p-4 border-b border-default">
+                    <div className="p-4 border-b border-border-default">
                       <div className="flex items-center justify-between">
                         <h3 className="font-display text-base text-primary">{parentName}</h3>
                         <div className="flex items-center gap-2">
@@ -1573,7 +1573,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                         console.error('Failed to add record:', error)
                       }
                     }}
-                    className="flex items-center gap-2 pt-2 border-t border-default"
+                    className="flex items-center gap-2 pt-2 border-t border-border-default"
                   >
                     <Icon name="plus" size={16} className="text-tertiary shrink-0" />
                     <input
@@ -1678,7 +1678,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                     console.error('Failed to add record:', error)
                   }
                 }}
-                className="flex items-center gap-3 px-4 py-3 border-b border-default"
+                className="flex items-center gap-3 px-4 py-3 border-b border-border-default"
               >
                 <Icon name="plus" size={18} className="text-tertiary" />
                 <input
@@ -1754,7 +1754,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
 
               {/* Completed Items */}
               {showCompleted && doneItems.length > 0 && (
-                <div className="border-t border-default">
+                <div className="border-t border-border-default">
                   <button
                     onClick={() => setTodoCompletedCollapsed(!todoCompletedCollapsed)}
                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-tertiary hover:bg-elevated transition-colors"
@@ -2443,10 +2443,10 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                     <div className="relative group">
                       <button
                         type="button"
-                        className="w-8 h-8 rounded-lg border border-default hover:border-secondary transition-colors"
+                        className="w-8 h-8 rounded-lg border border-border-default hover:border-secondary transition-colors"
                         style={{ backgroundColor: opt.color }}
                       />
-                      <div className="absolute left-0 top-full mt-1 p-2 bg-surface border border-default rounded-lg shadow-lg z-50 hidden group-hover:grid grid-cols-6 gap-1 w-44">
+                      <div className="absolute left-0 top-full mt-1 p-2 bg-surface border border-border-default rounded-lg shadow-lg z-50 hidden group-hover:grid grid-cols-6 gap-1 w-44">
                         {OPTION_COLORS.map(color => (
                           <button
                             key={color.value}
@@ -2543,7 +2543,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
             </div>
           ))}
         </div>
-        <div className="flex gap-3 pt-4 mt-4 border-t border-default">
+        <div className="flex gap-3 pt-4 mt-4 border-t border-border-default">
           <Button variant="secondary" onClick={() => setRecordModalOpen(false)} className="flex-1">
             Cancel
           </Button>
@@ -2602,7 +2602,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
             ))
           )}
         </div>
-        <div className="flex gap-3 pt-4 mt-4 border-t border-default">
+        <div className="flex gap-3 pt-4 mt-4 border-t border-border-default">
           <Button variant="secondary" onClick={() => setFieldsManagerOpen(false)} className="flex-1">
             Close
           </Button>

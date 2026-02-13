@@ -45,7 +45,7 @@ export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
   if (!mounted || authState === 'checking') {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="flex items-center gap-3 rounded-xl border border-default bg-surface px-6 py-4">
+        <div className="flex items-center gap-3 rounded-xl border border-border-default bg-surface px-6 py-4">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
           <span className="font-medium text-primary">Loading...</span>
         </div>

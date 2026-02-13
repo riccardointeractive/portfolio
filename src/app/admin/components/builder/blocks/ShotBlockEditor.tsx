@@ -39,7 +39,7 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
     <div className="flex flex-col gap-3">
       {/* Selected shot preview */}
       {shot ? (
-        <div className="flex items-center gap-3 rounded-lg border border-default bg-base p-3">
+        <div className="flex items-center gap-3 rounded-lg border border-border-default bg-base p-3">
           {(shot.thumbnail_url || shot.media_url) ? (
             <NextImage
               src={shot.thumbnail_url || shot.media_url!}
@@ -59,7 +59,7 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
           </div>
           <button
             onClick={() => setShowPicker(true)}
-            className="rounded-lg border border-default px-3 py-1.5 text-xs text-secondary transition-colors hover:bg-hover"
+            className="rounded-lg border border-border-default px-3 py-1.5 text-xs text-secondary transition-colors hover:bg-hover"
           >
             Change
           </button>
@@ -67,7 +67,7 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
       ) : (
         <button
           onClick={() => setShowPicker(true)}
-          className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-default py-6 text-sm text-tertiary transition-colors hover:border-border-hover hover:text-secondary"
+          className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border-default py-6 text-sm text-tertiary transition-colors hover:border-border-hover hover:text-secondary"
         >
           <Image size={16} />
           Select a shot
@@ -78,7 +78,7 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
       {showPicker && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setShowPicker(false)} />
-          <div className="relative z-50 max-h-64 overflow-y-auto rounded-lg border border-default bg-surface shadow-lg">
+          <div className="relative z-50 max-h-64 overflow-y-auto rounded-lg border border-border-default bg-surface shadow-lg">
             {shots.length === 0 ? (
               <p className="p-4 text-sm text-tertiary">No shots available</p>
             ) : (
@@ -122,7 +122,7 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
         value={content.caption || ''}
         onChange={(e) => onChange({ ...content, caption: e.target.value })}
         placeholder="Caption (optional)"
-        className="rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+        className="rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
       />
     </div>
   )

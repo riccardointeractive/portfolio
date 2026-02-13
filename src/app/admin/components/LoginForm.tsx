@@ -81,7 +81,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="mb-8 text-center">
-          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-elevated border border-default">
+          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-elevated border border-border-default">
             <Lock className="h-8 w-8 text-primary" />
           </div>
           <h1 className="mb-2 font-display text-4xl tracking-tight text-primary">
@@ -93,7 +93,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl border border-default bg-surface p-8"
+          className="rounded-2xl border border-border-default bg-surface p-8"
         >
           <div className="mb-6">
             <label htmlFor="password" className="mb-3 block text-sm font-semibold text-primary">
@@ -106,7 +106,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLocked || isSubmitting}
-                className="w-full rounded-xl border border-default bg-elevated px-4 py-3 pr-12 text-primary placeholder-tertiary transition-all focus:border-border-active focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full rounded-xl border border-border-default bg-elevated px-4 py-3 pr-12 text-primary placeholder-tertiary transition-all focus:border-border-active focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder={isLocked ? 'Please wait...' : 'Enter admin password'}
                 autoComplete="current-password"
                 autoFocus
@@ -124,7 +124,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
           {/* Lockout Timer */}
           {isLocked && (
-            <div className="mb-6 rounded-xl border border-default bg-elevated p-4">
+            <div className="mb-6 rounded-xl border border-border-default bg-elevated p-4">
               <div className="flex items-center gap-3">
                 <Clock size={20} className="shrink-0 text-secondary" />
                 <div>
@@ -139,7 +139,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
           {/* Error */}
           {error && !isLocked && (
-            <div className="mb-6 rounded-xl border border-default bg-elevated p-4">
+            <div className="mb-6 rounded-xl border border-border-default bg-elevated p-4">
               <div className="flex items-start gap-3">
                 <AlertTriangle size={20} className="mt-0.5 shrink-0 text-secondary" />
                 <div className="text-sm text-primary">{error}</div>
@@ -175,7 +175,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         </form>
 
         {/* Security Info */}
-        <div className="mt-6 rounded-xl border border-default bg-surface p-4">
+        <div className="mt-6 rounded-xl border border-border-default bg-surface p-4">
           <div className="flex items-start gap-3">
             <ShieldCheck size={20} className="mt-0.5 shrink-0 text-secondary" />
             <div className="text-xs text-tertiary">

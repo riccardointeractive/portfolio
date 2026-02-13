@@ -124,7 +124,7 @@ export function ShotEditor({ shot, isOpen, onClose, onSave, isSaving }: ShotEdit
 
       <div className="relative z-10 flex h-full w-full max-w-lg flex-col overflow-y-auto bg-surface shadow-lg">
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-default bg-surface px-5 py-4">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-default bg-surface px-5 py-4">
           <h3 className="font-display text-lg text-primary">
             {shot ? 'Edit Shot' : 'New Shot'}
           </h3>
@@ -144,7 +144,7 @@ export function ShotEditor({ shot, isOpen, onClose, onSave, isSaving }: ShotEdit
               onChange={(e) => updateField('title', e.target.value)}
               placeholder="Shot title"
               required
-              className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+              className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
             />
           </div>
 
@@ -160,7 +160,7 @@ export function ShotEditor({ shot, isOpen, onClose, onSave, isSaving }: ShotEdit
               }}
               placeholder="shot-slug"
               required
-              className="rounded-lg border border-default bg-base px-3 py-2 text-sm font-mono text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+              className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm font-mono text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
             />
           </div>
 
@@ -217,7 +217,7 @@ export function ShotEditor({ shot, isOpen, onClose, onSave, isSaving }: ShotEdit
             <select
               value={form.aspect_ratio}
               onChange={(e) => updateField('aspect_ratio', e.target.value)}
-              className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary focus:border-border-hover focus:outline-none"
+              className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary focus:border-border-hover focus:outline-none"
             >
               <option value="16/9">16:9</option>
               <option value="4/3">4:3</option>
@@ -235,7 +235,7 @@ export function ShotEditor({ shot, isOpen, onClose, onSave, isSaving }: ShotEdit
               onChange={(e) => updateField('description', e.target.value)}
               placeholder="Brief description..."
               rows={3}
-              className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none resize-none"
+              className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none resize-none"
             />
           </div>
 
@@ -246,7 +246,7 @@ export function ShotEditor({ shot, isOpen, onClose, onSave, isSaving }: ShotEdit
               {form.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="flex items-center gap-1 rounded-md border border-default bg-elevated px-2 py-0.5 text-xs text-secondary"
+                  className="flex items-center gap-1 rounded-md border border-border-default bg-elevated px-2 py-0.5 text-xs text-secondary"
                 >
                   {tag}
                   <button type="button" onClick={() => removeTag(tag)}>
@@ -267,12 +267,12 @@ export function ShotEditor({ shot, isOpen, onClose, onSave, isSaving }: ShotEdit
                   }
                 }}
                 placeholder="Add tag..."
-                className="flex-1 rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+                className="flex-1 rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
               />
               <button
                 type="button"
                 onClick={addTag}
-                className="rounded-lg border border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
+                className="rounded-lg border border-border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
               >
                 Add
               </button>
@@ -300,7 +300,7 @@ export function ShotEditor({ shot, isOpen, onClose, onSave, isSaving }: ShotEdit
           </div>
 
           {/* Submit */}
-          <div className="mt-auto sticky bottom-0 border-t border-default bg-surface pt-4 pb-1">
+          <div className="mt-auto sticky bottom-0 border-t border-border-default bg-surface pt-4 pb-1">
             <button
               type="submit"
               disabled={isSaving || !form.title || !form.slug}

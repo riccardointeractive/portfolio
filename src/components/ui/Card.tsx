@@ -14,9 +14,9 @@ export function Card({
   ...props
 }: CardProps) {
   const variants = {
-    default: 'bg-surface border border-default',
-    elevated: 'bg-elevated border border-default shadow-lg',
-    interactive: 'bg-surface border border-default hover:border-hover cursor-pointer',
+    default: 'bg-surface border border-border-default',
+    elevated: 'bg-elevated border border-border-default shadow-lg',
+    interactive: 'bg-surface border border-border-default hover:border-hover cursor-pointer',
   }
 
   return (
@@ -67,7 +67,7 @@ export function CardContent({ className, children, ...props }: HTMLAttributes<HT
 
 export function CardFooter({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn('mt-4 pt-4 border-t border-default flex items-center gap-2', className)} {...props}>
+    <div className={cn('mt-4 pt-4 border-t border-border-default flex items-center gap-2', className)} {...props}>
       {children}
     </div>
   )

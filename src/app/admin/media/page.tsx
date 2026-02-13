@@ -176,7 +176,7 @@ function MediaContent() {
 
         {/* Detail panel */}
         {selected && (
-          <div className="hidden w-72 shrink-0 flex-col gap-4 rounded-xl border border-default bg-surface p-4 lg:flex">
+          <div className="hidden w-72 shrink-0 flex-col gap-4 rounded-xl border border-border-default bg-surface p-4 lg:flex">
             {/* Preview */}
             {selected.mime_type.startsWith('image/') ? (
               <div className="relative aspect-video w-full overflow-hidden rounded-lg">
@@ -219,10 +219,10 @@ function MediaContent() {
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col gap-2 border-t border-default pt-3">
+            <div className="flex flex-col gap-2 border-t border-border-default pt-3">
               <button
                 onClick={() => copyUrl(selected.url, selected.id)}
-                className="flex items-center gap-2 rounded-lg border border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
+                className="flex items-center gap-2 rounded-lg border border-border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
               >
                 {copiedId === selected.id ? <Check size={14} /> : <Copy size={14} />}
                 {copiedId === selected.id ? 'Copied!' : 'Copy URL'}
@@ -231,14 +231,14 @@ function MediaContent() {
                 href={selected.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-lg border border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
+                className="flex items-center gap-2 rounded-lg border border-border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
               >
                 <ExternalLink size={14} />
                 Open in new tab
               </a>
               <button
                 onClick={() => handleDelete(selected)}
-                className="flex items-center gap-2 rounded-lg border border-default px-3 py-1.5 text-sm text-error transition-colors hover:bg-hover"
+                className="flex items-center gap-2 rounded-lg border border-border-default px-3 py-1.5 text-sm text-error transition-colors hover:bg-hover"
               >
                 <Trash2 size={14} />
                 Delete

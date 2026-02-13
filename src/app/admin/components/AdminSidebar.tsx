@@ -50,7 +50,7 @@ export function AdminSidebar({ onLogout }: AdminSidebarProps) {
       {/* Mobile burger */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="fixed left-4 top-4 z-60 flex h-10 w-10 items-center justify-center rounded-xl border border-default bg-surface text-primary lg:hidden"
+        className="fixed left-4 top-4 z-60 flex h-10 w-10 items-center justify-center rounded-xl border border-border-default bg-surface text-primary lg:hidden"
         aria-label="Toggle menu"
       >
         {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -67,7 +67,7 @@ export function AdminSidebar({ onLogout }: AdminSidebarProps) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed left-0 top-0 z-50 flex h-screen flex-col border-r border-default bg-surface
+          fixed left-0 top-0 z-50 flex h-screen flex-col border-r border-border-default bg-surface
           transition-all duration-300
           w-64 lg:w-auto
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -76,18 +76,18 @@ export function AdminSidebar({ onLogout }: AdminSidebarProps) {
         `}
       >
         {/* Header */}
-        <div className="flex min-h-16 items-center justify-between border-b border-default p-4">
+        <div className="flex min-h-16 items-center justify-between border-b border-border-default p-4">
           <div className="flex items-center gap-2">
             <span className="whitespace-nowrap font-display text-xl tracking-tight text-primary">
               {isCollapsed && !isMobileOpen ? siteConfig.name.charAt(0) : siteConfig.name.split(' ')[0]}
             </span>
             {showLabel && (
-              <span className="hidden rounded-md border border-default bg-elevated px-1.5 py-0.5 text-xs font-medium text-secondary lg:inline-block">
+              <span className="hidden rounded-md border border-border-default bg-elevated px-1.5 py-0.5 text-xs font-medium text-secondary lg:inline-block">
                 Admin
               </span>
             )}
             {isMobileOpen && (
-              <span className="rounded-md border border-default bg-elevated px-1.5 py-0.5 text-xs font-medium text-secondary lg:hidden">
+              <span className="rounded-md border border-border-default bg-elevated px-1.5 py-0.5 text-xs font-medium text-secondary lg:hidden">
                 Admin
               </span>
             )}
@@ -106,7 +106,7 @@ export function AdminSidebar({ onLogout }: AdminSidebarProps) {
 
         {/* Expand button (collapsed) */}
         {isCollapsed && (
-          <div className="hidden justify-center border-b border-default py-3 lg:flex">
+          <div className="hidden justify-center border-b border-border-default py-3 lg:flex">
             <button
               onClick={toggleCollapse}
               className="rounded-lg p-2 text-secondary transition-colors hover:bg-hover hover:text-primary"
@@ -150,7 +150,7 @@ export function AdminSidebar({ onLogout }: AdminSidebarProps) {
         </nav>
 
         {/* Footer */}
-        <div className="space-y-1 border-t border-default p-3">
+        <div className="space-y-1 border-t border-border-default p-3">
           <a
             href="/"
             target="_blank"

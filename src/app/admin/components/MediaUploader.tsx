@@ -91,7 +91,7 @@ export function MediaUploader({
 
   if (value) {
     return (
-      <div className={cn('relative overflow-hidden rounded-lg border border-default', className)}>
+      <div className={cn('relative overflow-hidden rounded-lg border border-border-default', className)}>
         {isImage && (
           <div className="relative h-48 w-full">
             <NextImage

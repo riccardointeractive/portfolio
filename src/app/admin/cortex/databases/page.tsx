@@ -198,7 +198,7 @@ export default function DatabasesPage() {
           {/* Toolbar */}
           <div className="flex items-center gap-2 flex-wrap">
             {searchOpen ? (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-default rounded-lg">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border-default rounded-lg">
                 <Icon name="search" size={16} className="text-tertiary" />
                 <input
                   type="text"
@@ -237,7 +237,7 @@ export default function DatabasesPage() {
               {sortModalOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setSortModalOpen(false)} />
-                  <div className="absolute left-0 top-full mt-1 w-48 bg-surface border border-default rounded-lg shadow-lg z-50 py-1">
+                  <div className="absolute left-0 top-full mt-1 w-48 bg-surface border border-border-default rounded-lg shadow-lg z-50 py-1">
                     {[
                       { field: 'name' as SortField, label: 'Name' },
                       { field: 'updatedAt' as SortField, label: 'Updated' },

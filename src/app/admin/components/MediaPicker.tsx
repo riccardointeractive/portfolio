@@ -53,14 +53,14 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
       <div className="absolute inset-0 bg-overlay" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative z-10 flex max-h-[80vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-default bg-surface shadow-lg">
+      <div className="relative z-10 flex max-h-[80vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-border-default bg-surface shadow-lg">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-default px-5 py-4">
+        <div className="flex items-center justify-between border-b border-border-default px-5 py-4">
           <h3 className="font-display text-lg text-primary">Media Library</h3>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowUploader(!showUploader)}
-              className="flex items-center gap-1.5 rounded-lg border border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
+              className="flex items-center gap-1.5 rounded-lg border border-border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
             >
               <Upload size={14} />
               Upload
@@ -73,7 +73,7 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
 
         {/* Upload zone */}
         {showUploader && (
-          <div className="border-b border-default p-4">
+          <div className="border-b border-border-default p-4">
             <MediaUploader
               onUpload={() => {
                 setShowUploader(false)
@@ -84,7 +84,7 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
         )}
 
         {/* Search */}
-        <div className="border-b border-default px-5 py-3">
+        <div className="border-b border-border-default px-5 py-3">
           <div className="relative">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-tertiary" />
             <input
@@ -96,7 +96,7 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
                 setPage(1)
               }}
               onKeyDown={(e) => e.key === 'Enter' && fetchMedia()}
-              className="w-full rounded-lg border border-default bg-base pl-9 pr-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+              className="w-full rounded-lg border border-border-default bg-base pl-9 pr-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
             />
           </div>
         </div>
@@ -105,7 +105,7 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
         <div className="flex-1 overflow-y-auto p-4">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-default border-t-interactive" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-border-default border-t-interactive" />
             </div>
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -120,7 +120,7 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
                   <button
                     key={item.id}
                     onClick={() => onSelect(item)}
-                    className="group relative aspect-square overflow-hidden rounded-lg border border-default transition-all hover:border-border-hover hover:shadow-sm"
+                    className="group relative aspect-square overflow-hidden rounded-lg border border-border-default transition-all hover:border-border-hover hover:shadow-sm"
                   >
                     {isImage ? (
                       <Image
@@ -147,7 +147,7 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 border-t border-default px-5 py-3">
+          <div className="flex items-center justify-center gap-2 border-t border-border-default px-5 py-3">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}

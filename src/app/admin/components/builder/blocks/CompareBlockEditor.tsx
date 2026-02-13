@@ -27,7 +27,7 @@ export function CompareBlockEditor({ content, onChange }: CompareBlockEditorProp
             value={content.before_label || ''}
             onChange={(e) => onChange({ ...content, before_label: e.target.value })}
             placeholder="Before label"
-            className="rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+            className="rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
           />
         </div>
 
@@ -46,7 +46,7 @@ export function CompareBlockEditor({ content, onChange }: CompareBlockEditorProp
             value={content.after_label || ''}
             onChange={(e) => onChange({ ...content, after_label: e.target.value })}
             placeholder="After label"
-            className="rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+            className="rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
           />
         </div>
       </div>

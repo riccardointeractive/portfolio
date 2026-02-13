@@ -55,7 +55,7 @@ export default function AdminPage() {
                 >
                   <div
                     className={`
-                      rounded-xl border border-default bg-surface p-6 transition-all duration-200
+                      rounded-xl border border-border-default bg-surface p-6 transition-all duration-200
                       ${tool.status === 'coming' ? 'opacity-50' : 'hover:-translate-y-0.5 hover:border-border-hover hover:shadow-md'}
                     `}
                   >
@@ -63,7 +63,7 @@ export default function AdminPage() {
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-elevated text-secondary">
                         {tool.icon}
                       </div>
-                      <span className="rounded-full border border-default bg-elevated px-2 py-0.5 text-xs font-medium text-tertiary">
+                      <span className="rounded-full border border-border-default bg-elevated px-2 py-0.5 text-xs font-medium text-tertiary">
                         {tool.badge}
                       </span>
                     </div>
@@ -80,7 +80,7 @@ export default function AdminPage() {
       </div>
 
       {/* Quick Links */}
-      <div className="mb-12 rounded-xl border border-default bg-surface p-6">
+      <div className="mb-12 rounded-xl border border-border-default bg-surface p-6">
         <h3 className="mb-4 font-display text-lg text-primary">Quick Links</h3>
         <div className="space-y-2">
           {quickLinks.map((link, idx) =>
@@ -90,7 +90,7 @@ export default function AdminPage() {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between rounded-lg border border-default bg-elevated px-4 py-3 transition-all hover:border-border-hover"
+                className="flex items-center justify-between rounded-lg border border-border-default bg-elevated px-4 py-3 transition-all hover:border-border-hover"
               >
                 <span className="text-sm font-medium text-primary">{link.title}</span>
                 {getQuickLinkIcon(link.url)}
@@ -99,7 +99,7 @@ export default function AdminPage() {
               <Link
                 key={idx}
                 href={link.url}
-                className="flex items-center justify-between rounded-lg border border-default bg-elevated px-4 py-3 transition-all hover:border-border-hover"
+                className="flex items-center justify-between rounded-lg border border-border-default bg-elevated px-4 py-3 transition-all hover:border-border-hover"
               >
                 <span className="text-sm font-medium text-primary">{link.title}</span>
                 <ChevronRight size={16} className="text-tertiary" />
@@ -110,7 +110,7 @@ export default function AdminPage() {
       </div>
 
       {/* System Info */}
-      <div className="rounded-xl border border-default bg-surface p-6">
+      <div className="rounded-xl border border-border-default bg-surface p-6">
         <h3 className="mb-6 font-display text-lg text-primary">
           System Information
         </h3>
@@ -145,7 +145,7 @@ function StatCard({
   icon: React.ReactNode
 }) {
   return (
-    <div className="rounded-xl border border-default bg-surface p-5">
+    <div className="rounded-xl border border-border-default bg-surface p-5">
       <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-elevated text-secondary">
         {icon}
       </div>

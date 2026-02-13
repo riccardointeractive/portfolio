@@ -38,12 +38,12 @@ export function Modal({ open, isOpen, onClose, title, description, children, cla
       />
       <div
         className={cn(
-          'relative bg-surface border border-default rounded-xl shadow-2xl',
+          'relative bg-surface border border-border-default rounded-xl shadow-2xl',
           'w-full max-w-md mx-4 max-h-dvh overflow-y-auto',
           className
         )}
       >
-        <div className="flex items-start justify-between p-4 border-b border-default">
+        <div className="flex items-start justify-between p-4 border-b border-border-default">
           <div>
             {title && <h2 className="font-display text-lg text-primary">{title}</h2>}
             {description && <p className="text-sm text-tertiary mt-1">{description}</p>}

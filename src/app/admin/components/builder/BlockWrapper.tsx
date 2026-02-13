@@ -26,9 +26,9 @@ export function BlockWrapper({ type, children, onDelete, dragHandleProps }: Bloc
   const [collapsed, setCollapsed] = useState(false)
 
   return (
-    <div className="rounded-xl border border-default bg-surface transition-colors hover:border-border-hover">
+    <div className="rounded-xl border border-border-default bg-surface transition-colors hover:border-border-hover">
       {/* Header */}
-      <div className="flex items-center gap-2 border-b border-default px-3 py-2">
+      <div className="flex items-center gap-2 border-b border-border-default px-3 py-2">
         {/* Drag handle */}
         <button
           className="cursor-grab rounded p-0.5 text-tertiary transition-colors hover:text-secondary active:cursor-grabbing"

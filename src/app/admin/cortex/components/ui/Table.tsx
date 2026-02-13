@@ -26,7 +26,7 @@ export function Table({
   return (
     <div className={cn(
       'w-full overflow-auto',
-      bordered && 'border border-default rounded-xl'
+      bordered && 'border border-border-default rounded-xl'
     )}>
       <table
         className={cn(
@@ -51,7 +51,7 @@ export interface TableHeaderProps extends HTMLAttributes<HTMLTableSectionElement
 export function TableHeader({ className, children, ...props }: TableHeaderProps) {
   return (
     <thead
-      className={cn('bg-elevated border-b border-default', className)}
+      className={cn('bg-elevated border-b border-border-default', className)}
       {...props}
     >
       {children}
@@ -97,7 +97,7 @@ export function TableRow({
   return (
     <tr
       className={cn(
-        'border-b border-default transition-colors',
+        'border-b border-border-default transition-colors',
         hoverable && 'hover:bg-elevated/50',
         selected && 'bg-info/10',
         className
@@ -239,7 +239,7 @@ export interface TableFooterProps extends HTMLAttributes<HTMLTableSectionElement
 export function TableFooter({ className, children, ...props }: TableFooterProps) {
   return (
     <tfoot
-      className={cn('bg-elevated border-t border-default font-medium', className)}
+      className={cn('bg-elevated border-t border-border-default font-medium', className)}
       {...props}
     >
       {children}
@@ -321,7 +321,7 @@ export function TableSkeleton({ columns, rows = 5 }: TableSkeletonProps) {
   return (
     <>
       {Array.from({ length: rows }).map((_, rowIndex) => (
-        <tr key={rowIndex} className="border-b border-default">
+        <tr key={rowIndex} className="border-b border-border-default">
           {Array.from({ length: columns }).map((_, colIndex) => (
             <td key={colIndex} className="h-14 px-4">
               <div className="h-4 bg-elevated rounded animate-pulse"
@@ -371,7 +371,7 @@ export function TablePagination({
   const endItem = Math.min(page * pageSize, totalItems)
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-t border-default bg-elevated/50">
+    <div className="flex items-center justify-between px-4 py-3 border-t border-border-default bg-elevated/50">
       <div className="flex items-center gap-4">
         <span className="text-sm text-tertiary">
           Showing <span className="font-medium text-primary">{startItem}</span> to{' '}
@@ -385,7 +385,7 @@ export function TablePagination({
             <select
               value={pageSize}
               onChange={(e) => onPageSizeChange(Number(e.target.value))}
-              className="bg-base border border-default rounded-lg px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-info/50"
+              className="bg-base border border-border-default rounded-lg px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-info/50"
             >
               {pageSizes.map((size) => (
                 <option key={size} value={size}>{size}</option>

@@ -23,7 +23,7 @@ export function MediaBlockEditor({ content, onChange }: MediaBlockEditorProps) {
         value={content.alt}
         onChange={(e) => onChange({ ...content, alt: e.target.value })}
         placeholder="Alt text"
-        className="rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+        className="rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
       />
 
       <input
@@ -31,7 +31,7 @@ export function MediaBlockEditor({ content, onChange }: MediaBlockEditorProps) {
         value={content.caption || ''}
         onChange={(e) => onChange({ ...content, caption: e.target.value })}
         placeholder="Caption (optional)"
-        className="rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+        className="rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
       />
     </div>
   )

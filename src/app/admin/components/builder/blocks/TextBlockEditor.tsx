@@ -36,7 +36,7 @@ export function TextBlockEditor({ content, onChange }: TextBlockEditorProps) {
       </div>
 
       {preview ? (
-        <div className="min-h-[120px] rounded-lg border border-default bg-base p-3 text-sm text-primary prose prose-sm max-w-none">
+        <div className="min-h-[120px] rounded-lg border border-border-default bg-base p-3 text-sm text-primary prose prose-sm max-w-none">
           {content.markdown || (
             <span className="text-tertiary">Nothing to preview</span>
           )}
@@ -47,7 +47,7 @@ export function TextBlockEditor({ content, onChange }: TextBlockEditorProps) {
           onChange={(e) => onChange({ markdown: e.target.value })}
           placeholder="Write markdown content..."
           rows={6}
-          className="rounded-lg border border-default bg-base px-3 py-2 text-sm font-mono text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none resize-y"
+          className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm font-mono text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none resize-y"
         />
       )}
     </div>

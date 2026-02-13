@@ -47,7 +47,7 @@ export function VideoEmbedBlockEditor({ content, onChange }: VideoEmbedBlockEdit
           onChange({ ...content, url, provider: detectProvider(url) })
         }}
         placeholder="Paste video URL (YouTube, Vimeo, Loom)"
-        className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+        className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
       />
 
       {content.url && (
@@ -60,7 +60,7 @@ export function VideoEmbedBlockEditor({ content, onChange }: VideoEmbedBlockEdit
       )}
 
       {embedUrl && (
-        <div className="aspect-video w-full overflow-hidden rounded-lg border border-default">
+        <div className="aspect-video w-full overflow-hidden rounded-lg border border-border-default">
           <iframe
             src={embedUrl}
             className="h-full w-full"
