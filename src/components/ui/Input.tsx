@@ -3,7 +3,7 @@
 import { forwardRef, InputHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string
   error?: string
   hint?: string
