@@ -30,7 +30,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 : 'bg-transparent hover:border-hover'
             )}
           >
-            {checked && <Icon name="check" size={14} weight="bold" color="white" />}
+            {checked && <Icon name="check" size={14} weight="bold" className="text-toggle-knob" />}
           </div>
         </div>
         {label && (

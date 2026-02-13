@@ -317,7 +317,7 @@ export default function DatabasesPage() {
                         </button>
                       </div>
                     </div>
-                    <h3 className="font-semibold text-primary mb-1">{db.name}</h3>
+                    <h3 className="font-display text-base text-primary mb-1">{db.name}</h3>
                     {db.description && (
                       <p className="text-sm text-tertiary mb-3 line-clamp-2">{db.description}</p>
                     )}

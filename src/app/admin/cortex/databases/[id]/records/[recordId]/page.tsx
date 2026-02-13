@@ -449,7 +449,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
           </div>
           <div>
             <p className="text-xs text-tertiary">{database.name}</p>
-            <h1 className="text-xl font-semibold text-primary">{getRecordTitle()}</h1>
+            <h1 className="font-display text-xl text-primary">{getRecordTitle()}</h1>
           </div>
         </div>
         <Button
@@ -461,7 +461,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
               router.push(`/admin/cortex/databases/${databaseId}`)
             }
           }}
-          className="text-tertiary hover:text-red-400"
+          className="text-tertiary hover:text-error"
         >
           <Icon name="trash" size={18} />
         </Button>
@@ -485,7 +485,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
       {/* Related Records */}
       {relatedRecords.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-primary">Related</h2>
+          <h2 className="font-display text-lg text-primary">Related</h2>
           {relatedRecords.map(({ database: relDb, field, records: relRecords }) => {
             const nameField = relDb.fields.find(f => f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title')
               || relDb.fields.find(f => f.type === 'text')
@@ -560,7 +560,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
                                 }
                               }
                             }}
-                            className="p-1.5 text-tertiary hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                            className="p-1.5 text-tertiary hover:text-error hover:bg-error-subtle rounded transition-colors"
                             title="Delete"
                           >
                             <Icon name="trash" size={14} />

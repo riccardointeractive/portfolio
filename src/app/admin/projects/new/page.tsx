@@ -47,7 +47,7 @@ function NewProjectContent() {
         </div>
       </div>
 
-      <div className="max-w-2xl rounded-xl border border-border-default bg-surface p-6">
+      <div className="max-w-2xl rounded-xl border border-default bg-surface p-6">
         <ProjectMetadataForm
           onSave={handleSave}
           onCancel={() => router.push('/admin/projects')}

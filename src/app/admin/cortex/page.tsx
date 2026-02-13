@@ -35,7 +35,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <PageHeader
         title="Dashboard"
         description="Overview of your Cortex workspace"
@@ -43,43 +43,43 @@ export default function DashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card className="p-6">
-          <div className="p-6">
+        <Card>
+          <div className="p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-tertiary">Databases</p>
-                <p className="text-3xl font-bold text-primary mt-1">{stats?.totalDatabases || 0}</p>
+                <div className="font-display text-2xl text-primary mt-1">{stats?.totalDatabases || 0}</div>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-info/10 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-info-subtle flex items-center justify-center">
                 <Icon name="layers" size={24} className="text-info" />
               </div>
             </div>
           </div>
         </Card>
 
-        <Card className="p-6">
-          <div className="p-6">
+        <Card>
+          <div className="p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-tertiary">Total Records</p>
-                <p className="text-3xl font-bold text-primary mt-1">{stats?.totalRecords || 0}</p>
+                <div className="font-display text-2xl text-primary mt-1">{stats?.totalRecords || 0}</div>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
-                <Icon name="list" size={24} className="text-green-400" />
+              <div className="w-12 h-12 rounded-xl bg-accent-green-subtle flex items-center justify-center">
+                <Icon name="list" size={24} className="text-accent-green" />
               </div>
             </div>
           </div>
         </Card>
 
-        <Card className="p-6">
-          <Link href="/admin/cortex/databases" className="block p-6">
+        <Card>
+          <Link href="/admin/cortex/databases" className="block p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-tertiary">Quick Action</p>
-                <p className="text-lg font-semibold text-primary mt-1">Create Database</p>
+                <p className="font-display text-lg text-primary mt-1">Create Database</p>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                <Icon name="plus" size={24} className="text-purple-400" />
+              <div className="w-12 h-12 rounded-xl bg-accent-purple-subtle flex items-center justify-center">
+                <Icon name="plus" size={24} className="text-accent-purple" />
               </div>
             </div>
           </Link>
@@ -87,10 +87,10 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Databases */}
-      <Card className="p-6">
+      <Card>
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-primary">Recent Databases</h2>
+            <h2 className="font-display text-lg text-primary">Recent Databases</h2>
             <Link href="/admin/cortex/databases">
               <Button variant="ghost" size="sm">
                 View All
@@ -140,29 +140,29 @@ export default function DashboardPage() {
 
       {/* Getting Started */}
       {stats?.totalDatabases === 0 && (
-        <Card className="p-6">
+        <Card>
           <div className="p-6">
-            <h2 className="text-lg font-semibold text-primary mb-4">Getting Started</h2>
+            <h2 className="font-display text-lg text-primary mb-4">Getting Started</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 rounded-lg bg-elevated">
-                <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mb-3">
-                  <Icon name="world" size={20} className="text-blue-400" />
+                <div className="w-10 h-10 rounded-lg bg-accent-blue-subtle flex items-center justify-center mb-3">
+                  <Icon name="world" size={20} className="text-accent-blue" />
                 </div>
-                <h3 className="font-medium text-primary mb-1">1. Create Spheres</h3>
+                <h3 className="font-display text-base text-primary mb-1">1. Create Spheres</h3>
                 <p className="text-sm text-tertiary">Create a &quot;Spheres&quot; database to organize your life areas</p>
               </div>
               <div className="p-4 rounded-lg bg-elevated">
-                <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center mb-3">
-                  <Icon name="folder" size={20} className="text-purple-400" />
+                <div className="w-10 h-10 rounded-lg bg-accent-purple-subtle flex items-center justify-center mb-3">
+                  <Icon name="folder" size={20} className="text-accent-purple" />
                 </div>
-                <h3 className="font-medium text-primary mb-1">2. Add Projects</h3>
+                <h3 className="font-display text-base text-primary mb-1">2. Add Projects</h3>
                 <p className="text-sm text-tertiary">Create a &quot;Projects&quot; database and link to Spheres</p>
               </div>
               <div className="p-4 rounded-lg bg-elevated">
-                <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center mb-3">
-                  <Icon name="check-square" size={20} className="text-green-400" />
+                <div className="w-10 h-10 rounded-lg bg-accent-green-subtle flex items-center justify-center mb-3">
+                  <Icon name="check-square" size={20} className="text-accent-green" />
                 </div>
-                <h3 className="font-medium text-primary mb-1">3. Track Tasks</h3>
+                <h3 className="font-display text-base text-primary mb-1">3. Track Tasks</h3>
                 <p className="text-sm text-tertiary">Create a &quot;Tasks&quot; database and link to Projects</p>
               </div>
             </div>

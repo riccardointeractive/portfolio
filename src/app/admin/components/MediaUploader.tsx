@@ -91,7 +91,7 @@ export function MediaUploader({
 
   if (value) {
     return (
-      <div className={cn('relative overflow-hidden rounded-lg border border-border-default', className)}>
+      <div className={cn('relative overflow-hidden rounded-lg border border-default', className)}>
         {isImage && (
           <div className="relative h-48 w-full">
             <NextImage
@@ -136,7 +136,7 @@ export function MediaUploader({
         'relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed px-4 py-8 transition-colors',
         isDragging
           ? 'border-interactive bg-hover'
-          : 'border-border-default hover:border-border-hover hover:bg-hover',
+          : 'border-default hover:border-border-hover hover:bg-hover',
         isUploading && 'pointer-events-none opacity-60',
         className
       )}

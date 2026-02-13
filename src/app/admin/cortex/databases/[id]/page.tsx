@@ -672,7 +672,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
             href={String(value)}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-info hover:underline truncate block max-w-[200px]"
+            className="text-info hover:underline truncate block max-w-48"
           >
             {String(value)}
           </a>
@@ -731,7 +731,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           ) : <span className="text-tertiary">-</span>
         }
       default:
-        return <span className="truncate max-w-[200px] block">{value ? String(value) : '-'}</span>
+        return <span className="truncate max-w-48 block">{value ? String(value) : '-'}</span>
     }
   }
 
@@ -932,7 +932,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           <Icon name={database.icon} size={24} color={database.color} weight="fill" />
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-primary">{database.name}</h1>
+          <h1 className="font-display text-xl text-primary">{database.name}</h1>
           {database.description && (
             <p className="text-sm text-tertiary">{database.description}</p>
           )}
@@ -965,7 +965,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
               {database.views.length > 1 && (
                 <span
                   onClick={(e) => { e.stopPropagation(); handleDeleteView(view.id) }}
-                  className="p-0.5 hover:bg-red-500/20 hover:text-red-400 rounded transition-all"
+                  className="p-0.5 hover:bg-error-subtle hover:text-error rounded transition-all"
                   title="Delete view"
                 >
                   <Icon name="close" size={12} />
@@ -1132,7 +1132,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                         <span className="flex-1">{field.name}</span>
                         <button
                           onClick={() => handleDeleteField(field.id)}
-                          className="p-1 hover:bg-red-500/20 rounded opacity-0 group-hover:opacity-100 text-tertiary hover:text-red-400 transition-all"
+                          className="p-1 hover:bg-error-subtle rounded opacity-0 group-hover:opacity-100 text-tertiary hover:text-error transition-all"
                           title="Delete field"
                         >
                           <Icon name="trash" size={14} />
@@ -1300,7 +1300,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                   >
                     <div className="p-4 border-b border-default">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-primary">{parentName}</h3>
+                        <h3 className="font-display text-base text-primary">{parentName}</h3>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-tertiary">
                             {childRecords.length} {sourceDb.name.toLowerCase()}
@@ -1323,7 +1323,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 p-2 space-y-1 max-h-[200px] overflow-hidden">
+                    <div className="flex-1 p-2 space-y-1 max-h-52 overflow-hidden">
                       {childRecords.length === 0 ? (
                         <p className="text-sm text-tertiary text-center py-4">
                           No {sourceDb.name.toLowerCase()} yet
@@ -1442,7 +1442,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                   })()}
 
                   {/* Records list */}
-                  <div className="space-y-2 max-h-[350px] overflow-y-auto">
+                  <div className="space-y-2 max-h-80 overflow-y-auto">
                     {expandedChildRecords.length === 0 ? (
                       <p className="text-tertiary text-center py-8">
                         No {sourceDb.name.toLowerCase()} yet
@@ -1533,7 +1533,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                                   }
                                 }
                               }}
-                              className="p-1.5 text-tertiary hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                              className="p-1.5 text-tertiary hover:text-error hover:bg-error-subtle rounded transition-colors"
                               title="Delete"
                             >
                               <Icon name="trash" size={14} />
@@ -1985,18 +1985,18 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
             <Card className="p-5">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center">
-                    <Icon name="sun" size={24} className="text-amber-500" />
+                  <div className="w-12 h-12 rounded-xl bg-accent-orange-subtle flex items-center justify-center">
+                    <Icon name="sun" size={24} className="text-accent-orange" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-semibold text-primary">My Day</h2>
+                    <h2 className="font-display text-lg text-primary">My Day</h2>
                     <p className="text-sm text-tertiary">{todayFormatted}</p>
                   </div>
                 </div>
                 {isPerfectStreakActive && perfectStreak > 0 && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl">
-                    <Icon name="fire" size={20} className="text-orange-500" />
-                    <span className="text-lg font-bold text-orange-500">{perfectStreak}</span>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-accent-orange-subtle rounded-xl">
+                    <Icon name="fire" size={20} className="text-accent-orange" />
+                    <span className="text-lg font-bold text-accent-orange">{perfectStreak}</span>
                     <span className="text-sm text-tertiary">perfect {perfectStreak === 1 ? 'day' : 'days'}</span>
                   </div>
                 )}
@@ -2014,14 +2014,14 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                   className={cn(
                     "h-full transition-all duration-500 ease-out rounded-full",
                     allCompletedToday
-                      ? "bg-gradient-to-r from-green-500 to-emerald-500"
-                      : "bg-gradient-to-r from-blue-500 to-cyan-500"
+                      ? "bg-success"
+                      : "bg-info"
                   )}
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
               {allCompletedToday && (
-                <div className="mt-3 flex items-center gap-2 text-green-500">
+                <div className="mt-3 flex items-center gap-2 text-success">
                   <Icon name="trophy" size={18} />
                   <span className="text-sm font-medium">Perfect day! Keep it up!</span>
                 </div>
@@ -2067,7 +2067,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                         {getRecordName(rec)}
                       </span>
                       {isStreakValid(rec) && getStreak(rec) > 0 && (
-                        <div className="flex items-center gap-1 text-orange-500">
+                        <div className="flex items-center gap-1 text-accent-orange">
                           <Icon name="fire" size={14} />
                           <span className="text-sm font-medium">{getStreak(rec)}</span>
                         </div>
@@ -2089,7 +2089,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                     <div
                       key={rec.id}
                       className={cn(
-                        "group flex items-center gap-3 px-4 py-3 hover:bg-elevated transition-colors bg-green-500/5",
+                        "group flex items-center gap-3 px-4 py-3 hover:bg-elevated transition-colors bg-success-subtle",
                         canDragRecords && "cursor-grab active:cursor-grabbing",
                         draggedRecordId === rec.id && "opacity-50"
                       )}
@@ -2112,7 +2112,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       >
                         {getRecordName(rec)}
                       </span>
-                      <div className="flex items-center gap-1 text-green-500">
+                      <div className="flex items-center gap-1 text-success">
                         <Icon name="fire" size={14} />
                         <span className="text-sm font-medium">{getStreak(rec)}</span>
                       </div>
@@ -2446,7 +2446,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                         className="w-8 h-8 rounded-lg border border-default hover:border-secondary transition-colors"
                         style={{ backgroundColor: opt.color }}
                       />
-                      <div className="absolute left-0 top-full mt-1 p-2 bg-surface border border-default rounded-lg shadow-lg z-50 hidden group-hover:grid grid-cols-6 gap-1 w-[180px]">
+                      <div className="absolute left-0 top-full mt-1 p-2 bg-surface border border-default rounded-lg shadow-lg z-50 hidden group-hover:grid grid-cols-6 gap-1 w-44">
                         {OPTION_COLORS.map(color => (
                           <button
                             key={color.value}
@@ -2458,7 +2458,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                             }}
                             className={cn(
                               "w-6 h-6 rounded transition-transform hover:scale-110",
-                              opt.color === color.value && "ring-2 ring-white ring-offset-1 ring-offset-surface"
+                              opt.color === color.value && "ring-2 ring-primary ring-offset-1 ring-offset-surface"
                             )}
                             style={{ backgroundColor: color.value }}
                             title={color.name}
@@ -2532,7 +2532,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
         title={editingRecord ? 'Edit Record' : 'New Record'}
         className="max-w-lg"
       >
-        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+        <div className="space-y-4 max-h-screen overflow-y-auto pr-2">
           {database.fields.map(field => (
             <div key={field.id}>
               {renderFieldInput(
@@ -2593,7 +2593,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       setFieldsManagerOpen(false)
                     }
                   }}
-                  className="p-2 text-tertiary hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                  className="p-2 text-tertiary hover:text-error hover:bg-error-subtle rounded-lg transition-colors"
                   title="Delete field"
                 >
                   <Icon name="trash" size={16} />

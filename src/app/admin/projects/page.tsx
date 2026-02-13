@@ -97,10 +97,10 @@ function ProjectsContent() {
           onAction={() => router.push('/admin/projects/new')}
         />
       ) : (
-        <div className="overflow-hidden rounded-xl border border-border-default">
+        <div className="overflow-hidden rounded-xl border border-default">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-border-default bg-elevated">
+              <tr className="border-b border-default bg-elevated">
                 <th className="px-4 py-3 text-left text-xs font-medium text-tertiary uppercase tracking-wider">
                   Title
                 </th>

@@ -36,7 +36,7 @@ export function DesignSystemBlockEditor({ content, onChange }: DesignSystemBlock
         value={content.title}
         onChange={(e) => onChange({ ...content, title: e.target.value })}
         placeholder="Section title"
-        className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+        className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
       />
 
       <textarea
@@ -44,7 +44,7 @@ export function DesignSystemBlockEditor({ content, onChange }: DesignSystemBlock
         onChange={(e) => onChange({ ...content, description: e.target.value })}
         placeholder="Description (optional)"
         rows={2}
-        className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none resize-none"
+        className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none resize-none"
       />
 
       {/* Tokens */}
@@ -57,19 +57,19 @@ export function DesignSystemBlockEditor({ content, onChange }: DesignSystemBlock
               value={token.name}
               onChange={(e) => updateToken(i, 'name', e.target.value)}
               placeholder="Name"
-              className="flex-1 rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+              className="flex-1 rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
             />
             <input
               type="text"
               value={token.value}
               onChange={(e) => updateToken(i, 'value', e.target.value)}
               placeholder="Value"
-              className="flex-1 rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+              className="flex-1 rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
             />
             <select
               value={token.preview_type}
               onChange={(e) => updateToken(i, 'preview_type', e.target.value)}
-              className="rounded-lg border border-border-default bg-base px-2 py-1.5 text-sm text-primary focus:border-border-hover focus:outline-none"
+              className="rounded-lg border border-default bg-base px-2 py-1.5 text-sm text-primary focus:border-border-hover focus:outline-none"
             >
               <option value="color">Color</option>
               <option value="text">Text</option>
@@ -86,7 +86,7 @@ export function DesignSystemBlockEditor({ content, onChange }: DesignSystemBlock
 
         <button
           onClick={addToken}
-          className="flex items-center gap-1 rounded-lg border border-dashed border-border-default px-3 py-1.5 text-xs text-tertiary transition-colors hover:border-border-hover hover:text-secondary"
+          className="flex items-center gap-1 rounded-lg border border-dashed border-default px-3 py-1.5 text-xs text-tertiary transition-colors hover:border-border-hover hover:text-secondary"
         >
           <Plus size={12} />
           Add Token

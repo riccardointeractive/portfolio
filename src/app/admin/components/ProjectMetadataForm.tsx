@@ -110,7 +110,7 @@ export function ProjectMetadataForm({
           onChange={(e) => updateField('title', e.target.value)}
           placeholder="Project title"
           required
-          className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+          className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
         />
       </div>
 
@@ -126,7 +126,7 @@ export function ProjectMetadataForm({
           }}
           placeholder="project-slug"
           required
-          className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm font-mono text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+          className="rounded-lg border border-default bg-base px-3 py-2 text-sm font-mono text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
         />
       </div>
 
@@ -139,7 +139,7 @@ export function ProjectMetadataForm({
             value={form.client}
             onChange={(e) => updateField('client', e.target.value)}
             placeholder="Client name"
-            className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+            className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -149,7 +149,7 @@ export function ProjectMetadataForm({
             value={form.year ?? ''}
             onChange={(e) => updateField('year', e.target.value ? parseInt(e.target.value) : null)}
             placeholder="2024"
-            className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+            className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
           />
         </div>
       </div>
@@ -162,7 +162,7 @@ export function ProjectMetadataForm({
           value={form.role}
           onChange={(e) => updateField('role', e.target.value)}
           placeholder="Design & Development"
-          className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+          className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
         />
       </div>
 
@@ -174,7 +174,7 @@ export function ProjectMetadataForm({
           onChange={(e) => updateField('description', e.target.value)}
           placeholder="Brief project description..."
           rows={3}
-          className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none resize-none"
+          className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none resize-none"
         />
       </div>
 
@@ -197,7 +197,7 @@ export function ProjectMetadataForm({
           {form.tags.map((tag) => (
             <span
               key={tag}
-              className="flex items-center gap-1 rounded-md border border-border-default bg-elevated px-2 py-0.5 text-xs text-secondary"
+              className="flex items-center gap-1 rounded-md border border-default bg-elevated px-2 py-0.5 text-xs text-secondary"
             >
               {tag}
               <button type="button" onClick={() => removeTag(tag)}>
@@ -218,12 +218,12 @@ export function ProjectMetadataForm({
               }
             }}
             placeholder="Add tag..."
-            className="flex-1 rounded-lg border border-border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
+            className="flex-1 rounded-lg border border-default bg-base px-3 py-1.5 text-sm text-primary placeholder:text-tertiary focus:border-border-hover focus:outline-none"
           />
           <button
             type="button"
             onClick={addTag}
-            className="rounded-lg border border-border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
+            className="rounded-lg border border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
           >
             Add
           </button>
@@ -237,7 +237,7 @@ export function ProjectMetadataForm({
           <select
             value={form.status}
             onChange={(e) => updateField('status', e.target.value as ProjectStatus)}
-            className="rounded-lg border border-border-default bg-base px-3 py-2 text-sm text-primary focus:border-border-hover focus:outline-none"
+            className="rounded-lg border border-default bg-base px-3 py-2 text-sm text-primary focus:border-border-hover focus:outline-none"
           >
             <option value="draft">Draft</option>
             <option value="published">Published</option>
@@ -281,7 +281,7 @@ export function ProjectMetadataForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg border border-border-default px-4 py-2 text-sm text-secondary transition-colors hover:bg-hover"
+          className="rounded-lg border border-default px-4 py-2 text-sm text-secondary transition-colors hover:bg-hover"
         >
           Cancel
         </button>

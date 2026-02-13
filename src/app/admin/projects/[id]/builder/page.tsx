@@ -92,7 +92,7 @@ function BuilderContent({ projectId }: { projectId: string }) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => router.push(`/admin/projects/new?edit=${projectId}`)}
-            className="flex items-center gap-1.5 rounded-lg border border-border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
+            className="flex items-center gap-1.5 rounded-lg border border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
           >
             <Settings2 size={14} />
             Settings
@@ -102,7 +102,7 @@ function BuilderContent({ projectId }: { projectId: string }) {
             className={cn(
               'rounded-lg px-4 py-1.5 text-sm font-medium transition-colors',
               project.status === 'published'
-                ? 'border border-border-default text-secondary hover:bg-hover'
+                ? 'border border-default text-secondary hover:bg-hover'
                 : 'bg-interactive text-white hover:bg-interactive-hover'
             )}
           >
@@ -114,7 +114,7 @@ function BuilderContent({ projectId }: { projectId: string }) {
       {/* Block editor */}
       <div className="mx-auto w-full max-w-3xl">
         {blocks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border-default py-16">
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-default py-16">
             <p className="text-sm text-secondary">This study case is empty</p>
             <p className="mt-1 text-xs text-tertiary">
               Add blocks to start building your case study

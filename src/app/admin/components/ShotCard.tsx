@@ -24,7 +24,7 @@ export function ShotCard({ shot, onEdit, onDelete, onTogglePublish }: ShotCardPr
   const isImage = shot.media_url?.match(/\.(jpg|jpeg|png|webp|gif)(\?|$)/i)
 
   return (
-    <div className="group overflow-hidden rounded-xl border border-border-default bg-surface transition-all hover:border-border-hover hover:shadow-sm">
+    <div className="group overflow-hidden rounded-xl border border-default bg-surface transition-all hover:border-border-hover hover:shadow-sm">
       {/* Thumbnail */}
       <div className="relative aspect-video w-full overflow-hidden bg-elevated">
         {shot.thumbnail_url || (shot.media_url && isImage) ? (

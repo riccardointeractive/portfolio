@@ -74,7 +74,7 @@ export function AddBlockMenu({ onAdd }: AddBlockMenuProps) {
     <div className="relative flex justify-center py-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 rounded-lg border border-dashed border-border-default px-3 py-1.5 text-sm text-tertiary transition-colors hover:border-border-hover hover:text-secondary"
+        className="flex items-center gap-1.5 rounded-lg border border-dashed border-default px-3 py-1.5 text-sm text-tertiary transition-colors hover:border-border-hover hover:text-secondary"
       >
         <Plus size={14} />
         Add Block
@@ -83,7 +83,7 @@ export function AddBlockMenu({ onAdd }: AddBlockMenuProps) {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-border-default bg-surface shadow-lg">
+          <div className="absolute top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-default bg-surface shadow-lg">
             {blockOptions.map(({ type, label, icon, defaultContent }) => (
               <button
                 key={type}

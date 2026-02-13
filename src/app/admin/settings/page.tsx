@@ -21,7 +21,7 @@ function SocialLink({
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-3 rounded-lg border border-border-default px-4 py-3 transition-colors hover:bg-hover"
+      className="flex items-center gap-3 rounded-lg border border-default px-4 py-3 transition-colors hover:bg-hover"
     >
       <Icon size={16} className="text-tertiary" />
       <div className="flex-1">
@@ -66,7 +66,7 @@ function SettingsContent() {
         <SettingsSection title="Contact">
           <a
             href={`mailto:${siteConfig.email}`}
-            className="flex items-center gap-3 rounded-lg border border-border-default px-4 py-3 transition-colors hover:bg-hover"
+            className="flex items-center gap-3 rounded-lg border border-default px-4 py-3 transition-colors hover:bg-hover"
           >
             <Mail size={16} className="text-tertiary" />
             <div className="flex-1">
@@ -95,7 +95,7 @@ function SettingsContent() {
             {siteConfig.nav.map((item) => (
               <span
                 key={item.label}
-                className="rounded-lg border border-border-default bg-elevated px-3 py-1.5 text-sm text-secondary"
+                className="rounded-lg border border-default bg-elevated px-3 py-1.5 text-sm text-secondary"
               >
                 {item.label}
                 <span className="ml-1.5 text-xs text-tertiary font-mono">
@@ -124,7 +124,7 @@ function SettingsContent() {
         </SettingsSection>
 
         {/* Source file hint */}
-        <div className="flex items-center gap-2 rounded-lg border border-dashed border-border-default px-4 py-3">
+        <div className="flex items-center gap-2 rounded-lg border border-dashed border-default px-4 py-3">
           <Globe size={14} className="text-tertiary" />
           <p className="text-xs text-tertiary">
             These settings are read-only. To modify, edit{' '}

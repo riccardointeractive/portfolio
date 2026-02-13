@@ -35,7 +35,7 @@ export function ColorPicker({ value, onChange, label }: ColorPickerProps) {
             title={color.name}
           >
             {value === color.value && (
-              <Icon name="check" size={14} weight="bold" color="white" />
+              <Icon name="check" size={14} weight="bold" className="text-toggle-knob" />
             )}
           </button>
         ))}

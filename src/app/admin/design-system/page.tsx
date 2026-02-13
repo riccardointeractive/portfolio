@@ -98,7 +98,7 @@ function ColorsSection() {
   ]
 
   const borderTokens = [
-    { name: 'border-default', css: '--border-default', tw: 'border-border-default', light: colors.light.border.default, dark: colors.dark.border.default },
+    { name: 'border-default', css: '--border-default', tw: 'border-default', light: colors.light.border.default, dark: colors.dark.border.default },
     { name: 'border-hover', css: '--border-hover', tw: 'border-border-hover', light: colors.light.border.hover, dark: colors.dark.border.hover },
     { name: 'border-active', css: '--border-active', tw: 'border-border-active', light: colors.light.border.active, dark: colors.dark.border.active },
   ]
@@ -136,12 +136,12 @@ function ColorGroup({ title, tokens, type }: { title: string; tokens: ColorToken
         {tokens.map((token) => (
           <div
             key={token.name}
-            className="flex items-center gap-3 rounded-xl border border-border-default bg-surface p-3"
+            className="flex items-center gap-3 rounded-xl border border-default bg-surface p-3"
           >
             {/* Swatch */}
             <div className="flex gap-1">
               <div
-                className="h-10 w-10 rounded-lg border border-border-default"
+                className="h-10 w-10 rounded-lg border border-default"
                 style={{
                   backgroundColor: type === 'bg' ? `var(${token.css})` : undefined,
                   borderColor: type === 'border' ? `var(${token.css})` : undefined,
@@ -210,7 +210,7 @@ function TypographySection() {
             {fonts.map((font) => (
               <div
                 key={font.name}
-                className="rounded-xl border border-border-default bg-surface p-5"
+                className="rounded-xl border border-default bg-surface p-5"
               >
                 <div className="mb-3 flex items-center justify-between">
                   <Badge>{font.tw}</Badge>
@@ -231,11 +231,11 @@ function TypographySection() {
         {/* Size scale */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Size Scale</h3>
-          <div className="rounded-xl border border-border-default bg-surface">
+          <div className="rounded-xl border border-default bg-surface">
             {sizes.map((s, i) => (
               <div
                 key={s.name}
-                className={`flex items-center gap-4 px-5 py-3 ${i < sizes.length - 1 ? 'border-b border-border-default' : ''}`}
+                className={`flex items-center gap-4 px-5 py-3 ${i < sizes.length - 1 ? 'border-b border-default' : ''}`}
               >
                 <div className="flex w-20 items-center gap-1">
                   <span className="font-mono text-xs text-tertiary">{s.name}</span>
@@ -256,7 +256,7 @@ function TypographySection() {
         {/* Heading hierarchy */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Heading Hierarchy (Clash Display)</h3>
-          <div className="space-y-4 rounded-xl border border-border-default bg-surface p-6">
+          <div className="space-y-4 rounded-xl border border-default bg-surface p-6">
             <div className="font-display text-5xl tracking-tight text-primary">Heading 1</div>
             <div className="font-display text-4xl tracking-tight text-primary">Heading 2</div>
             <div className="font-display text-3xl text-primary">Heading 3</div>
@@ -269,7 +269,7 @@ function TypographySection() {
         {/* Body text */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Body Text (Switzer)</h3>
-          <div className="rounded-xl border border-border-default bg-surface p-6">
+          <div className="rounded-xl border border-default bg-surface p-6">
             <p className="mb-4 text-base leading-relaxed text-primary">
               This is body text using Switzer at the base size. It&apos;s designed for readability
               and comfortable scanning across all screen sizes. The font features clean lines and
@@ -326,7 +326,7 @@ function SpacingSection() {
             {spacingTokens.map((token) => (
               <div
                 key={token.name}
-                className="flex items-center justify-between rounded-xl border border-border-default bg-surface p-4"
+                className="flex items-center justify-between rounded-xl border border-default bg-surface p-4"
               >
                 <div>
                   <div className="text-sm font-medium text-primary">{token.name}</div>
@@ -341,7 +341,7 @@ function SpacingSection() {
         {/* Tailwind scale visual */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Tailwind Scale</h3>
-          <div className="rounded-xl border border-border-default bg-surface p-5">
+          <div className="rounded-xl border border-default bg-surface p-5">
             <div className="space-y-2">
               {tailwindScale.map((s) => (
                 <div key={s.name} className="flex items-center gap-3">
@@ -380,7 +380,7 @@ function RadiusSection() {
         {radiusTokens.map((token) => (
           <div
             key={token.name}
-            className="flex flex-col items-center gap-3 rounded-xl border border-border-default bg-surface p-5"
+            className="flex flex-col items-center gap-3 rounded-xl border border-default bg-surface p-5"
           >
             <div
               className="h-16 w-16 border-2 border-interactive bg-elevated"
@@ -417,7 +417,7 @@ function ShadowsSection() {
         {shadowTokens.map((token) => (
           <div key={token.name} className="flex flex-col items-center gap-4">
             <div
-              className="flex h-24 w-full items-center justify-center rounded-xl border border-border-default bg-surface"
+              className="flex h-24 w-full items-center justify-center rounded-xl border border-default bg-surface"
               style={{ boxShadow: `var(--${token.name})` }}
             >
               <span className="text-sm font-medium text-secondary">{token.name}</span>
@@ -449,7 +449,7 @@ function TransitionsSection() {
     <Section title="Transitions" description="Timing tokens for animations and hover effects.">
       <div className="space-y-6">
         {/* Easing */}
-        <div className="rounded-xl border border-border-default bg-surface p-5">
+        <div className="rounded-xl border border-default bg-surface p-5">
           <div className="mb-2 flex items-center gap-2">
             <span className="text-sm font-medium text-primary">Easing</span>
             <CopyButton value="var(--ease-out-expo)" />
@@ -463,7 +463,7 @@ function TransitionsSection() {
           {durations.map((d) => (
             <div
               key={d.name}
-              className="rounded-xl border border-border-default bg-surface p-4"
+              className="rounded-xl border border-default bg-surface p-4"
             >
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-medium text-primary">{d.name}</span>
@@ -496,7 +496,7 @@ function ComponentsSection() {
         {/* Badges */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Badge</h3>
-          <div className="flex flex-wrap gap-2 rounded-xl border border-border-default bg-surface p-5">
+          <div className="flex flex-wrap gap-2 rounded-xl border border-default bg-surface p-5">
             <Badge>React</Badge>
             <Badge>TypeScript</Badge>
             <Badge>Next.js</Badge>
@@ -509,11 +509,11 @@ function ComponentsSection() {
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Card</h3>
           <div className="grid gap-4 lg:grid-cols-3">
-            <div className="rounded-xl border border-border-default bg-surface p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-hover hover:shadow-md">
+            <div className="rounded-xl border border-default bg-surface p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-hover hover:shadow-md">
               <h4 className="mb-1 font-display text-base text-primary">Default Card</h4>
               <p className="text-sm text-secondary">A card with hover effect, border, and surface background.</p>
             </div>
-            <div className="rounded-xl border border-border-default bg-elevated p-6">
+            <div className="rounded-xl border border-default bg-elevated p-6">
               <h4 className="mb-1 font-display text-base text-primary">Elevated Card</h4>
               <p className="text-sm text-secondary">A card with elevated background for nested content.</p>
             </div>
@@ -527,11 +527,11 @@ function ComponentsSection() {
         {/* Buttons */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Buttons</h3>
-          <div className="flex flex-wrap gap-3 rounded-xl border border-border-default bg-surface p-5">
+          <div className="flex flex-wrap gap-3 rounded-xl border border-default bg-surface p-5">
             <button className="rounded-lg bg-interactive px-4 py-2 text-sm font-medium text-base transition-colors hover:bg-interactive-hover">
               Primary
             </button>
-            <button className="rounded-lg border border-border-default bg-surface px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-hover">
+            <button className="rounded-lg border border-default bg-surface px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-hover">
               Secondary
             </button>
             <button className="rounded-lg px-4 py-2 text-sm font-medium text-secondary transition-colors hover:bg-hover hover:text-primary">
@@ -543,7 +543,7 @@ function ComponentsSection() {
         {/* Text hierarchy */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Text Hierarchy</h3>
-          <div className="rounded-xl border border-border-default bg-surface p-6">
+          <div className="rounded-xl border border-default bg-surface p-6">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Badge>text-primary</Badge>
@@ -568,19 +568,19 @@ function ComponentsSection() {
         {/* Input */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-secondary">Form Elements</h3>
-          <div className="max-w-md rounded-xl border border-border-default bg-surface p-5">
+          <div className="max-w-md rounded-xl border border-default bg-surface p-5">
             <label className="mb-1 block text-sm font-medium text-primary">Label</label>
             <input
               type="text"
               placeholder="Placeholder text..."
-              className="mb-3 w-full rounded-lg border border-border-default bg-elevated px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-active focus:outline-none"
+              className="mb-3 w-full rounded-lg border border-default bg-elevated px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-active focus:outline-none"
               readOnly
             />
             <label className="mb-1 block text-sm font-medium text-primary">Textarea</label>
             <textarea
               placeholder="Write something..."
               rows={3}
-              className="w-full resize-none rounded-lg border border-border-default bg-elevated px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-active focus:outline-none"
+              className="w-full resize-none rounded-lg border border-default bg-elevated px-3 py-2 text-sm text-primary placeholder:text-tertiary focus:border-border-active focus:outline-none"
               readOnly
             />
           </div>

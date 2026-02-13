@@ -176,7 +176,7 @@ export function TableHead({
   return (
     <th
       className={cn(
-        'h-11 px-4 text-xs font-medium text-secondary uppercase tracking-wider',
+        'h-11 px-4 text-xs font-medium text-tertiary uppercase tracking-wider',
         alignClasses[align],
         className
       )}
@@ -220,7 +220,7 @@ export function TableCell({
         'h-14 px-4',
         alignClasses[align],
         muted ? 'text-tertiary' : 'text-primary',
-        truncate && 'max-w-[200px] truncate',
+        truncate && 'max-w-48 truncate',
         className
       )}
       {...props}
@@ -434,9 +434,9 @@ export function TablePagination({
                 key={pageNum}
                 onClick={() => onPageChange(pageNum as number)}
                 className={cn(
-                  'min-w-[32px] h-8 px-2 rounded-lg text-sm font-medium transition-colors',
+                  'min-w-8 h-8 px-2 rounded-lg text-sm font-medium transition-colors',
                   page === pageNum
-                    ? 'bg-info text-white'
+                    ? 'bg-info text-toggle-knob'
                     : 'text-secondary hover:text-primary hover:bg-elevated'
                 )}
               >

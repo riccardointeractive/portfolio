@@ -6,7 +6,7 @@ interface AdminEmptyStateProps {
 
 export function AdminEmptyState({ message, actionLabel, onAction }: AdminEmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border-default py-20">
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-default py-20">
       <p className="text-sm text-secondary">{message}</p>
       {actionLabel && onAction && (
         <button
