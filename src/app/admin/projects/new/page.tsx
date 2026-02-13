@@ -40,8 +40,8 @@ function NewProjectContent() {
           <ArrowLeft size={18} className="text-secondary" />
         </button>
         <div>
-          <h1 className="font-display text-2xl text-primary">New Project</h1>
-          <p className="mt-1 text-sm text-secondary">
+          <h1 className="font-display text-4xl text-primary">New Project</h1>
+          <p className="mt-2 text-secondary">
             Set up the project metadata, then build the study case.
           </p>
         </div>
