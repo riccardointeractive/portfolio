@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback, use } from 'react'
+import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import {
   Card, Button, Modal, Input, Select, Badge, Checkbox,
@@ -116,6 +117,11 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
   const [todoCompletedCollapsed, setTodoCompletedCollapsed] = useState(false)
   const [draggedRecordId, setDraggedRecordId] = useState<string | null>(null)
   const [tmdbModalOpen, setTmdbModalOpen] = useState(false)
+  const [activeCellDropdown, setActiveCellDropdown] = useState<{
+    recordId: string
+    fieldId: string
+    rect: DOMRect
+  } | null>(null)
 
   // Form states
   const [newViewName, setNewViewName] = useState('')
@@ -534,12 +540,14 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
 
   // Record management
   const openNewRecord = () => {
+    setActiveCellDropdown(null)
     setEditingRecord(null)
     setRecordValues({})
     setRecordModalOpen(true)
   }
 
   const openEditRecord = (record: DatabaseRecord) => {
+    setActiveCellDropdown(null)
     setEditingRecord(record)
     setRecordValues(record.values)
     setRecordModalOpen(true)
@@ -638,6 +646,177 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     }
   }, [id])
 
+  // Inline cell dropdown for select/multiselect
+  const openCellDropdown = useCallback((
+    e: React.MouseEvent<HTMLElement>,
+    recordId: string,
+    fieldId: string
+  ) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    setActiveCellDropdown({ recordId, fieldId, rect })
+  }, [])
+
+  // Close cell dropdown on click outside, Escape, or scroll
+  useEffect(() => {
+    if (!activeCellDropdown) return
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (!target.closest('[data-cell-dropdown]')) {
+        setActiveCellDropdown(null)
+      }
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveCellDropdown(null)
+    }
+
+    const handleScroll = () => setActiveCellDropdown(null)
+
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    // Close on any scroll (table container or window)
+    window.addEventListener('scroll', handleScroll, true)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('scroll', handleScroll, true)
+    }
+  }, [activeCellDropdown])
+
+  // Cell dropdown portal for inline select/multiselect editing
+  const cellDropdown = useMemo(() => {
+    if (!activeCellDropdown || !database) return null
+
+    const field = database.fields.find(f => f.id === activeCellDropdown.fieldId)
+    if (!field || !field.options || (field.type !== 'select' && field.type !== 'multiselect')) return null
+
+    const record = database.records.find(r => r.id === activeCellDropdown.recordId)
+    if (!record) return null
+
+    const currentValue = record.values[field.id]
+    const { rect } = activeCellDropdown
+
+    // Position: below cell, flip above if insufficient space
+    const dropdownMaxHeight = 240
+    const spaceBelow = window.innerHeight - rect.bottom
+    const showAbove = spaceBelow < dropdownMaxHeight && rect.top > spaceBelow
+
+    const positionStyle: React.CSSProperties = {
+      position: 'fixed',
+      left: `${rect.left}px`,
+      ...(showAbove
+        ? { bottom: `${window.innerHeight - rect.top + 4}px` }
+        : { top: `${rect.bottom + 4}px` }),
+      zIndex: 9999,
+      minWidth: `${Math.max(rect.width, 180)}px`,
+      maxHeight: `${dropdownMaxHeight}px`,
+    }
+
+    if (field.type === 'select') {
+      return createPortal(
+        <div
+          data-cell-dropdown
+          className="bg-surface border border-border-default rounded-lg shadow-lg overflow-y-auto"
+          style={positionStyle}
+        >
+          {/* None option to clear */}
+          <button
+            type="button"
+            className={cn(
+              'w-full px-3 py-2 text-left text-sm transition-colors',
+              'hover:bg-hover',
+              !currentValue && 'bg-elevated'
+            )}
+            onClick={() => {
+              handleCellChange(activeCellDropdown.recordId, field.id, undefined)
+              setActiveCellDropdown(null)
+            }}
+          >
+            <span className="text-tertiary italic">None</span>
+          </button>
+          {field.options.map(opt => {
+            const isSelected = currentValue === opt.id
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                className={cn(
+                  'w-full px-3 py-2 text-left text-sm flex items-center gap-2 transition-colors',
+                  'hover:bg-hover',
+                  isSelected && 'bg-elevated'
+                )}
+                onClick={() => {
+                  handleCellChange(activeCellDropdown.recordId, field.id, opt.id)
+                  setActiveCellDropdown(null)
+                }}
+              >
+                <Badge variant="custom" customColor={opt.color} className="text-xs">
+                  {opt.label}
+                </Badge>
+                {isSelected && (
+                  <Icon name="check" size={14} className="ml-auto text-interactive" />
+                )}
+              </button>
+            )
+          })}
+        </div>,
+        document.body
+      )
+    }
+
+    if (field.type === 'multiselect') {
+      const selectedIds: string[] = Array.isArray(currentValue) ? currentValue : []
+      return createPortal(
+        <div
+          data-cell-dropdown
+          className="bg-surface border border-border-default rounded-lg shadow-lg overflow-y-auto"
+          style={positionStyle}
+        >
+          {field.options.map(opt => {
+            const isSelected = selectedIds.includes(opt.id)
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                className={cn(
+                  'w-full px-3 py-2 text-left text-sm flex items-center gap-2 transition-colors',
+                  'hover:bg-hover',
+                  isSelected && 'bg-elevated'
+                )}
+                onClick={() => {
+                  const newSelected = isSelected
+                    ? selectedIds.filter(sid => sid !== opt.id)
+                    : [...selectedIds, opt.id]
+                  handleCellChange(activeCellDropdown.recordId, field.id, newSelected)
+                }}
+              >
+                <div
+                  className={cn(
+                    'w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors',
+                    isSelected ? 'border-transparent' : 'border-border-default'
+                  )}
+                  style={isSelected ? { backgroundColor: opt.color } : undefined}
+                >
+                  {isSelected && (
+                    <Icon name="check" size={10} weight="bold" className="text-white" />
+                  )}
+                </div>
+                <Badge variant="custom" customColor={opt.color} className="text-xs">
+                  {opt.label}
+                </Badge>
+              </button>
+            )
+          })}
+        </div>,
+        document.body
+      )
+    }
+
+    return null
+  }, [activeCellDropdown, database, handleCellChange])
+
   // Render cell value
   const renderCellValue = (field: Field, value: unknown, recordId: string) => {
     switch (field.type) {
@@ -648,33 +827,49 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
             onChange={e => handleCellChange(recordId, field.id, e.target.checked)}
           />
         )
-      case 'select':
+      case 'select': {
         const option = field.options?.find(o => o.id === value)
-        return option ? (
-          <Badge
-            variant="custom"
-            customColor={option.color}
-            className="text-xs"
+        return (
+          <button
+            type="button"
+            data-cell-dropdown
+            className="cursor-pointer rounded px-1 py-0.5 -mx-1 -my-0.5 hover:bg-hover transition-colors"
+            onClick={(e) => openCellDropdown(e, recordId, field.id)}
           >
-            {option.label}
-          </Badge>
-        ) : (
-          <span className="text-tertiary">-</span>
+            {option ? (
+              <Badge variant="custom" customColor={option.color} className="text-xs">
+                {option.label}
+              </Badge>
+            ) : (
+              <span className="text-tertiary">-</span>
+            )}
+          </button>
         )
-      case 'multiselect':
+      }
+      case 'multiselect': {
         const selectedIds = Array.isArray(value) ? value : []
         const selectedOptions = field.options?.filter(o => selectedIds.includes(o.id)) || []
-        return selectedOptions.length > 0 ? (
-          <div className="flex flex-wrap gap-1">
-            {selectedOptions.map(opt => (
-              <Badge key={opt.id} variant="custom" customColor={opt.color} className="text-xs">
-                {opt.label}
-              </Badge>
-            ))}
-          </div>
-        ) : (
-          <span className="text-tertiary">-</span>
+        return (
+          <button
+            type="button"
+            data-cell-dropdown
+            className="cursor-pointer rounded px-1 py-0.5 -mx-1 -my-0.5 hover:bg-hover transition-colors text-left"
+            onClick={(e) => openCellDropdown(e, recordId, field.id)}
+          >
+            {selectedOptions.length > 0 ? (
+              <div className="flex flex-wrap gap-1">
+                {selectedOptions.map(opt => (
+                  <Badge key={opt.id} variant="custom" customColor={opt.color} className="text-xs">
+                    {opt.label}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <span className="text-tertiary">-</span>
+            )}
+          </button>
         )
+      }
       case 'url':
         return value ? (
           <a
@@ -2777,6 +2972,9 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           onImported={loadData}
         />
       )}
+
+      {/* Inline cell dropdown portal */}
+      {cellDropdown}
     </div>
   )
 }
