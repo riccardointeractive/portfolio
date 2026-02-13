@@ -5,11 +5,10 @@ import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import {
   Card, Button, Modal, Input, Select, Badge, Checkbox,
-  Table, TableHeader, TableBody, TableRow, TableHead, TableCell,
-  TableEmpty, TableActions, TableActionButton,
 } from '@/app/admin/cortex/components/ui'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { TMDBImportModal } from '@/app/admin/cortex/components/ui/TMDBImportModal'
+import { TableView, CardsView, TodoView, MyDayView, GalleryView } from './views'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
 import { cn, generateId, customColorBg } from '@/app/admin/cortex/lib/utils'
 import {
@@ -113,8 +112,6 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
   const [recordModalOpen, setRecordModalOpen] = useState(false)
   const [editingField, setEditingField] = useState<Field | null>(null)
   const [editingView, setEditingView] = useState<DatabaseView | null>(null)
-  const [expandedCardId, setExpandedCardId] = useState<string | null>(null)
-  const [todoCompletedCollapsed, setTodoCompletedCollapsed] = useState(false)
   const [draggedRecordId, setDraggedRecordId] = useState<string | null>(null)
   const [tmdbModalOpen, setTmdbModalOpen] = useState(false)
   const [backfilling, setBackfilling] = useState(false)
@@ -313,13 +310,6 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     await refreshDatabase()
     console.log(`Backfilled ${successCount}/${recordsNeedingBackfill.length} records`)
   }, [database, backfilling, recordsNeedingBackfill, id, refreshDatabase])
-
-  // Sync todo collapsed state with view config when view changes or loads
-  useEffect(() => {
-    if (activeView?.type === 'todo' && activeView.todoConfig) {
-      setTodoCompletedCollapsed(activeView.todoConfig.completedCollapsed)
-    }
-  }, [activeView])
 
   // Apply filters and sorts to records
   const filteredRecords = useMemo(() => {
@@ -1465,1135 +1455,118 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
 
       {/* Table View */}
       {(activeView?.type === 'table' || !activeView?.type) && (
-        <>
-          <Card className="overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow hoverable={false}>
-                  {canDragRecords && (
-                    <TableHead className="w-8 px-2"></TableHead>
-                  )}
-                  {visibleFields.map(field => (
-                    <TableHead key={field.id} className="min-w-40">
-                      <div className="flex items-center gap-2 group">
-                        <Icon name={FIELD_TYPE_ICONS[field.type]} size={14} className="text-tertiary" />
-                        <span className="flex-1">{field.name}</span>
-                        <button
-                          onClick={() => handleDeleteField(field.id)}
-                          className="p-1 hover:bg-error-subtle rounded opacity-0 group-hover:opacity-100 text-tertiary hover:text-error transition-all"
-                          title="Delete field"
-                        >
-                          <Icon name="trash" size={14} />
-                        </button>
-                      </div>
-                    </TableHead>
-                  ))}
-                  <TableHead className="w-20" align="right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredRecords.length === 0 ? (
-              <TableEmpty
-                colSpan={visibleFields.length + (canDragRecords ? 2 : 1)}
-                icon="list"
-                title="No records"
-                description={activeView?.filters.length ? "No records match your filters" : "Add your first record to get started"}
-                action={!activeView?.filters.length ? (
-                  <Button size="sm" onClick={openNewRecord}>
-                    <Icon name="plus" size={16} />
-                    Add Record
-                  </Button>
-                ) : undefined}
-              />
-            ) : (
-              filteredRecords.map(record => (
-                <TableRow
-                  key={record.id}
-                  draggable={canDragRecords}
-                  onDragStart={e => handleDragStart(e, record.id)}
-                  onDragEnd={handleDragEnd}
-                  onDragOver={handleDragOver}
-                  onDrop={e => handleDrop(e, record.id)}
-                  className={cn(
-                    canDragRecords && 'cursor-grab active:cursor-grabbing',
-                    draggedRecordId === record.id && 'opacity-50'
-                  )}
-                >
-                  {canDragRecords && (
-                    <TableCell className="w-8 px-2">
-                      <Icon name="grip" size={16} className="text-secondary" />
-                    </TableCell>
-                  )}
-                  {visibleFields.map(field => (
-                    <TableCell key={field.id}>
-                      {renderCellValue(field, record.values[field.id], record.id)}
-                    </TableCell>
-                  ))}
-                  <TableCell align="right">
-                    <TableActions>
-                      <TableActionButton
-                        icon="arrow-out"
-                        label="Open"
-                        onClick={() => router.push(`/admin/cortex/databases/${id}/records/${record.id}`)}
-                      />
-                      <TableActionButton
-                        icon="edit"
-                        label="Edit"
-                        onClick={() => openEditRecord(record)}
-                      />
-                      <TableActionButton
-                        icon="trash"
-                        label="Delete"
-                        variant="danger"
-                        onClick={() => handleDeleteRecord(record.id)}
-                      />
-                    </TableActions>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-          </Card>
-
-          {/* Footer stats */}
-          <div className="text-sm text-tertiary">
-            {filteredRecords.length} of {database.records.length} records
-            {activeView?.filters.length ? ` (filtered)` : ''}
-            {canDragRecords && filteredRecords.length > 1 && (
-              <span className="ml-2 text-tertiary/60">• Drag to reorder</span>
-            )}
-          </div>
-        </>
+        <TableView
+          database={database}
+          allDatabases={allDatabases}
+          activeView={activeView!}
+          filteredRecords={filteredRecords}
+          databaseId={id}
+          canDragRecords={canDragRecords}
+          draggedRecordId={draggedRecordId}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onOpenEditRecord={openEditRecord}
+          onOpenNewRecord={openNewRecord}
+          onDeleteRecord={handleDeleteRecord}
+          onRefreshDatabase={refreshDatabase}
+          visibleFields={visibleFields}
+          fieldTypeIcons={FIELD_TYPE_ICONS}
+          renderCellValue={renderCellValue}
+          onDeleteField={handleDeleteField}
+          onNavigateToRecord={(recordId) => router.push(`/admin/cortex/databases/${id}/records/${recordId}`)}
+        />
       )}
 
       {/* Cards View */}
-      {activeView?.type === 'cards' && activeView.cardsConfig && (() => {
-        const sourceDb = allDatabases.find(db => db.id === activeView.cardsConfig?.sourceDatabaseId)
-        if (!sourceDb) return (
-          <Card className="p-8 text-center text-tertiary">
-            Source database not found
-          </Card>
-        )
+      {activeView?.type === 'cards' && activeView.cardsConfig && (
+        <CardsView
+          database={database}
+          allDatabases={allDatabases}
+          activeView={activeView!}
+          filteredRecords={filteredRecords}
+          databaseId={id}
+          canDragRecords={canDragRecords}
+          draggedRecordId={draggedRecordId}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onOpenEditRecord={openEditRecord}
+          onOpenNewRecord={openNewRecord}
+          onDeleteRecord={handleDeleteRecord}
+          onRefreshDatabase={refreshDatabase}
+          onNavigateToSourceRecord={(dbId, recordId) => router.push(`/admin/cortex/databases/${dbId}/records/${recordId}`)}
+        />
+      )}
 
-        const groupByField = sourceDb.fields.find(f => f.id === activeView.cardsConfig?.groupByFieldId)
-        if (!groupByField) return (
-          <Card className="p-8 text-center text-tertiary">
-            Group by field not found
-          </Card>
-        )
-
-        // Get display name for a source record
-        const getSourceRecordName = (record: DatabaseRecord) => {
-          const nameField = sourceDb.fields.find(f => f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title')
-          if (nameField && record.values[nameField.id]) {
-            return String(record.values[nameField.id])
-          }
-          const firstTextField = sourceDb.fields.find(f => f.type === 'text')
-          if (firstTextField && record.values[firstTextField.id]) {
-            return String(record.values[firstTextField.id])
-          }
-          return `Record ${record.id.slice(0, 6)}`
-        }
-
-        // Check if source record has a checkbox field (for task completion)
-        const checkboxField = sourceDb.fields.find(f => f.type === 'checkbox')
-
-        // Get expanded card data
-        const expandedCard = expandedCardId ? database.records.find(r => r.id === expandedCardId) : null
-        const expandedChildRecords = expandedCard ? sourceDb.records.filter(sr => {
-          const relationValue = sr.values[groupByField.id]
-          if (Array.isArray(relationValue)) {
-            return relationValue.includes(expandedCard.id)
-          }
-          return relationValue === expandedCard.id
-        }) : []
-
-        // Get parent display name helper
-        const getParentName = (parentRecord: DatabaseRecord) => {
-          const parentNameField = database.fields.find(f => f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title')
-          return parentNameField && parentRecord.values[parentNameField.id]
-            ? String(parentRecord.values[parentNameField.id])
-            : `Record ${parentRecord.id.slice(0, 6)}`
-        }
-
-        return (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {database.records.map(parentRecord => {
-                // Find all source records that have this parent as their relation
-                const childRecords = sourceDb.records.filter(sr => {
-                  const relationValue = sr.values[groupByField.id]
-                  if (Array.isArray(relationValue)) {
-                    return relationValue.includes(parentRecord.id)
-                  }
-                  return relationValue === parentRecord.id
-                })
-
-                const parentName = getParentName(parentRecord)
-
-                // Calculate progress if there's a checkbox field
-                const completedCount = checkboxField
-                  ? childRecords.filter(r => r.values[checkboxField.id] === true).length
-                  : 0
-                const progress = childRecords.length > 0
-                  ? Math.round((completedCount / childRecords.length) * 100)
-                  : 0
-
-                return (
-                  <Card
-                    key={parentRecord.id}
-                    className="flex flex-col cursor-pointer hover:bg-elevated transition-colors"
-                    onClick={() => setExpandedCardId(parentRecord.id)}
-                  >
-                    <div className="p-4 border-b border-border-default">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-display text-base text-primary">{parentName}</h3>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-tertiary">
-                            {childRecords.length} {sourceDb.name.toLowerCase()}
-                          </span>
-                          <Icon name="arrow-out" size={14} className="text-tertiary" />
-                        </div>
-                      </div>
-                      {checkboxField && childRecords.length > 0 && (
-                        <div className="mt-2">
-                          <div className="flex items-center justify-between text-xs text-tertiary mb-1">
-                            <span>{completedCount}/{childRecords.length} completed</span>
-                            <span>{progress}%</span>
-                          </div>
-                          <div className="h-2 bg-elevated rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-success rounded-full transition-all duration-300 ease-out"
-                              style={{ width: `${progress}%` }}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1 p-2 space-y-1 max-h-52 overflow-hidden">
-                      {childRecords.length === 0 ? (
-                        <p className="text-sm text-tertiary text-center py-4">
-                          No {sourceDb.name.toLowerCase()} yet
-                        </p>
-                      ) : (
-                        childRecords.slice(0, 5).map(childRecord => (
-                          <div
-                            key={childRecord.id}
-                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm"
-                          >
-                            {checkboxField && (
-                              <Icon
-                                name={childRecord.values[checkboxField.id] ? 'check-square' : 'square'}
-                                size={14}
-                                className={childRecord.values[checkboxField.id] ? 'text-success' : 'text-tertiary'}
-                              />
-                            )}
-                            <span className={cn(
-                              "flex-1 truncate",
-                              checkboxField && childRecord.values[checkboxField.id]
-                                ? "text-tertiary line-through"
-                                : "text-primary"
-                            )}>
-                              {getSourceRecordName(childRecord)}
-                            </span>
-                          </div>
-                        ))
-                      )}
-                      {childRecords.length > 5 && (
-                        <p className="text-xs text-tertiary text-center py-1">
-                          +{childRecords.length - 5} more
-                        </p>
-                      )}
-                    </div>
-                    {/* Quick add in card */}
-                    <div className="p-2 pt-0">
-                      <form
-                        onClick={(e) => e.stopPropagation()}
-                        onSubmit={async (e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          const form = e.target as HTMLFormElement
-                          const input = form.elements.namedItem(`quickAdd-${parentRecord.id}`) as HTMLInputElement
-                          const value = input.value.trim()
-                          if (!value) return
-
-                          const nameField = sourceDb.fields.find(f =>
-                            f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title'
-                          ) || sourceDb.fields.find(f => f.type === 'text')
-
-                          if (!nameField) return
-
-                          try {
-                            await databasesApi.addRecord(sourceDb.id, {
-                              [nameField.id]: value,
-                              [groupByField.id]: groupByField.relationConfig?.multiple
-                                ? [parentRecord.id]
-                                : parentRecord.id
-                            })
-                            await refreshDatabase()
-                            input.value = ''
-                          } catch (error) {
-                            console.error('Failed to add record:', error)
-                          }
-                        }}
-                        className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-elevated transition-colors"
-                      >
-                        <Icon name="plus" size={14} className="text-tertiary shrink-0" />
-                        <input
-                          name={`quickAdd-${parentRecord.id}`}
-                          type="text"
-                          placeholder={`Add ${sourceDb.name.toLowerCase().replace(/s$/, '')}...`}
-                          className="flex-1 bg-transparent text-primary placeholder-tertiary outline-none text-sm"
-                          autoComplete="off"
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      </form>
-                    </div>
-                  </Card>
-                )
-              })}
-            </div>
-
-            {/* Footer stats */}
-            <div className="text-sm text-tertiary">
-              {database.records.length} cards • {sourceDb.records.length} {sourceDb.name.toLowerCase()} total
-            </div>
-
-            {/* Expanded Card Modal */}
-            <Modal
-              open={!!expandedCardId}
-              onClose={() => setExpandedCardId(null)}
-              title={expandedCard ? getParentName(expandedCard) : ''}
-              className="max-w-2xl"
-            >
-              {expandedCard && (
-                <div className="space-y-4">
-                  {/* Progress */}
-                  {checkboxField && expandedChildRecords.length > 0 && (() => {
-                    const completed = expandedChildRecords.filter(r => r.values[checkboxField.id] === true).length
-                    const progress = Math.round((completed / expandedChildRecords.length) * 100)
-                    return (
-                      <div>
-                        <div className="flex items-center justify-between text-sm text-tertiary mb-2">
-                          <span>{completed}/{expandedChildRecords.length} completed</span>
-                          <span>{progress}%</span>
-                        </div>
-                        <div className="h-2 bg-elevated rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-success rounded-full transition-all duration-300 ease-out"
-                            style={{ width: `${progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    )
-                  })()}
-
-                  {/* Records list */}
-                  <div className="space-y-2 max-h-80 overflow-y-auto">
-                    {expandedChildRecords.length === 0 ? (
-                      <p className="text-tertiary text-center py-8">
-                        No {sourceDb.name.toLowerCase()} yet
-                      </p>
-                    ) : (
-                      expandedChildRecords.map(childRecord => (
-                        <div
-                          key={childRecord.id}
-                          className="group flex items-start gap-3 p-3 rounded-lg bg-elevated hover:bg-surface transition-colors"
-                        >
-                          {checkboxField && (
-                            <Checkbox
-                              checked={!!childRecord.values[checkboxField.id]}
-                              onChange={async (e) => {
-                                e.stopPropagation()
-                                try {
-                                  await databasesApi.updateRecord(
-                                    sourceDb.id,
-                                    childRecord.id,
-                                    { ...childRecord.values, [checkboxField.id]: e.target.checked }
-                                  )
-                                  await refreshDatabase()
-                                } catch (error) {
-                                  console.error('Failed to update record:', error)
-                                }
-                              }}
-                              className="mt-0.5"
-                            />
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <p className={cn(
-                              "font-medium",
-                              checkboxField && childRecord.values[checkboxField.id]
-                                ? "text-tertiary line-through"
-                                : "text-primary"
-                            )}>
-                              {getSourceRecordName(childRecord)}
-                            </p>
-                            {/* Show other fields */}
-                            <div className="mt-1 flex flex-wrap gap-2">
-                              {sourceDb.fields
-                                .filter(f =>
-                                  f.id !== groupByField.id &&
-                                  f.type !== 'checkbox' &&
-                                  f.name.toLowerCase() !== 'name' &&
-                                  f.name.toLowerCase() !== 'title' &&
-                                  childRecord.values[f.id]
-                                )
-                                .slice(0, 3)
-                                .map(f => {
-                                  const value = childRecord.values[f.id]
-                                  if (f.type === 'select' && f.options) {
-                                    const opt = f.options.find(o => o.id === value)
-                                    return opt ? (
-                                      <Badge key={f.id} variant="custom" customColor={opt.color} className="text-xs">
-                                        {opt.label}
-                                      </Badge>
-                                    ) : null
-                                  }
-                                  if (f.type === 'date' && value) {
-                                    return (
-                                      <span key={f.id} className="text-xs text-tertiary">
-                                        {new Date(String(value)).toLocaleDateString()}
-                                      </span>
-                                    )
-                                  }
-                                  return null
-                                })}
-                            </div>
-                          </div>
-                          {/* Action buttons */}
-                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                            <button
-                              onClick={() => router.push(`/admin/cortex/databases/${sourceDb.id}/records/${childRecord.id}`)}
-                              className="p-1.5 text-tertiary hover:text-primary hover:bg-base rounded transition-colors"
-                              title="Open"
-                            >
-                              <Icon name="arrow-out" size={14} />
-                            </button>
-                            <button
-                              onClick={async () => {
-                                if (confirm('Delete this record?')) {
-                                  try {
-                                    await databasesApi.deleteRecord(sourceDb.id, childRecord.id)
-                                    await refreshDatabase()
-                                  } catch (error) {
-                                    console.error('Failed to delete record:', error)
-                                  }
-                                }
-                              }}
-                              className="p-1.5 text-tertiary hover:text-error hover:bg-error-subtle rounded transition-colors"
-                              title="Delete"
-                            >
-                              <Icon name="trash" size={14} />
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-
-                  {/* Quick add record */}
-                  <form
-                    onSubmit={async (e) => {
-                      e.preventDefault()
-                      const form = e.target as HTMLFormElement
-                      const input = form.elements.namedItem('quickAdd') as HTMLInputElement
-                      const value = input.value.trim()
-                      if (!value) return
-
-                      // Find name/title field
-                      const nameField = sourceDb.fields.find(f =>
-                        f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title'
-                      ) || sourceDb.fields.find(f => f.type === 'text')
-
-                      if (!nameField) return
-
-                      try {
-                        await databasesApi.addRecord(sourceDb.id, {
-                          [nameField.id]: value,
-                          [groupByField.id]: groupByField.relationConfig?.multiple
-                            ? [expandedCard.id]
-                            : expandedCard.id
-                        })
-                        await refreshDatabase()
-                        input.value = ''
-                      } catch (error) {
-                        console.error('Failed to add record:', error)
-                      }
-                    }}
-                    className="flex items-center gap-2 pt-2 border-t border-border-default"
-                  >
-                    <Icon name="plus" size={16} className="text-tertiary shrink-0" />
-                    <input
-                      name="quickAdd"
-                      type="text"
-                      placeholder={`Add ${sourceDb.name.toLowerCase().replace(/s$/, '')}...`}
-                      className="flex-1 bg-transparent text-primary placeholder-tertiary outline-none text-sm py-2"
-                      autoComplete="off"
-                    />
-                    <Button type="submit" size="sm" variant="ghost">
-                      Add
-                    </Button>
-                  </form>
-                </div>
-              )}
-            </Modal>
-          </>
-        )
-      })()}
 
       {/* Todo View */}
-      {activeView?.type === 'todo' && activeView.todoConfig && (() => {
-        const checkboxField = database.fields.find(f => f.id === activeView.todoConfig?.checkboxFieldId)
-        if (!checkboxField) {
-          return (
-            <Card className="p-8 text-center text-tertiary">
-              Checkbox field not found. Please reconfigure this view.
-            </Card>
-          )
-        }
-
-        const nameField = database.fields.find(f => f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title')
-          || database.fields.find(f => f.type === 'text')
-
-        const getRecordName = (rec: DatabaseRecord) => {
-          if (nameField && rec.values[nameField.id]) {
-            return String(rec.values[nameField.id])
-          }
-          return `Record ${rec.id.slice(0, 6)}`
-        }
-
-        // Correct logic:
-        // - Unchecked checkbox = task NOT done = show in main list (top)
-        // - Checked checkbox = task done = show in completed section (bottom)
-        const isDone = (val: unknown) => val === true || val === 'true'
-        const todoItems = filteredRecords.filter(r => !isDone(r.values[checkboxField.id])) // unchecked → top
-        const doneItems = filteredRecords.filter(r => isDone(r.values[checkboxField.id]))  // checked → bottom
-        const showCompleted = activeView.todoConfig.showCompleted
-
-        const toggleComplete = async (rec: DatabaseRecord) => {
-          try {
-            await databasesApi.updateRecord(id, rec.id, {
-              ...rec.values,
-              [checkboxField.id]: !isDone(rec.values[checkboxField.id])
-            })
-            await refreshDatabase()
-          } catch (error) {
-            console.error('Failed to update record:', error)
-          }
-        }
-
-        const progressPercent = filteredRecords.length > 0
-          ? Math.round((doneItems.length / filteredRecords.length) * 100)
-          : 0
-
-        return (
-          <div className="space-y-4">
-            {/* Progress Bar */}
-            <Card className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-primary">Progress</span>
-                <span className="text-sm text-tertiary">
-                  {doneItems.length}/{filteredRecords.length} completed ({progressPercent}%)
-                </span>
-              </div>
-              <div className="h-2 bg-elevated rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-success rounded-full transition-all duration-300 ease-out"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-            </Card>
-
-            {/* Quick Add */}
-            <Card className="p-0 overflow-hidden">
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault()
-                  const form = e.target as HTMLFormElement
-                  const input = form.elements.namedItem('todoQuickAdd') as HTMLInputElement
-                  const value = input.value.trim()
-                  if (!value || !nameField) return
-
-                  try {
-                    await databasesApi.addRecord(id, {
-                      [nameField.id]: value,
-                      [checkboxField.id]: false
-                    })
-                    await refreshDatabase()
-                    input.value = ''
-                  } catch (error) {
-                    console.error('Failed to add record:', error)
-                  }
-                }}
-                className="flex items-center gap-3 px-4 py-3 border-b border-border-default"
-              >
-                <Icon name="plus" size={18} className="text-tertiary" />
-                <input
-                  name="todoQuickAdd"
-                  type="text"
-                  placeholder="Add a task..."
-                  className="flex-1 bg-transparent text-primary placeholder-tertiary outline-none"
-                  autoComplete="off"
-                />
-                <Button type="submit" size="sm">Add</Button>
-              </form>
-
-              {/* Incomplete Items (todo) */}
-              <div className="divide-y divide-border-default">
-                {todoItems.length === 0 && doneItems.length === 0 && (
-                  <div className="px-4 py-8 text-center text-tertiary">
-                    <Icon name="check-circle" size={32} className="mx-auto mb-2 opacity-50" />
-                    <p>No tasks yet. Add one above!</p>
-                  </div>
-                )}
-                {todoItems.length === 0 && doneItems.length > 0 && (
-                  <div className="px-4 py-6 text-center text-tertiary">
-                    <Icon name="trophy" size={32} className="mx-auto mb-2 text-success" />
-                    <p className="text-success font-medium">All done!</p>
-                  </div>
-                )}
-                {todoItems.map(rec => (
-                  <div
-                    key={rec.id}
-                    className={cn(
-                      "group flex items-center gap-3 px-4 py-3 hover:bg-elevated transition-colors",
-                      canDragRecords && "cursor-grab active:cursor-grabbing",
-                      draggedRecordId === rec.id && "opacity-50"
-                    )}
-                    draggable={canDragRecords}
-                    onDragStart={e => handleDragStart(e, rec.id)}
-                    onDragEnd={handleDragEnd}
-                    onDragOver={handleDragOver}
-                    onDrop={e => handleDrop(e, rec.id)}
-                  >
-                    {canDragRecords && (
-                      <Icon name="grip" size={16} className="text-tertiary group-hover:text-secondary transition-colors" />
-                    )}
-                    <Checkbox
-                      checked={isDone(rec.values[checkboxField.id])}
-                      onChange={() => toggleComplete(rec)}
-                    />
-                    <span
-                      className="flex-1 cursor-pointer"
-                      onClick={() => router.push(`/admin/cortex/databases/${id}/records/${rec.id}`)}
-                    >
-                      {getRecordName(rec)}
-                    </span>
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={() => router.push(`/admin/cortex/databases/${id}/records/${rec.id}`)}
-                        className="p-1.5 text-tertiary hover:text-primary hover:bg-base rounded"
-                        title="Open"
-                      >
-                        <Icon name="arrow-out" size={14} />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteRecord(rec.id)}
-                        className="p-1.5 text-tertiary hover:text-error hover:bg-error/10 rounded"
-                        title="Delete"
-                      >
-                        <Icon name="trash" size={14} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Completed Items */}
-              {showCompleted && doneItems.length > 0 && (
-                <div className="border-t border-border-default">
-                  <button
-                    onClick={() => setTodoCompletedCollapsed(!todoCompletedCollapsed)}
-                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-tertiary hover:bg-elevated transition-colors"
-                  >
-                    <Icon
-                      name={todoCompletedCollapsed ? 'caret-right' : 'caret-down'}
-                      size={14}
-                    />
-                    <span>Completed ({doneItems.length})</span>
-                  </button>
-                  {!todoCompletedCollapsed && (
-                    <div className="divide-y divide-border-default bg-base/50">
-                      {doneItems.map(rec => (
-                        <div
-                          key={rec.id}
-                          className={cn(
-                            "group flex items-center gap-3 px-4 py-3 hover:bg-elevated transition-colors",
-                            canDragRecords && "cursor-grab active:cursor-grabbing",
-                            draggedRecordId === rec.id && "opacity-50"
-                          )}
-                          draggable={canDragRecords}
-                          onDragStart={e => handleDragStart(e, rec.id)}
-                          onDragEnd={handleDragEnd}
-                          onDragOver={handleDragOver}
-                          onDrop={e => handleDrop(e, rec.id)}
-                        >
-                          {canDragRecords && (
-                            <Icon name="grip" size={16} className="text-tertiary group-hover:text-secondary transition-colors" />
-                          )}
-                          <Checkbox
-                            checked={isDone(rec.values[checkboxField.id])}
-                            onChange={() => toggleComplete(rec)}
-                          />
-                          <span
-                            className="flex-1 text-tertiary line-through cursor-pointer"
-                            onClick={() => router.push(`/admin/cortex/databases/${id}/records/${rec.id}`)}
-                          >
-                            {getRecordName(rec)}
-                          </span>
-                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                              onClick={() => router.push(`/admin/cortex/databases/${id}/records/${rec.id}`)}
-                              className="p-1.5 text-tertiary hover:text-primary hover:bg-base rounded"
-                              title="Open"
-                            >
-                              <Icon name="arrow-out" size={14} />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteRecord(rec.id)}
-                              className="p-1.5 text-tertiary hover:text-error hover:bg-error/10 rounded"
-                              title="Delete"
-                            >
-                              <Icon name="trash" size={14} />
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </Card>
-
-            {/* Footer stats */}
-            <div className="text-sm text-tertiary">
-              {filteredRecords.length} total tasks
-              {activeView?.filters.length ? ` (filtered)` : ''}
-              {canDragRecords && filteredRecords.length > 1 && (
-                <span className="ml-2 text-tertiary/60">• Drag to reorder</span>
-              )}
-            </div>
-          </div>
-        )
-      })()}
+      {activeView?.type === 'todo' && activeView.todoConfig && (
+        <TodoView
+          database={database}
+          allDatabases={allDatabases}
+          activeView={activeView!}
+          filteredRecords={filteredRecords}
+          databaseId={id}
+          canDragRecords={canDragRecords}
+          draggedRecordId={draggedRecordId}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onOpenEditRecord={openEditRecord}
+          onOpenNewRecord={openNewRecord}
+          onDeleteRecord={handleDeleteRecord}
+          onRefreshDatabase={refreshDatabase}
+          onNavigateToRecord={(recordId) => router.push(`/admin/cortex/databases/${id}/records/${recordId}`)}
+        />
+      )}
 
       {/* My Day View */}
-      {activeView?.type === 'myday' && activeView.myDayConfig && (() => {
-        const dateField = database.fields.find(f => f.id === activeView.myDayConfig?.dateFieldId)
-        const streakField = database.fields.find(f => f.id === activeView.myDayConfig?.streakFieldId)
+      {activeView?.type === 'myday' && activeView.myDayConfig && (
+        <MyDayView
+          database={database}
+          allDatabases={allDatabases}
+          activeView={activeView!}
+          filteredRecords={filteredRecords}
+          databaseId={id}
+          canDragRecords={canDragRecords}
+          draggedRecordId={draggedRecordId}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onOpenEditRecord={openEditRecord}
+          onOpenNewRecord={openNewRecord}
+          onDeleteRecord={handleDeleteRecord}
+          onRefreshDatabase={refreshDatabase}
+          onNavigateToRecord={(recordId) => router.push(`/admin/cortex/databases/${id}/records/${recordId}`)}
+        />
+      )}
 
-        if (!dateField || !streakField) {
-          return (
-            <Card className="p-8 text-center text-tertiary">
-              Required fields not found. Please reconfigure this view.
-            </Card>
-          )
-        }
+      {/* Gallery View */}
+      {activeView?.type === 'gallery' && activeView.galleryConfig && (
+        <GalleryView
+          database={database}
+          allDatabases={allDatabases}
+          activeView={activeView!}
+          filteredRecords={filteredRecords}
+          databaseId={id}
+          canDragRecords={canDragRecords}
+          draggedRecordId={draggedRecordId}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onOpenEditRecord={openEditRecord}
+          onOpenNewRecord={openNewRecord}
+          onDeleteRecord={handleDeleteRecord}
+          onRefreshDatabase={refreshDatabase}
+        />
+      )}
 
-        const nameField = database.fields.find(f => f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title')
-          || database.fields.find(f => f.type === 'text')
-
-        const getRecordName = (rec: DatabaseRecord) => {
-          if (nameField && rec.values[nameField.id]) {
-            return String(rec.values[nameField.id])
-          }
-          return `Habit ${rec.id.slice(0, 6)}`
-        }
-
-        // Get today's date string (YYYY-MM-DD)
-        const today = new Date().toISOString().split('T')[0]
-        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
-
-        // Check if a record is completed today
-        const isCompletedToday = (rec: DatabaseRecord) => {
-          const lastCompleted = rec.values[dateField.id]
-          if (!lastCompleted) return false
-          const completedDate = String(lastCompleted).split('T')[0]
-          return completedDate === today
-        }
-
-        // Get streak value
-        const getStreak = (rec: DatabaseRecord) => {
-          const streak = rec.values[streakField.id]
-          return typeof streak === 'number' ? streak : 0
-        }
-
-        // Calculate if streak is still valid (completed yesterday or today)
-        const isStreakValid = (rec: DatabaseRecord) => {
-          const lastCompleted = rec.values[dateField.id]
-          if (!lastCompleted) return false
-          const completedDate = String(lastCompleted).split('T')[0]
-          return completedDate === today || completedDate === yesterday
-        }
-
-        const completedToday = filteredRecords.filter(r => isCompletedToday(r))
-        const pendingToday = filteredRecords.filter(r => !isCompletedToday(r))
-        const allCompletedToday = pendingToday.length === 0 && filteredRecords.length > 0
-
-        // Perfect Day Streak from config
-        const perfectStreak = activeView.myDayConfig.perfectStreak || 0
-        const lastPerfectDay = activeView.myDayConfig.lastPerfectDay || null
-
-        const progressPercent = filteredRecords.length > 0
-          ? Math.round((completedToday.length / filteredRecords.length) * 100)
-          : 0
-
-        // Update perfect streak when status changes
-        const updatePerfectStreak = async (willBeAllComplete: boolean) => {
-          const currentPerfectStreak = activeView.myDayConfig?.perfectStreak || 0
-          const currentLastPerfectDay = activeView.myDayConfig?.lastPerfectDay || null
-
-          if (willBeAllComplete) {
-            // Just completed all habits today
-            if (currentLastPerfectDay === today) {
-              // Already recorded today, no update needed
-              return
-            }
-
-            let newPerfectStreak: number
-            if (currentLastPerfectDay === yesterday) {
-              // Continuing the perfect streak
-              newPerfectStreak = currentPerfectStreak + 1
-            } else {
-              // Starting new perfect streak
-              newPerfectStreak = 1
-            }
-
-            await databasesApi.updateView(id, activeView.id, {
-              myDayConfig: {
-                dateFieldId: activeView.myDayConfig!.dateFieldId,
-                streakFieldId: activeView.myDayConfig!.streakFieldId,
-                perfectStreak: newPerfectStreak,
-                lastPerfectDay: today
-              }
-            })
-          }
-          // Note: We don't decrease perfectStreak when unchecking -
-          // the streak only breaks if you miss a day entirely
-        }
-
-        const toggleHabit = async (rec: DatabaseRecord) => {
-          try {
-            const wasCompletedToday = isCompletedToday(rec)
-            const currentStreak = getStreak(rec)
-            const lastCompleted = rec.values[dateField.id]
-            const lastCompletedDate = lastCompleted ? String(lastCompleted).split('T')[0] : null
-
-            let newStreak: number
-            let newDate: string | null
-
-            if (wasCompletedToday) {
-              // Unchecking - reset to yesterday or null, decrease streak
-              newStreak = Math.max(0, currentStreak - 1)
-              newDate = lastCompletedDate === today ? (currentStreak > 1 ? yesterday : null) : lastCompletedDate
-            } else {
-              // Checking - set to today, calculate new streak
-              if (lastCompletedDate === yesterday) {
-                // Continuing streak
-                newStreak = currentStreak + 1
-              } else {
-                // New streak
-                newStreak = 1
-              }
-              newDate = today
-            }
-
-            await databasesApi.updateRecord(id, rec.id, {
-              ...rec.values,
-              [dateField.id]: newDate,
-              [streakField.id]: newStreak
-            })
-
-            // Check if this action completes all habits for today
-            const willBeAllComplete = !wasCompletedToday && pendingToday.length === 1 && pendingToday[0].id === rec.id
-            if (willBeAllComplete) {
-              await updatePerfectStreak(true)
-            }
-
-            await refreshDatabase()
-          } catch (error) {
-            console.error('Failed to update habit:', error)
-          }
-        }
-
-        // Format today's date nicely
-        const todayFormatted = new Date().toLocaleDateString('en-US', {
-          weekday: 'long',
-          month: 'short',
-          day: 'numeric'
-        })
-
-        // Check if perfect streak is still valid (last perfect day was today or yesterday)
-        const isPerfectStreakActive = lastPerfectDay === today || lastPerfectDay === yesterday
-
-        return (
-          <div className="space-y-4">
-            {/* Header with date and streak */}
-            <Card className="p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-accent-orange-subtle flex items-center justify-center">
-                    <Icon name="sun" size={24} className="text-accent-orange" />
-                  </div>
-                  <div>
-                    <h2 className="font-display text-lg text-primary">My Day</h2>
-                    <p className="text-sm text-tertiary">{todayFormatted}</p>
-                  </div>
-                </div>
-                {isPerfectStreakActive && perfectStreak > 0 && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-accent-orange-subtle rounded-xl">
-                    <Icon name="fire" size={20} className="text-accent-orange" />
-                    <span className="text-lg font-bold text-accent-orange">{perfectStreak}</span>
-                    <span className="text-sm text-tertiary">perfect {perfectStreak === 1 ? 'day' : 'days'}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Progress */}
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-tertiary">Today's Progress</span>
-                <span className="text-sm font-medium text-primary">
-                  {completedToday.length}/{filteredRecords.length} completed
-                </span>
-              </div>
-              <div className="h-2 bg-elevated rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-success rounded-full transition-all duration-300 ease-out"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-              {allCompletedToday && (
-                <div className="mt-3 flex items-center gap-2 text-success">
-                  <Icon name="trophy" size={18} />
-                  <span className="text-sm font-medium">Perfect day! Keep it up!</span>
-                </div>
-              )}
-            </Card>
-
-            {/* Habits List */}
-            <Card className="p-0 overflow-hidden">
-              {filteredRecords.length === 0 ? (
-                <div className="px-4 py-8 text-center text-tertiary">
-                  <Icon name="sun" size={32} className="mx-auto mb-2 opacity-50" />
-                  <p>No daily habits yet.</p>
-                  <p className="text-sm mt-1">Add records to start tracking your day!</p>
-                </div>
-              ) : (
-                <div className="divide-y divide-border-default">
-                  {/* Pending habits first */}
-                  {pendingToday.map(rec => (
-                    <div
-                      key={rec.id}
-                      className={cn(
-                        "group flex items-center gap-3 px-4 py-3 hover:bg-elevated transition-colors",
-                        canDragRecords && "cursor-grab active:cursor-grabbing",
-                        draggedRecordId === rec.id && "opacity-50"
-                      )}
-                      draggable={canDragRecords}
-                      onDragStart={e => handleDragStart(e, rec.id)}
-                      onDragEnd={handleDragEnd}
-                      onDragOver={handleDragOver}
-                      onDrop={e => handleDrop(e, rec.id)}
-                    >
-                      {canDragRecords && (
-                        <Icon name="grip" size={16} className="text-tertiary group-hover:text-secondary transition-colors" />
-                      )}
-                      <Checkbox
-                        checked={false}
-                        onChange={() => toggleHabit(rec)}
-                      />
-                      <span
-                        className="flex-1 cursor-pointer font-medium"
-                        onClick={() => router.push(`/admin/cortex/databases/${id}/records/${rec.id}`)}
-                      >
-                        {getRecordName(rec)}
-                      </span>
-                      {isStreakValid(rec) && getStreak(rec) > 0 && (
-                        <div className="flex items-center gap-1 text-accent-orange">
-                          <Icon name="fire" size={14} />
-                          <span className="text-sm font-medium">{getStreak(rec)}</span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => router.push(`/admin/cortex/databases/${id}/records/${rec.id}`)}
-                          className="p-1.5 text-tertiary hover:text-primary hover:bg-base rounded"
-                          title="Open"
-                        >
-                          <Icon name="arrow-out" size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* Completed habits */}
-                  {completedToday.map(rec => (
-                    <div
-                      key={rec.id}
-                      className={cn(
-                        "group flex items-center gap-3 px-4 py-3 hover:bg-elevated transition-colors bg-success-subtle",
-                        canDragRecords && "cursor-grab active:cursor-grabbing",
-                        draggedRecordId === rec.id && "opacity-50"
-                      )}
-                      draggable={canDragRecords}
-                      onDragStart={e => handleDragStart(e, rec.id)}
-                      onDragEnd={handleDragEnd}
-                      onDragOver={handleDragOver}
-                      onDrop={e => handleDrop(e, rec.id)}
-                    >
-                      {canDragRecords && (
-                        <Icon name="grip" size={16} className="text-tertiary group-hover:text-secondary transition-colors" />
-                      )}
-                      <Checkbox
-                        checked={true}
-                        onChange={() => toggleHabit(rec)}
-                      />
-                      <span
-                        className="flex-1 cursor-pointer text-tertiary"
-                        onClick={() => router.push(`/admin/cortex/databases/${id}/records/${rec.id}`)}
-                      >
-                        {getRecordName(rec)}
-                      </span>
-                      <div className="flex items-center gap-1 text-success">
-                        <Icon name="fire" size={14} />
-                        <span className="text-sm font-medium">{getStreak(rec)}</span>
-                      </div>
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => router.push(`/admin/cortex/databases/${id}/records/${rec.id}`)}
-                          className="p-1.5 text-tertiary hover:text-primary hover:bg-base rounded"
-                          title="Open"
-                        >
-                          <Icon name="arrow-out" size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-
-            {/* Footer */}
-            <div className="text-sm text-tertiary">
-              {filteredRecords.length} daily habits
-              {activeView?.filters.length ? ` (filtered)` : ''}
-              {canDragRecords && filteredRecords.length > 1 && (
-                <span className="ml-2 text-tertiary/60">• Drag to reorder</span>
-              )}
-            </div>
-          </div>
-        )
-      })()}
-
-      {/* ====== GALLERY VIEW ====== */}
-      {activeView?.type === 'gallery' && activeView.galleryConfig && (() => {
-        const imageField = database.fields.find(f => f.id === activeView.galleryConfig!.imageFieldId)
-        const nameField = database.fields.find(f => f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title') || database.fields.find(f => f.type === 'text')
-        const yearField = database.fields.find(f => f.name.toLowerCase() === 'year')
-        const ratingField = database.fields.find(f => f.name.toLowerCase() === 'rating')
-        const statusField = database.fields.find(f => f.name.toLowerCase() === 'status' && f.type === 'select')
-        const typeField = database.fields.find(f => f.name.toLowerCase() === 'type' && f.type === 'select')
-
-        if (!imageField) {
-          return (
-            <Card>
-              <div className="p-8 text-center">
-                <Icon name="grid" size={48} className="text-tertiary mx-auto mb-3" />
-                <p className="text-tertiary">Image field not found. Edit this view to configure it.</p>
-              </div>
-            </Card>
-          )
-        }
-
-        return (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {filteredRecords.map(record => {
-              const imageUrl = record.values[imageField.id] as string | undefined
-              const title = nameField ? record.values[nameField.id] as string : ''
-              const year = yearField ? record.values[yearField.id] as number | undefined : undefined
-              const rating = ratingField ? record.values[ratingField.id] as number | undefined : undefined
-
-              const statusOption = statusField?.options?.find(o => o.id === record.values[statusField.id])
-              const typeOption = typeField?.options?.find(o => o.id === record.values[typeField.id])
-
-              return (
-                <div
-                  key={record.id}
-                  onClick={() => openEditRecord(record)}
-                  className="group relative cursor-pointer rounded-xl overflow-hidden transition-transform hover:scale-105"
-                  style={{ aspectRatio: '2/3' }}
-                >
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      alt={title || ''}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-elevated flex items-center justify-center">
-                      <Icon name="clapboard" size={40} className="text-tertiary" />
-                    </div>
-                  )}
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
-
-                  <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1">
-                    <div className="flex flex-wrap gap-1">
-                      {typeOption && (
-                        <span
-                          className="px-1.5 py-0.5 rounded text-[10px] font-medium"
-                          style={{ backgroundColor: typeOption.color + '33', color: typeOption.color }}
-                        >
-                          {typeOption.label}
-                        </span>
-                      )}
-                      {statusOption && (
-                        <span
-                          className="px-1.5 py-0.5 rounded text-[10px] font-medium"
-                          style={{ backgroundColor: statusOption.color + '33', color: statusOption.color }}
-                        >
-                          {statusOption.label}
-                        </span>
-                      )}
-                    </div>
-
-                    {title && (
-                      <p className="text-sm font-medium text-white leading-tight line-clamp-2">
-                        {title}
-                      </p>
-                    )}
-
-                    <div className="flex items-center gap-2 text-[11px] text-white/70">
-                      {year && <span>{year}</span>}
-                      {rating != null && rating > 0 && <span>★ {rating}</span>}
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-
-            {filteredRecords.length === 0 && (
-              <div className="col-span-full">
-                <Card>
-                  <div className="p-8 text-center">
-                    <Icon name="grid" size={48} className="text-tertiary mx-auto mb-3" />
-                    <p className="text-tertiary mb-4">
-                      {activeView.filters.length ? 'No records match your filters' : 'No records yet'}
-                    </p>
-                    {!activeView.filters.length && (
-                      <Button size="sm" onClick={openNewRecord}>
-                        <Icon name="plus" size={16} />
-                        Add Record
-                      </Button>
-                    )}
-                  </div>
-                </Card>
-              </div>
-            )}
-          </div>
-        )
-      })()}
 
       {/* Add/Edit View Modal */}
       <Modal
