@@ -117,6 +117,8 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
   const [todoCompletedCollapsed, setTodoCompletedCollapsed] = useState(false)
   const [draggedRecordId, setDraggedRecordId] = useState<string | null>(null)
   const [tmdbModalOpen, setTmdbModalOpen] = useState(false)
+  const [backfilling, setBackfilling] = useState(false)
+  const [backfillProgress, setBackfillProgress] = useState({ current: 0, total: 0 })
   const [activeCellDropdown, setActiveCellDropdown] = useState<{
     recordId: string
     fieldId: string
@@ -191,6 +193,103 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     const labels = typeField.options.map(o => o.label.toLowerCase())
     return labels.includes('film') && labels.includes('serie tv')
   }, [database])
+
+  // Backfill: detect records missing Genre/Duration/Director
+  const recordsNeedingBackfill = useMemo(() => {
+    if (!database || !isMoviesDb) return []
+    const genreField = database.fields.find(f => f.name.toLowerCase() === 'genre')
+    const durationField = database.fields.find(f => f.name.toLowerCase() === 'duration')
+    const directorField = database.fields.find(f => f.name.toLowerCase() === 'director')
+    const nameField = database.fields.find(f => f.name.toLowerCase() === 'name')
+    if (!nameField) return []
+
+    return database.records.filter(record => {
+      const hasName = !!record.values[nameField.id]
+      if (!hasName) return false
+      const needsGenre = genreField && (!record.values[genreField.id] || (Array.isArray(record.values[genreField.id]) && (record.values[genreField.id] as string[]).length === 0))
+      const needsDuration = durationField && !record.values[durationField.id]
+      const needsDirector = directorField && !record.values[directorField.id]
+      return needsGenre || needsDuration || needsDirector
+    })
+  }, [database, isMoviesDb])
+
+  // Backfill: fetch TMDB data for records missing new fields
+  const handleBackfill = useCallback(async () => {
+    if (!database || backfilling) return
+    setBackfilling(true)
+    setBackfillProgress({ current: 0, total: recordsNeedingBackfill.length })
+
+    const nameField = database.fields.find(f => f.name.toLowerCase() === 'name')
+    const yearField = database.fields.find(f => f.name.toLowerCase() === 'year')
+    const typeField = database.fields.find(f => f.name.toLowerCase() === 'type')
+    const genreField = database.fields.find(f => f.name.toLowerCase() === 'genre')
+    const durationField = database.fields.find(f => f.name.toLowerCase() === 'duration')
+    const seasonsField = database.fields.find(f => f.name.toLowerCase() === 'seasons')
+    const directorField = database.fields.find(f => f.name.toLowerCase() === 'director')
+
+    let successCount = 0
+
+    for (let i = 0; i < recordsNeedingBackfill.length; i++) {
+      const record = recordsNeedingBackfill[i]
+      setBackfillProgress({ current: i + 1, total: recordsNeedingBackfill.length })
+
+      const name = nameField ? record.values[nameField.id] as string : ''
+      const year = yearField ? record.values[yearField.id] : ''
+      const typeOptionId = typeField ? record.values[typeField.id] as string : ''
+      const isTv = typeField?.options?.find(o => o.id === typeOptionId)?.label.toLowerCase().includes('serie')
+      const searchType = isTv ? 'tv' : 'movie'
+
+      try {
+        const res = await fetch(
+          `/api/admin/cortex/tmdb?query=${encodeURIComponent(name)}&type=${searchType}`,
+          { credentials: 'same-origin' }
+        )
+        const data = await res.json()
+
+        if (data.success && data.data?.length > 0) {
+          const result = data.data[0]
+          const values: Record<string, unknown> = {}
+
+          // Genre: only if empty
+          if (genreField && (!record.values[genreField.id] || (Array.isArray(record.values[genreField.id]) && (record.values[genreField.id] as string[]).length === 0))) {
+            const genreOptionIds = (result.genres as string[])
+              .map((gName: string) => genreField.options?.find(o => o.label.toLowerCase() === gName.toLowerCase())?.id)
+              .filter(Boolean) as string[]
+            if (genreOptionIds.length > 0) values[genreField.id] = genreOptionIds
+          }
+
+          // Duration: only if empty (movies only)
+          if (durationField && !record.values[durationField.id] && result.duration) {
+            values[durationField.id] = result.duration
+          }
+
+          // Seasons: only if empty (TV only)
+          if (seasonsField && !record.values[seasonsField.id] && result.seasons) {
+            values[seasonsField.id] = result.seasons
+          }
+
+          // Director: only if empty
+          if (directorField && !record.values[directorField.id] && result.director) {
+            values[directorField.id] = result.director
+          }
+
+          if (Object.keys(values).length > 0) {
+            await databasesApi.updateRecord(id, record.id, values)
+            successCount++
+          }
+        }
+      } catch (error) {
+        console.error(`Backfill failed for "${name}":`, error)
+      }
+
+      // Rate limiting
+      await new Promise(r => setTimeout(r, 300))
+    }
+
+    setBackfilling(false)
+    await loadData()
+    console.log(`Backfilled ${successCount}/${recordsNeedingBackfill.length} records`)
+  }, [database, backfilling, recordsNeedingBackfill, id])
 
   // Sync todo collapsed state with view config when view changes or loads
   useEffect(() => {
@@ -1239,6 +1338,17 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           <Button variant="secondary" size="sm" onClick={() => setTmdbModalOpen(true)}>
             <Icon name="search" size={16} />
             TMDB
+          </Button>
+        )}
+
+        {/* TMDB Backfill (only when records need updating) */}
+        {isMoviesDb && recordsNeedingBackfill.length > 0 && (
+          <Button variant="secondary" size="sm" onClick={handleBackfill} disabled={backfilling}>
+            <Icon name="lightning" size={16} className={backfilling ? 'animate-pulse' : ''} />
+            {backfilling
+              ? `${backfillProgress.current}/${backfillProgress.total}`
+              : `Backfill (${recordsNeedingBackfill.length})`
+            }
           </Button>
         )}
 

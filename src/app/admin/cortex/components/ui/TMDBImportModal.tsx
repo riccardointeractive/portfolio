@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Modal, Button, Input } from '@/app/admin/cortex/components/ui'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
@@ -13,6 +13,10 @@ interface TMDBResult {
   overview: string
   rating: number
   posterUrl: string | null
+  genres: string[]
+  duration: number | null
+  seasons: number | null
+  director: string | null
 }
 
 interface TMDBImportModalProps {
@@ -41,6 +45,17 @@ export function TMDBImportModal({ open, onClose, database, onImported }: TMDBImp
   const [importing, setImporting] = useState<number | null>(null)
   const [imported, setImported] = useState<Set<number>>(new Set())
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Set of existing record names (lowercase) for duplicate detection
+  const existingNames = useMemo(() => {
+    const nameField = findField(database.fields, 'Name')
+    if (!nameField) return new Set<string>()
+    return new Set(
+      database.records
+        .map(r => (r.values[nameField.id] as string)?.toLowerCase())
+        .filter(Boolean)
+    )
+  }, [database])
 
   // Debounced search
   const search = useCallback(async (q: string, type: 'movie' | 'tv') => {
@@ -95,9 +110,18 @@ export function TMDBImportModal({ open, onClose, database, onImported }: TMDBImp
     const ratingField = findField(database.fields, 'Rating')
     const overviewField = findField(database.fields, 'Overview')
     const posterField = findField(database.fields, 'Poster')
+    const genreField = findField(database.fields, 'Genre')
+    const durationField = findField(database.fields, 'Duration')
+    const seasonsField = findField(database.fields, 'Seasons')
+    const directorField = findField(database.fields, 'Director')
 
     const typeOptionId = findOption(typeField, searchType === 'movie' ? 'Film' : 'Serie TV')
     const statusOptionId = findOption(statusField, 'Da Vedere')
+
+    // Map genre names to multiselect option IDs
+    const genreOptionIds = result.genres
+      .map(name => findOption(genreField, name))
+      .filter(Boolean) as string[]
 
     const values: Record<string, unknown> = {}
     if (nameField) values[nameField.id] = result.title
@@ -107,6 +131,10 @@ export function TMDBImportModal({ open, onClose, database, onImported }: TMDBImp
     if (ratingField) values[ratingField.id] = result.rating
     if (overviewField && result.overview) values[overviewField.id] = result.overview
     if (posterField && result.posterUrl) values[posterField.id] = result.posterUrl
+    if (genreField && genreOptionIds.length > 0) values[genreField.id] = genreOptionIds
+    if (durationField && result.duration) values[durationField.id] = result.duration
+    if (seasonsField && result.seasons) values[seasonsField.id] = result.seasons
+    if (directorField && result.director) values[directorField.id] = result.director
 
     try {
       await databasesApi.addRecord(database.id, values)
@@ -174,7 +202,8 @@ export function TMDBImportModal({ open, onClose, database, onImported }: TMDBImp
           )}
 
           {!loading && results.map((result) => {
-            const isImported = imported.has(result.id)
+            const alreadyExists = existingNames.has(result.title.toLowerCase())
+            const isImported = imported.has(result.id) || alreadyExists
             const isImporting = importing === result.id
 
             return (
@@ -204,14 +233,32 @@ export function TMDBImportModal({ open, onClose, database, onImported }: TMDBImp
                       <p className="text-sm font-medium text-primary truncate">
                         {result.title}
                       </p>
-                      <div className="flex items-center gap-2 mt-0.5">
+                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                         {result.year && (
                           <span className="text-xs text-tertiary">{result.year}</span>
                         )}
                         {result.rating > 0 && (
                           <span className="text-xs text-tertiary">★ {result.rating}</span>
                         )}
+                        {result.duration && (
+                          <span className="text-xs text-tertiary">{result.duration} min</span>
+                        )}
+                        {result.seasons && (
+                          <span className="text-xs text-tertiary">{result.seasons} stagion{result.seasons === 1 ? 'e' : 'i'}</span>
+                        )}
+                        {result.director && (
+                          <span className="text-xs text-tertiary">{result.director}</span>
+                        )}
                       </div>
+                      {result.genres.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {result.genres.slice(0, 3).map(g => (
+                            <span key={g} className="text-xs px-1.5 py-0.5 rounded bg-elevated text-secondary">
+                              {g}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     {/* Import Button */}
