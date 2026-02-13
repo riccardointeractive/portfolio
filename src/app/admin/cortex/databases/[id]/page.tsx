@@ -361,19 +361,21 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     if (activeView.sorts.length === 0) {
       records.sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     } else {
-      for (const sort of [...activeView.sorts].reverse()) {
-        records.sort((a, b) => {
+      // Single-pass multi-sort: one comparator handles all sort conditions
+      records.sort((a, b) => {
+        for (const sort of activeView.sorts) {
           const aVal = a.values[sort.fieldId]
           const bVal = b.values[sort.fieldId]
 
-          if (aVal === bVal) return 0
+          if (aVal === bVal) continue
           if (aVal === undefined || aVal === null) return 1
           if (bVal === undefined || bVal === null) return -1
 
-          const comparison = aVal < bVal ? -1 : 1
-          return sort.direction === 'asc' ? comparison : -comparison
-        })
-      }
+          const cmp = aVal < bVal ? -1 : 1
+          return sort.direction === 'asc' ? cmp : -cmp
+        }
+        return 0
+      })
     }
 
     return records
