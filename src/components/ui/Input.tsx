@@ -7,10 +7,16 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
   hint?: string
+  size?: 'sm' | 'md'
+}
+
+const sizes = {
+  sm: 'px-2 py-1 text-xs rounded-md',
+  md: 'px-4 py-2.5 rounded-lg',
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, hint, id, ...props }, ref) => {
+  ({ className, label, error, hint, id, size = 'md', ...props }, ref) => {
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-')
 
     return (
@@ -28,12 +34,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           autoComplete="off"
           className={cn(
-            'w-full px-4 py-2.5 bg-surface text-primary rounded-lg',
+            'w-full bg-surface text-primary',
             'border placeholder-tertiary',
             'focus:outline-none focus:ring-1 transition-all duration-150',
             error
               ? 'border-error focus:border-error focus:ring-error'
               : 'border-border-default focus:border-border-active focus:ring-border-active',
+            sizes[size],
             className
           )}
           {...props}

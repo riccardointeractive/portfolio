@@ -1050,7 +1050,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                   value={filter.operator}
                   onChange={e => handleUpdateFilter(index, { operator: e.target.value as FilterCondition['operator'] })}
                   options={FILTER_OPERATORS[field.type]}
-                  className="!py-1 !px-2 text-xs"
+                  size="sm"
                 />
                 {!['is_empty', 'is_not_empty'].includes(filter.operator) && (
                   field.type === 'select' ? (
@@ -1061,7 +1061,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                         { value: '', label: 'Select...' },
                         ...(field.options?.map(o => ({ value: o.id, label: o.label })) || [])
                       ]}
-                      className="!py-1 !px-2 text-xs"
+                      size="sm"
                     />
                   ) : field.type === 'checkbox' ? (
                     <Select
@@ -1071,14 +1071,15 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                         { value: 'true', label: 'Checked' },
                         { value: 'false', label: 'Unchecked' },
                       ]}
-                      className="!py-1 !px-2 text-xs"
+                      size="sm"
                     />
                   ) : (
                     <Input
                       value={String(filter.value || '')}
                       onChange={e => handleUpdateFilter(index, { value: e.target.value })}
                       placeholder="Value..."
-                      className="!py-1 !px-2 text-xs w-24"
+                      size="sm"
+                      className="w-24"
                     />
                   )
                 )}
