@@ -1141,7 +1141,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       </div>
                     </TableHead>
                   ))}
-              <TableHead className="w-20">Actions</TableHead>
+                  <TableHead className="w-20" align="right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -1182,7 +1182,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       {renderCellValue(field, record.values[field.id], record.id)}
                     </TableCell>
                   ))}
-                  <TableCell>
+                  <TableCell align="right">
                     <TableActions>
                       <TableActionButton
                         icon="arrow-out"
