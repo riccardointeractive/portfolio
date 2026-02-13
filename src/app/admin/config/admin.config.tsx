@@ -9,6 +9,7 @@ import {
   Camera,
   Upload,
   BarChart3,
+  Database,
 } from 'lucide-react'
 import { type ToolCategory, type QuickLink } from '../types/admin.types'
 import { siteConfig } from '@/config/site'
@@ -55,6 +56,12 @@ export const navigationItems: AdminNavItem[] = [
     label: 'Analytics',
     href: '/admin/analytics',
     icon: <BarChart3 className="h-5 w-5" />,
+  },
+  {
+    id: 'cortex',
+    label: 'Cortex',
+    href: '/admin/cortex',
+    icon: <Database className="h-5 w-5" />,
   },
   {
     id: 'design-system',
@@ -112,6 +119,20 @@ export const tools: ToolCategory[] = [
         href: '/admin/profile',
         status: 'coming',
         badge: 'Coming Soon',
+      },
+    ],
+  },
+  {
+    category: 'Tools',
+    items: [
+      {
+        id: 'cortex',
+        title: 'Cortex',
+        description: 'Notion-like database manager for structured data.',
+        icon: <Database className="h-5 w-5" />,
+        href: '/admin/cortex',
+        status: 'active',
+        badge: 'Active',
       },
     ],
   },
