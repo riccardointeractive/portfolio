@@ -922,7 +922,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <button onClick={() => router.push('/admin/cortex/databases')} className="p-2 hover:bg-elevated rounded-lg">
+        <button onClick={() => router.back()} className="p-2 hover:bg-elevated rounded-lg">
           <Icon name="arrow-left" size={20} />
         </button>
         <div
