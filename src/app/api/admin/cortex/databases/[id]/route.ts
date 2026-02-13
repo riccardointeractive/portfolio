@@ -142,6 +142,7 @@ export async function POST(
         cardsConfig: body.cardsConfig,
         todoConfig: body.todoConfig,
         myDayConfig: body.myDayConfig,
+        galleryConfig: body.galleryConfig,
       })
       return NextResponse.json({ success: true, data: view })
     }

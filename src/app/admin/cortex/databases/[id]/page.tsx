@@ -14,7 +14,7 @@ import { cn, generateId, customColorBg } from '@/app/admin/cortex/lib/utils'
 import {
   DATABASE_COLORS,
   type Database, type DatabaseRecord, type DatabaseView, type Field, type FieldType,
-  type FilterCondition, type SortCondition, type FieldOption, type CardsViewConfig, type TodoViewConfig, type MyDayViewConfig
+  type FilterCondition, type SortCondition, type FieldOption, type CardsViewConfig, type TodoViewConfig, type MyDayViewConfig, type GalleryViewConfig
 } from '@/app/admin/cortex/lib/types'
 
 // Field type icons
@@ -119,7 +119,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
 
   // Form states
   const [newViewName, setNewViewName] = useState('')
-  const [newViewType, setNewViewType] = useState<'table' | 'cards' | 'todo' | 'myday'>('table')
+  const [newViewType, setNewViewType] = useState<'table' | 'cards' | 'todo' | 'myday' | 'gallery'>('table')
   const [newViewCardsConfig, setNewViewCardsConfig] = useState<{
     sourceDatabaseId: string
     groupByFieldId: string
@@ -133,6 +133,9 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     dateFieldId: string
     streakFieldId: string
   }>({ dateFieldId: '', streakFieldId: '' })
+  const [newViewGalleryConfig, setNewViewGalleryConfig] = useState<{
+    imageFieldId: string
+  }>({ imageFieldId: '' })
   const [newField, setNewField] = useState<{
     name: string;
     type: FieldType;
@@ -260,6 +263,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     setNewViewCardsConfig({ sourceDatabaseId: '', groupByFieldId: '' })
     setNewViewTodoConfig({ checkboxFieldId: '', showCompleted: true, completedCollapsed: false })
     setNewViewMyDayConfig({ dateFieldId: '', streakFieldId: '' })
+    setNewViewGalleryConfig({ imageFieldId: '' })
     setEditingView(null)
   }
 
@@ -297,6 +301,13 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     } else {
       setNewViewMyDayConfig({ dateFieldId: '', streakFieldId: '' })
     }
+    if (view.galleryConfig) {
+      setNewViewGalleryConfig({
+        imageFieldId: view.galleryConfig.imageFieldId
+      })
+    } else {
+      setNewViewGalleryConfig({ imageFieldId: '' })
+    }
     setViewModalOpen(true)
   }
 
@@ -314,6 +325,10 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
       alert('Please select both date and streak fields for My Day view')
       return
     }
+    if (newViewType === 'gallery' && !newViewGalleryConfig.imageFieldId) {
+      alert('Please select an image field for the gallery view')
+      return
+    }
 
     try {
       if (editingView) {
@@ -323,7 +338,8 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           type: newViewType,
           cardsConfig: newViewType === 'cards' ? newViewCardsConfig : undefined,
           todoConfig: newViewType === 'todo' ? newViewTodoConfig : undefined,
-          myDayConfig: newViewType === 'myday' ? newViewMyDayConfig : undefined
+          myDayConfig: newViewType === 'myday' ? newViewMyDayConfig : undefined,
+          galleryConfig: newViewType === 'gallery' ? newViewGalleryConfig : undefined
         })
       } else {
         // Add new view
@@ -333,7 +349,8 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           visibleFields: database?.fields.map(f => f.id) || [],
           cardsConfig: newViewType === 'cards' ? newViewCardsConfig : undefined,
           todoConfig: newViewType === 'todo' ? newViewTodoConfig : undefined,
-          myDayConfig: newViewType === 'myday' ? newViewMyDayConfig : undefined
+          myDayConfig: newViewType === 'myday' ? newViewMyDayConfig : undefined,
+          galleryConfig: newViewType === 'gallery' ? newViewGalleryConfig : undefined
         })
         if (res.data) {
           setActiveViewId(res.data.id)
@@ -944,7 +961,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                 : 'border-transparent text-tertiary hover:text-secondary'
             )}
           >
-            <Icon name={view.type === 'table' ? 'list' : view.type === 'cards' ? 'layers' : view.type === 'todo' ? 'check-square' : view.type === 'myday' ? 'sun' : 'rows'} size={16} />
+            <Icon name={view.type === 'table' ? 'list' : view.type === 'cards' ? 'layers' : view.type === 'todo' ? 'check-square' : view.type === 'myday' ? 'sun' : view.type === 'gallery' ? 'grid' : 'rows'} size={16} />
             {view.name}
             <span className="hidden group-hover:inline-flex items-center gap-1 ml-1">
               <span
@@ -2139,6 +2156,115 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
         )
       })()}
 
+      {/* ====== GALLERY VIEW ====== */}
+      {activeView?.type === 'gallery' && activeView.galleryConfig && (() => {
+        const imageField = database.fields.find(f => f.id === activeView.galleryConfig!.imageFieldId)
+        const nameField = database.fields.find(f => f.name.toLowerCase() === 'name' || f.name.toLowerCase() === 'title') || database.fields.find(f => f.type === 'text')
+        const yearField = database.fields.find(f => f.name.toLowerCase() === 'year')
+        const ratingField = database.fields.find(f => f.name.toLowerCase() === 'rating')
+        const statusField = database.fields.find(f => f.name.toLowerCase() === 'status' && f.type === 'select')
+        const typeField = database.fields.find(f => f.name.toLowerCase() === 'type' && f.type === 'select')
+
+        if (!imageField) {
+          return (
+            <Card>
+              <div className="p-8 text-center">
+                <Icon name="grid" size={48} className="text-tertiary mx-auto mb-3" />
+                <p className="text-tertiary">Image field not found. Edit this view to configure it.</p>
+              </div>
+            </Card>
+          )
+        }
+
+        return (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {filteredRecords.map(record => {
+              const imageUrl = record.values[imageField.id] as string | undefined
+              const title = nameField ? record.values[nameField.id] as string : ''
+              const year = yearField ? record.values[yearField.id] as number | undefined : undefined
+              const rating = ratingField ? record.values[ratingField.id] as number | undefined : undefined
+
+              const statusOption = statusField?.options?.find(o => o.id === record.values[statusField.id])
+              const typeOption = typeField?.options?.find(o => o.id === record.values[typeField.id])
+
+              return (
+                <div
+                  key={record.id}
+                  onClick={() => openEditRecord(record)}
+                  className="group relative cursor-pointer rounded-xl overflow-hidden transition-transform hover:scale-105"
+                  style={{ aspectRatio: '2/3' }}
+                >
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt={title || ''}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-elevated flex items-center justify-center">
+                      <Icon name="clapboard" size={40} className="text-tertiary" />
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
+
+                  <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1">
+                    <div className="flex flex-wrap gap-1">
+                      {typeOption && (
+                        <span
+                          className="px-1.5 py-0.5 rounded text-[10px] font-medium"
+                          style={{ backgroundColor: typeOption.color + '33', color: typeOption.color }}
+                        >
+                          {typeOption.label}
+                        </span>
+                      )}
+                      {statusOption && (
+                        <span
+                          className="px-1.5 py-0.5 rounded text-[10px] font-medium"
+                          style={{ backgroundColor: statusOption.color + '33', color: statusOption.color }}
+                        >
+                          {statusOption.label}
+                        </span>
+                      )}
+                    </div>
+
+                    {title && (
+                      <p className="text-sm font-medium text-white leading-tight line-clamp-2">
+                        {title}
+                      </p>
+                    )}
+
+                    <div className="flex items-center gap-2 text-[11px] text-white/70">
+                      {year && <span>{year}</span>}
+                      {rating != null && rating > 0 && <span>★ {rating}</span>}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+
+            {filteredRecords.length === 0 && (
+              <div className="col-span-full">
+                <Card>
+                  <div className="p-8 text-center">
+                    <Icon name="grid" size={48} className="text-tertiary mx-auto mb-3" />
+                    <p className="text-tertiary mb-4">
+                      {activeView.filters.length ? 'No records match your filters' : 'No records yet'}
+                    </p>
+                    {!activeView.filters.length && (
+                      <Button size="sm" onClick={openNewRecord}>
+                        <Icon name="plus" size={16} />
+                        Add Record
+                      </Button>
+                    )}
+                  </div>
+                </Card>
+              </div>
+            )}
+          </div>
+        )
+      })()}
+
       {/* Add/Edit View Modal */}
       <Modal
         open={viewModalOpen}
@@ -2159,12 +2285,13 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           <Select
             label="View Type"
             value={newViewType}
-            onChange={e => setNewViewType(e.target.value as 'table' | 'cards' | 'todo' | 'myday')}
+            onChange={e => setNewViewType(e.target.value as 'table' | 'cards' | 'todo' | 'myday' | 'gallery')}
             options={[
               { value: 'table', label: 'Table' },
               { value: 'cards', label: 'Cards' },
               { value: 'todo', label: 'Todo' },
               { value: 'myday', label: 'My Day' },
+              { value: 'gallery', label: 'Gallery' },
             ]}
           />
 
@@ -2302,6 +2429,38 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                   options={[
                     { value: '', label: 'Select a number field...' },
                     ...numberFields.map(f => ({ value: f.id, label: f.name }))
+                  ]}
+                />
+              </div>
+            )
+          })()}
+
+          {/* Gallery Configuration */}
+          {newViewType === 'gallery' && (() => {
+            const urlFields = database?.fields.filter(f => f.type === 'url') || []
+
+            if (urlFields.length === 0) {
+              return (
+                <div className="p-3 bg-elevated rounded-lg">
+                  <p className="text-sm text-warning">
+                    Gallery view requires a URL field for images. Add a URL field first.
+                  </p>
+                </div>
+              )
+            }
+
+            return (
+              <div className="space-y-3 p-3 bg-elevated rounded-lg">
+                <p className="text-sm text-tertiary">
+                  Gallery displays records as a visual grid of images, like Netflix posters.
+                </p>
+                <Select
+                  label="Image Field (URL)"
+                  value={newViewGalleryConfig.imageFieldId}
+                  onChange={e => setNewViewGalleryConfig(prev => ({ ...prev, imageFieldId: e.target.value }))}
+                  options={[
+                    { value: '', label: 'Select a URL field...' },
+                    ...urlFields.map(f => ({ value: f.id, label: f.name }))
                   ]}
                 />
               </div>

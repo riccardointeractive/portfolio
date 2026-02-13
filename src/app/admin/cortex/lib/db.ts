@@ -469,7 +469,7 @@ async function getViews(databaseId: string): Promise<DatabaseView[]> {
 
 export async function addView(
   databaseId: string,
-  input: Partial<DatabaseView> & { cardsConfig?: unknown; todoConfig?: unknown; myDayConfig?: unknown }
+  input: Partial<DatabaseView> & { cardsConfig?: unknown; todoConfig?: unknown; myDayConfig?: unknown; galleryConfig?: unknown }
 ): Promise<DatabaseView> {
   const supabase = createAdminClient()
 
@@ -496,7 +496,7 @@ export async function addView(
   }
 
   // Build config from specific config types
-  const config = input.cardsConfig || input.todoConfig || input.myDayConfig || null
+  const config = input.cardsConfig || input.todoConfig || input.myDayConfig || input.galleryConfig || null
 
   const { error } = await supabase.from('cortex_views').insert({
     id,
@@ -523,6 +523,7 @@ export async function addView(
     ...(input.cardsConfig ? { cardsConfig: input.cardsConfig as DatabaseView['cardsConfig'] } : {}),
     ...(input.todoConfig ? { todoConfig: input.todoConfig as DatabaseView['todoConfig'] } : {}),
     ...(input.myDayConfig ? { myDayConfig: input.myDayConfig as DatabaseView['myDayConfig'] } : {}),
+    ...(input.galleryConfig ? { galleryConfig: input.galleryConfig as DatabaseView['galleryConfig'] } : {}),
   }
 }
 
@@ -542,6 +543,7 @@ export async function updateView(
   if (updates.cardsConfig !== undefined) updateData.config = updates.cardsConfig
   if (updates.todoConfig !== undefined) updateData.config = updates.todoConfig
   if (updates.myDayConfig !== undefined) updateData.config = updates.myDayConfig
+  if (updates.galleryConfig !== undefined) updateData.config = updates.galleryConfig
 
   const { data, error } = await supabase
     .from('cortex_views')
@@ -786,6 +788,7 @@ function mapView(row: any): DatabaseView {
     if (row.type === 'cards') view.cardsConfig = row.config
     else if (row.type === 'todo') view.todoConfig = row.config
     else if (row.type === 'myday') view.myDayConfig = row.config
+    else if (row.type === 'gallery') view.galleryConfig = row.config
   }
 
   return view

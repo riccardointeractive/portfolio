@@ -55,16 +55,21 @@ export interface CardsViewConfig {
   displayFields?: string[]    // Which fields to show in the cards
 }
 
+export interface GalleryViewConfig {
+  imageFieldId: string      // URL field to use as image (e.g., Poster)
+}
+
 export interface DatabaseView {
   id: string
   name: string
-  type: 'table' | 'cards' | 'todo' | 'myday'
+  type: 'table' | 'cards' | 'todo' | 'myday' | 'gallery'
   filters: FilterCondition[]
   sorts: SortCondition[]
   visibleFields: string[] // fieldIds
   cardsConfig?: CardsViewConfig // Only for cards type
   todoConfig?: TodoViewConfig // Only for todo type
   myDayConfig?: MyDayViewConfig // Only for myday type
+  galleryConfig?: GalleryViewConfig // Only for gallery type
 }
 
 export interface TodoViewConfig {
