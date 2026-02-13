@@ -42,16 +42,16 @@ export default function DashboardPage() {
           <StatCard
             label="Databases"
             value={stats?.totalDatabases || 0}
-            icon={<Icon name="layers" size={20} className="text-info" />}
-            accentClass="bg-info-subtle text-info"
+            icon={<Icon name="layers" size={20} className="text-secondary" />}
+            accentClass="bg-elevated text-secondary"
           />
         </Link>
 
         <StatCard
           label="Total Records"
           value={stats?.totalRecords || 0}
-          icon={<Icon name="list" size={20} className="text-accent-green" />}
-          accentClass="bg-accent-green-subtle text-accent-green"
+          icon={<Icon name="list" size={20} className="text-secondary" />}
+          accentClass="bg-elevated text-secondary"
         />
 
         <Card>
@@ -61,8 +61,8 @@ export default function DashboardPage() {
                 <p className="text-sm text-tertiary">Quick Action</p>
                 <p className="font-display text-lg text-primary mt-1">Create Database</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-accent-purple-subtle flex items-center justify-center">
-                <Icon name="plus" size={20} className="text-accent-purple" />
+              <div className="w-10 h-10 rounded-xl bg-elevated flex items-center justify-center">
+                <Icon name="plus" size={20} className="text-secondary" />
               </div>
             </div>
           </Link>
@@ -128,22 +128,22 @@ export default function DashboardPage() {
             <h2 className="font-display text-lg text-primary mb-4">Getting Started</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 rounded-lg bg-elevated">
-                <div className="w-10 h-10 rounded-lg bg-accent-blue-subtle flex items-center justify-center mb-3">
-                  <Icon name="world" size={20} className="text-accent-blue" />
+                <div className="w-10 h-10 rounded-lg bg-elevated flex items-center justify-center mb-3">
+                  <Icon name="world" size={20} className="text-secondary" />
                 </div>
                 <h3 className="font-display text-base text-primary mb-1">1. Create Spheres</h3>
                 <p className="text-sm text-tertiary">Create a &quot;Spheres&quot; database to organize your life areas</p>
               </div>
               <div className="p-4 rounded-lg bg-elevated">
-                <div className="w-10 h-10 rounded-lg bg-accent-purple-subtle flex items-center justify-center mb-3">
-                  <Icon name="folder" size={20} className="text-accent-purple" />
+                <div className="w-10 h-10 rounded-lg bg-elevated flex items-center justify-center mb-3">
+                  <Icon name="folder" size={20} className="text-secondary" />
                 </div>
                 <h3 className="font-display text-base text-primary mb-1">2. Add Projects</h3>
                 <p className="text-sm text-tertiary">Create a &quot;Projects&quot; database and link to Spheres</p>
               </div>
               <div className="p-4 rounded-lg bg-elevated">
-                <div className="w-10 h-10 rounded-lg bg-accent-green-subtle flex items-center justify-center mb-3">
-                  <Icon name="check-square" size={20} className="text-accent-green" />
+                <div className="w-10 h-10 rounded-lg bg-elevated flex items-center justify-center mb-3">
+                  <Icon name="check-square" size={20} className="text-secondary" />
                 </div>
                 <h3 className="font-display text-base text-primary mb-1">3. Track Tasks</h3>
                 <p className="text-sm text-tertiary">Create a &quot;Tasks&quot; database and link to Projects</p>
