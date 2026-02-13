@@ -1,5 +1,5 @@
-export { Button } from './Button'
-export type { ButtonProps } from './Button'
+export { Button } from '@/components/ui/Button'
+export type { ButtonProps } from '@/components/ui/Button'
 
 export { Input } from './Input'
 export type { InputProps } from './Input'
@@ -13,8 +13,8 @@ export type { SelectProps } from './Select'
 export { Badge } from '@/components/ui/Badge'
 export type { BadgeProps } from '@/components/ui/Badge'
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card'
-export type { CardProps } from './Card'
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card'
+export type { CardProps } from '@/components/ui/Card'
 
 export { Modal } from './Modal'
 export type { ModalProps } from './Modal'
