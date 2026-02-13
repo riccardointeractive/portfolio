@@ -2,21 +2,12 @@
 
 import { Copy, Check } from 'lucide-react'
 import { useState } from 'react'
-import { PageHeader } from '@/app/admin/components/PageHeader'
 import { Badge } from '@/components/ui/Badge'
 import { colors, typography, spacing, radius, transitions, shadows } from '@/config/design-tokens'
 
 export default function DesignSystemPage() {
   return (
     <>
-      {/* Page Header */}
-      <div className="mb-10">
-        <PageHeader
-          title="Design System"
-          description="Live preview of all design tokens, typography, and components. Everything here is rendered from the actual CSS variables and Tailwind classes."
-        />
-      </div>
-
       <div className="space-y-16">
         <ColorsSection />
         <TypographySection />

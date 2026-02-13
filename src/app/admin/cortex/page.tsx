@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { PageHeader } from '@/app/admin/cortex/components/layout'
 import { Card, Button } from '@/app/admin/cortex/components/ui'
 import { StatCard } from '@/components/ui/StatCard'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
@@ -37,19 +36,16 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        title="Dashboard"
-        description="Overview of your Cortex workspace"
-      />
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <StatCard
-          label="Databases"
-          value={stats?.totalDatabases || 0}
-          icon={<Icon name="layers" size={20} className="text-info" />}
-          accentClass="bg-info-subtle text-info"
-        />
+        <Link href="/admin/cortex/databases">
+          <StatCard
+            label="Databases"
+            value={stats?.totalDatabases || 0}
+            icon={<Icon name="layers" size={20} className="text-info" />}
+            accentClass="bg-info-subtle text-info"
+          />
+        </Link>
 
         <StatCard
           label="Total Records"
