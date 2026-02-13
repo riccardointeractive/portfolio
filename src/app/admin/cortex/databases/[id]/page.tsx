@@ -8,6 +8,7 @@ import {
   TableEmpty, TableActions, TableActionButton,
 } from '@/app/admin/cortex/components/ui'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
+import { TMDBImportModal } from '@/app/admin/cortex/components/ui/TMDBImportModal'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
 import { cn, generateId, customColorBg } from '@/app/admin/cortex/lib/utils'
 import {
@@ -114,6 +115,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null)
   const [todoCompletedCollapsed, setTodoCompletedCollapsed] = useState(false)
   const [draggedRecordId, setDraggedRecordId] = useState<string | null>(null)
+  const [tmdbModalOpen, setTmdbModalOpen] = useState(false)
 
   // Form states
   const [newViewName, setNewViewName] = useState('')
@@ -171,6 +173,15 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     if (!database || !activeViewId) return null
     return database.views.find(v => v.id === activeViewId) || database.views[0]
   }, [database, activeViewId])
+
+  // Detect if this is a Movies database (has Type field with Film/Serie TV options)
+  const isMoviesDb = useMemo(() => {
+    if (!database) return false
+    const typeField = database.fields.find(f => f.name.toLowerCase() === 'type')
+    if (!typeField?.options) return false
+    const labels = typeField.options.map(o => o.label.toLowerCase())
+    return labels.includes('film') && labels.includes('serie tv')
+  }, [database])
 
   // Sync todo collapsed state with view config when view changes or loads
   useEffect(() => {
@@ -1010,6 +1021,14 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           <Icon name="plus" size={16} />
           Add Field
         </Button>
+
+        {/* TMDB Import (only for Movies databases) */}
+        {isMoviesDb && (
+          <Button variant="secondary" size="sm" onClick={() => setTmdbModalOpen(true)}>
+            <Icon name="search" size={16} />
+            TMDB
+          </Button>
+        )}
 
         {/* Add Record */}
         <Button size="sm" onClick={openNewRecord}>
@@ -2589,6 +2608,16 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           </Button>
         </div>
       </Modal>
+
+      {/* TMDB Import Modal */}
+      {isMoviesDb && (
+        <TMDBImportModal
+          open={tmdbModalOpen}
+          onClose={() => setTmdbModalOpen(false)}
+          database={database}
+          onImported={loadData}
+        />
+      )}
     </div>
   )
 }
