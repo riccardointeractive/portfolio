@@ -253,6 +253,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Interactive elements — Tailwind v4 preflight does not set cursor:pointer */
+button,
+[role="button"],
+select,
+summary {
+  cursor: pointer;
+}
+
 /* Display font — weight controlled by token */
 .font-display {
   font-weight: var(--font-display-weight);
