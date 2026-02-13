@@ -2,7 +2,7 @@
 
 import { Copy, Check } from 'lucide-react'
 import { useState } from 'react'
-import { AdminPageHeader } from '../components/AdminPageHeader'
+import { PageHeader } from '@/app/admin/components/PageHeader'
 import { Badge } from '@/components/ui/Badge'
 import { colors, typography, spacing, radius, transitions, shadows } from '@/config/design-tokens'
 
@@ -11,7 +11,7 @@ export default function DesignSystemPage() {
     <>
       {/* Page Header */}
       <div className="mb-10">
-        <AdminPageHeader
+        <PageHeader
           title="Design System"
           description="Live preview of all design tokens, typography, and components. Everything here is rendered from the actual CSS variables and Tailwind classes."
         />

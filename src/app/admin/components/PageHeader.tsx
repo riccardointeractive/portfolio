@@ -12,11 +12,11 @@ export interface PageHeaderProps {
 
 export function PageHeader({ title, description, action, className }: PageHeaderProps) {
   return (
-    <div className={cn('flex items-start justify-between mb-8', className)}>
+    <div className={cn('flex items-start justify-between', className)}>
       <div>
         <h1 className="font-display text-2xl text-primary">{title}</h1>
         {description && (
-          <p className="text-tertiary mt-1">{description}</p>
+          <p className="text-sm text-tertiary mt-1">{description}</p>
         )}
       </div>
       {action && (

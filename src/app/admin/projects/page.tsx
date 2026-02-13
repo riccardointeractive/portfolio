@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, Star, Pencil, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
+import { PageHeader } from '@/app/admin/components/PageHeader'
+import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
 import { AdminEmptyState } from '@/app/admin/components/AdminEmptyState'
@@ -63,14 +64,15 @@ function ProjectsContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader
+      <PageHeader
         title="Projects"
         description="Study cases — create and manage your portfolio projects."
-        action={{
-          label: 'New Project',
-          icon: <Plus size={16} />,
-          onClick: () => router.push('/admin/projects/new'),
-        }}
+        action={
+          <Button onClick={() => router.push('/admin/projects/new')}>
+            <Plus size={16} />
+            New Project
+          </Button>
+        }
       />
 
       {/* Filters */}

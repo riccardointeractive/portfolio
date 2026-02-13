@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { Trash2, Copy, Check, ExternalLink } from 'lucide-react'
-import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
+import { PageHeader } from '@/app/admin/components/PageHeader'
+import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
 import { AdminEmptyState } from '@/app/admin/components/AdminEmptyState'
@@ -85,13 +86,14 @@ function MediaContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader
+      <PageHeader
         title="Media Library"
         description="All uploaded files — images, videos, and more."
-        action={{
-          label: 'Upload',
-          onClick: () => setShowUploader(!showUploader),
-        }}
+        action={
+          <Button variant="secondary" onClick={() => setShowUploader(!showUploader)}>
+            Upload
+          </Button>
+        }
       />
 
       {/* Upload zone */}

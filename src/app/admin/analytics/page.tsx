@@ -13,7 +13,8 @@ import {
   FileVideo,
   Server,
 } from 'lucide-react'
-import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
+import { PageHeader } from '@/app/admin/components/PageHeader'
+import { Button } from '@/components/ui/Button'
 import { EnvIndicator } from '@/app/admin/components/EnvIndicator'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 
@@ -235,14 +236,15 @@ function AnalyticsContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader
+      <PageHeader
         title="Analytics"
         description="Infrastructure usage and content overview."
-        action={{
-          label: 'Refresh',
-          icon: <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />,
-          onClick: fetchAnalytics,
-        }}
+        action={
+          <Button variant="secondary" onClick={fetchAnalytics}>
+            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+            Refresh
+          </Button>
+        }
       />
 
       {/* Loading */}

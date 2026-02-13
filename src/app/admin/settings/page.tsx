@@ -1,7 +1,7 @@
 'use client'
 
 import { Globe, Github, Linkedin, Twitter, Mail, ExternalLink } from 'lucide-react'
-import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
+import { PageHeader } from '@/app/admin/components/PageHeader'
 import { SettingsSection } from '@/app/admin/components/SettingsSection'
 import { SettingsField } from '@/app/admin/components/SettingsField'
 import { EnvIndicator } from '@/app/admin/components/EnvIndicator'
@@ -36,7 +36,7 @@ function SocialLink({
 function SettingsContent() {
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader
+      <PageHeader
         title="Settings"
         description="Site configuration overview. Edit src/config/site.ts to update these values."
       />

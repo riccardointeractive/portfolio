@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Plus } from 'lucide-react'
-import { AdminPageHeader } from '@/app/admin/components/AdminPageHeader'
+import { PageHeader } from '@/app/admin/components/PageHeader'
+import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
 import { AdminEmptyState } from '@/app/admin/components/AdminEmptyState'
@@ -111,14 +112,15 @@ function ShotsContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader
+      <PageHeader
         title="Shots"
         description="Manage your visual content — images, videos, code snippets, animations."
-        action={{
-          label: 'New Shot',
-          icon: <Plus size={16} />,
-          onClick: () => openEditor(),
-        }}
+        action={
+          <Button onClick={() => openEditor()}>
+            <Plus size={16} />
+            New Shot
+          </Button>
+        }
       />
 
       {/* Filters */}
