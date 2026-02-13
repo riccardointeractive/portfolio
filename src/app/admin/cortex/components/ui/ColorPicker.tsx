@@ -10,6 +10,10 @@ export interface ColorPickerProps {
   label?: string
 }
 
+function selectedRing(color: string): string {
+  return `0 0 0 2px var(--bg-base), 0 0 0 4px ${color}`
+}
+
 export function ColorPicker({ value, onChange, label }: ColorPickerProps) {
   return (
     <div className="w-full">
@@ -30,7 +34,7 @@ export function ColorPicker({ value, onChange, label }: ColorPickerProps) {
             )}
             style={{
               backgroundColor: color.value,
-              boxShadow: value === color.value ? `0 0 0 2px var(--bg-base), 0 0 0 4px ${color.value}` : undefined
+              boxShadow: value === color.value ? selectedRing(color.value) : undefined
             }}
             title={color.name}
           >

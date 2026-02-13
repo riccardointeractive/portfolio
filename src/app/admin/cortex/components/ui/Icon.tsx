@@ -2,6 +2,7 @@
 
 import { ComponentType } from 'react'
 import { IconProps as PhosphorIconProps } from '@phosphor-icons/react'
+import { cn } from '@/lib/utils'
 
 // Import all icons we need from Phosphor
 import {
@@ -494,7 +495,14 @@ export function Icon({
 
   if (!IconComponent) {
     // Don't spam console - just render fallback silently
-    return <span className={className} style={{ width: size, height: size, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>?</span>
+    return (
+      <span
+        className={cn('inline-flex items-center justify-center', className)}
+        style={{ width: size, height: size }}
+      >
+        ?
+      </span>
+    )
   }
 
   return (

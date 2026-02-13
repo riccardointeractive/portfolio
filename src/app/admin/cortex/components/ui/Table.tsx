@@ -317,6 +317,9 @@ export interface TableSkeletonProps {
   rows?: number
 }
 
+const SKELETON_MIN_WIDTH = 60
+const SKELETON_RANDOM_RANGE = 30
+
 export function TableSkeleton({ columns, rows = 5 }: TableSkeletonProps) {
   return (
     <>
@@ -325,7 +328,7 @@ export function TableSkeleton({ columns, rows = 5 }: TableSkeletonProps) {
           {Array.from({ length: columns }).map((_, colIndex) => (
             <td key={colIndex} className="h-14 px-4">
               <div className="h-4 bg-elevated rounded animate-pulse"
-                   style={{ width: `${60 + Math.random() * 30}%` }} />
+                   style={{ width: `${SKELETON_MIN_WIDTH + Math.random() * SKELETON_RANDOM_RANGE}%` }} />
             </td>
           ))}
         </tr>
