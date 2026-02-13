@@ -212,6 +212,11 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     return labels.includes('film') && labels.includes('serie tv')
   }, [database])
 
+  // Memoized: other databases (excluding current) — used in view config and field modals
+  const otherDatabases = useMemo(() =>
+    allDatabases.filter(db => db.id !== id).map(db => ({ value: db.id, label: db.name }))
+  , [allDatabases, id])
+
   // Backfill: detect records missing Genre/Duration/Director
   const recordsNeedingBackfill = useMemo(() => {
     if (!database || !isMoviesDb) return []
@@ -2636,9 +2641,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                 }))}
                 options={[
                   { value: '', label: 'Select a database...' },
-                  ...allDatabases
-                    .filter(db => db.id !== id) // Exclude current database
-                    .map(db => ({ value: db.id, label: db.name }))
+                  ...otherDatabases
                 ]}
               />
 
@@ -2895,9 +2898,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                 }))}
                 options={[
                   { value: '', label: 'Select a database...' },
-                  ...allDatabases
-                    .filter(db => db.id !== id) // Exclude current database
-                    .map(db => ({ value: db.id, label: db.name }))
+                  ...otherDatabases
                 ]}
               />
               <Checkbox
