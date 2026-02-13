@@ -31,5 +31,5 @@
     "*.ts",
     "*.mts"
   ],
-  "exclude": ["node_modules", "digiko", "movo", "framer-template"]
+  "exclude": ["node_modules", "digiko", "movo", "framer-template", "cortex"]
 }
