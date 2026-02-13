@@ -154,11 +154,25 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
   })
   const [recordValues, setRecordValues] = useState<Record<string, unknown>>({})
 
-  useEffect(() => {
-    loadData()
-  }, [id])
+  // Lightweight refresh: only refetch current database (used after mutations)
+  const refreshDatabase = useCallback(async () => {
+    try {
+      const dbRes = await databasesApi.get(id)
+      if (!dbRes.data) {
+        router.push('/admin/cortex/databases')
+        return
+      }
+      setDatabase(dbRes.data)
+      if (!activeViewId && dbRes.data.views.length > 0) {
+        setActiveViewId(dbRes.data.views[0].id)
+      }
+    } catch (error) {
+      console.error('Failed to refresh database:', error)
+    }
+  }, [id, activeViewId, router])
 
-  const loadData = async () => {
+  // Full load: fetch current database + all databases (only on mount / id change)
+  const loadData = useCallback(async () => {
     try {
       const [dbRes, allDbRes] = await Promise.all([
         databasesApi.get(id),
@@ -178,7 +192,11 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     } finally {
       setLoading(false)
     }
-  }
+  }, [id, activeViewId, router])
+
+  useEffect(() => {
+    loadData()
+  }, [id])
 
   const activeView = useMemo(() => {
     if (!database || !activeViewId) return null
@@ -287,9 +305,9 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     }
 
     setBackfilling(false)
-    await loadData()
+    await refreshDatabase()
     console.log(`Backfilled ${successCount}/${recordsNeedingBackfill.length} records`)
-  }, [database, backfilling, recordsNeedingBackfill, id])
+  }, [database, backfilling, recordsNeedingBackfill, id, refreshDatabase])
 
   // Sync todo collapsed state with view config when view changes or loads
   useEffect(() => {
@@ -461,7 +479,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           setActiveViewId(res.data.id)
         }
       }
-      await loadData()
+      await refreshDatabase()
       setViewModalOpen(false)
       resetViewForm()
     } catch (error) {
@@ -474,7 +492,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     if (!confirm('Delete this view?')) return
     try {
       await databasesApi.deleteView(id, viewId)
-      await loadData()
+      await refreshDatabase()
       if (activeViewId === viewId) {
         setActiveViewId(database.views.find(v => v.id !== viewId)?.id || null)
       }
@@ -500,7 +518,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
       await databasesApi.updateView(id, activeView.id, {
         filters: [...activeView.filters, newFilter]
       })
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to add filter:', error)
     }
@@ -513,7 +531,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
 
     try {
       await databasesApi.updateView(id, activeView.id, { filters: newFilters })
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to update filter:', error)
     }
@@ -525,7 +543,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
 
     try {
       await databasesApi.updateView(id, activeView.id, { filters: newFilters })
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to remove filter:', error)
     }
@@ -540,7 +558,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
       await databasesApi.updateView(id, activeView.id, {
         sorts: [...activeView.sorts, newSort]
       })
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to add sort:', error)
     }
@@ -552,7 +570,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
 
     try {
       await databasesApi.updateView(id, activeView.id, { sorts: newSorts })
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to remove sort:', error)
     }
@@ -568,7 +586,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
 
     try {
       await databasesApi.updateView(id, activeView.id, { sorts: newSorts })
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to toggle sort:', error)
     }
@@ -580,7 +598,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     if (!confirm('Delete this field? All data in this column will be lost.')) return
     try {
       await databasesApi.deleteField(id, fieldId)
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to delete field:', error)
     }
@@ -628,7 +646,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           relationConfig: newField.type === 'relation' ? newField.relationConfig : undefined
         })
       }
-      await loadData()
+      await refreshDatabase()
       setFieldModalOpen(false)
       setEditingField(null)
       setNewField({ name: '', type: 'text', options: [] })
@@ -659,7 +677,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
       } else {
         await databasesApi.addRecord(id, recordValues)
       }
-      await loadData()
+      await refreshDatabase()
       setRecordModalOpen(false)
     } catch (error) {
       console.error('Failed to save record:', error)
@@ -670,7 +688,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     if (!confirm('Delete this record?')) return
     try {
       await databasesApi.deleteRecord(id, recordId)
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to delete record:', error)
     }
@@ -727,7 +745,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     // Update server with new order
     try {
       await databasesApi.reorderRecords(id, currentOrder)
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to reorder records:', error)
     }
@@ -739,11 +757,11 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
   const handleCellChange = useCallback(async (recordId: string, fieldId: string, value: unknown) => {
     try {
       await databasesApi.updateRecord(id, recordId, { [fieldId]: value })
-      await loadData()
+      await refreshDatabase()
     } catch (error) {
       console.error('Failed to update cell:', error)
     }
-  }, [id])
+  }, [id, refreshDatabase])
 
   // Inline cell dropdown for select/multiselect
   const openCellDropdown = useCallback((
@@ -1706,7 +1724,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                                 ? [parentRecord.id]
                                 : parentRecord.id
                             })
-                            await loadData()
+                            await refreshDatabase()
                             input.value = ''
                           } catch (error) {
                             console.error('Failed to add record:', error)
@@ -1787,7 +1805,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                                     childRecord.id,
                                     { ...childRecord.values, [checkboxField.id]: e.target.checked }
                                   )
-                                  await loadData()
+                                  await refreshDatabase()
                                 } catch (error) {
                                   console.error('Failed to update record:', error)
                                 }
@@ -1850,7 +1868,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                                 if (confirm('Delete this record?')) {
                                   try {
                                     await databasesApi.deleteRecord(sourceDb.id, childRecord.id)
-                                    await loadData()
+                                    await refreshDatabase()
                                   } catch (error) {
                                     console.error('Failed to delete record:', error)
                                   }
@@ -1890,7 +1908,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                             ? [expandedCard.id]
                             : expandedCard.id
                         })
-                        await loadData()
+                        await refreshDatabase()
                         input.value = ''
                       } catch (error) {
                         console.error('Failed to add record:', error)
@@ -1952,7 +1970,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
               ...rec.values,
               [checkboxField.id]: !isDone(rec.values[checkboxField.id])
             })
-            await loadData()
+            await refreshDatabase()
           } catch (error) {
             console.error('Failed to update record:', error)
           }
@@ -1995,7 +2013,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
                       [nameField.id]: value,
                       [checkboxField.id]: false
                     })
-                    await loadData()
+                    await refreshDatabase()
                     input.value = ''
                   } catch (error) {
                     console.error('Failed to add record:', error)
@@ -2286,7 +2304,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
               await updatePerfectStreak(true)
             }
 
-            await loadData()
+            await refreshDatabase()
           } catch (error) {
             console.error('Failed to update habit:', error)
           }
