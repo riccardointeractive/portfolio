@@ -10,8 +10,8 @@ export type { TextareaProps } from './Textarea'
 export { Select } from './Select'
 export type { SelectProps } from './Select'
 
-export { Badge } from './Badge'
-export type { BadgeProps } from './Badge'
+export { Badge } from '@/components/ui/Badge'
+export type { BadgeProps } from '@/components/ui/Badge'
 
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card'
 export type { CardProps } from './Card'
