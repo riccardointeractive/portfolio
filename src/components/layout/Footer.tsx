@@ -1,11 +1,12 @@
 import { Github, Linkedin, Twitter } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import { COPY } from '@/config/copy'
 import { Container } from './Container'
 
 const socialLinks = [
   { href: siteConfig.social.github, icon: Github, label: 'GitHub' },
   { href: siteConfig.social.linkedin, icon: Linkedin, label: 'LinkedIn' },
-  { href: siteConfig.social.twitter, icon: Twitter, label: 'X / Twitter' },
+  { href: siteConfig.social.twitter, icon: Twitter, label: COPY.social.twitter },
 ]
 
 export function Footer() {

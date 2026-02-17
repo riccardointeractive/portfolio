@@ -1,5 +1,7 @@
 import { ArrowDown } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import { COPY } from '@/config/copy'
+import { ROUTES } from '@/config/routes'
 import { Container } from '@/components/layout/Container'
 
 export function Hero() {
@@ -20,17 +22,17 @@ export function Hero() {
 
         <div className="reveal reveal-delay-3 flex items-center gap-4 pt-4">
           <a
-            href="#projects"
+            href={ROUTES.anchors.projects}
             className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-base transition-all duration-200 hover:opacity-90"
           >
-            View Projects
+            {COPY.sections.hero.ctaPrimary}
             <ArrowDown size={16} />
           </a>
           <a
-            href="#contact"
+            href={ROUTES.anchors.contact}
             className="inline-flex items-center gap-2 rounded-full border border-border-default px-6 py-3 text-sm font-medium text-secondary transition-all duration-200 hover:border-border-hover hover:text-primary"
           >
-            Get in Touch
+            {COPY.sections.hero.ctaSecondary}
           </a>
         </div>
       </Container>

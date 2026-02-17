@@ -4,6 +4,7 @@ import { type Project } from '@/types/content'
 import { Badge } from './Badge'
 import { cn } from '@/lib/utils'
 import { imageSizes } from '@/config/image'
+import { ROUTES } from '@/config/routes'
 
 interface ProjectCardProps {
   project: Project
@@ -13,7 +14,7 @@ interface ProjectCardProps {
 export function ProjectCard({ project, className }: ProjectCardProps) {
   return (
     <a
-      href={`/projects/${project.slug}`}
+      href={ROUTES.project(project.slug)}
       className={cn(
         'group flex flex-col overflow-hidden rounded-xl border border-border-default bg-surface transition-all duration-300',
         'hover:-translate-y-1 hover:border-border-hover hover:shadow-lg',

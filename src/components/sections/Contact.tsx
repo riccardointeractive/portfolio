@@ -1,12 +1,13 @@
 import { Mail, Github, Linkedin, Twitter } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import { COPY } from '@/config/copy'
 import { Container } from '@/components/layout/Container'
 
 const links = [
   { href: `mailto:${siteConfig.email}`, icon: Mail, label: siteConfig.email },
   { href: siteConfig.social.github, icon: Github, label: 'GitHub' },
   { href: siteConfig.social.linkedin, icon: Linkedin, label: 'LinkedIn' },
-  { href: siteConfig.social.twitter, icon: Twitter, label: 'X / Twitter' },
+  { href: siteConfig.social.twitter, icon: Twitter, label: COPY.social.twitter },
 ]
 
 export function Contact() {
@@ -15,10 +16,10 @@ export function Contact() {
       <Container className="flex flex-col items-center gap-8 text-center">
         <div className="reveal flex flex-col gap-3">
           <h2 className="font-display text-3xl tracking-tight text-primary sm:text-4xl">
-            Get in Touch
+            {COPY.sections.contact.title}
           </h2>
           <p className="max-w-md text-secondary">
-            Interested in working together or just want to say hello? Drop me a line.
+            {COPY.sections.contact.description}
           </p>
         </div>
 
