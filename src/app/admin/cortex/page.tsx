@@ -7,6 +7,7 @@ import { StatCard } from '@/components/ui/StatCard'
 import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { dashboardApi } from '@/app/admin/cortex/lib/api'
 import { formatRelativeDate, customColorBg } from '@/app/admin/cortex/lib/utils'
+import { ROUTES } from '@/config/routes'
 import type { DashboardStats } from '@/app/admin/cortex/lib/types'
 
 export default function DashboardPage() {
@@ -38,7 +39,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Link href="/admin/cortex/databases">
+        <Link href={ROUTES.admin.cortexDatabases}>
           <StatCard
             label="Databases"
             value={stats?.totalDatabases || 0}
@@ -55,7 +56,7 @@ export default function DashboardPage() {
         />
 
         <Card>
-          <Link href="/admin/cortex/databases" className="block p-5">
+          <Link href={ROUTES.admin.cortexDatabases} className="block p-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-tertiary">Quick Action</p>
@@ -74,7 +75,7 @@ export default function DashboardPage() {
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-display text-lg text-primary">Recent Databases</h2>
-            <Link href="/admin/cortex/databases">
+            <Link href={ROUTES.admin.cortexDatabases}>
               <Button variant="ghost" size="sm">
                 View All
                 <Icon name="chevron-right" size={16} />
@@ -87,7 +88,7 @@ export default function DashboardPage() {
               {stats.recentDatabases.map(db => (
                 <Link
                   key={db.id}
-                  href={`/admin/cortex/databases/${db.id}`}
+                  href={ROUTES.admin.cortexDatabase(db.id)}
                   className="flex items-center gap-4 p-3 rounded-lg hover:bg-elevated transition-colors"
                 >
                   <div
@@ -110,7 +111,7 @@ export default function DashboardPage() {
             <div className="text-center py-8">
               <Icon name="layers" size={48} className="text-tertiary mx-auto mb-3" />
               <p className="text-tertiary mb-4">No databases yet</p>
-              <Link href="/admin/cortex/databases">
+              <Link href={ROUTES.admin.cortexDatabases}>
                 <Button>
                   <Icon name="plus" size={18} />
                   Create Your First Database

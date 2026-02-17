@@ -7,6 +7,7 @@ import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
 import { cn, customColorBg, customColorStyle } from '@/app/admin/cortex/lib/utils'
 import type { Database, DatabaseRecord, Field, FieldType } from '@/app/admin/cortex/lib/types'
+import { ROUTES } from '@/config/routes'
 
 // Field type icons
 const FIELD_TYPE_ICONS: Record<FieldType, string> = {
@@ -45,7 +46,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
       ])
 
       if (!dbRes.data) {
-        router.push('/admin/cortex/databases')
+        router.push(ROUTES.admin.cortexDatabases)
         return
       }
 
@@ -54,7 +55,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
 
       const foundRecord = dbRes.data.records.find(r => r.id === recordId)
       if (!foundRecord) {
-        router.push(`/admin/cortex/databases/${databaseId}`)
+        router.push(ROUTES.admin.cortexDatabase(databaseId))
         return
       }
 
@@ -362,7 +363,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
                   className="cursor-pointer hover:bg-elevated"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push(`/admin/cortex/databases/${targetDb.id}/records/${recId}`)
+                    router.push(ROUTES.admin.cortexRecord(targetDb.id, recId))
                   }}
                 >
                   {getTargetRecordName(recId)}
@@ -378,7 +379,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
               className="cursor-pointer hover:bg-elevated"
               onClick={(e) => {
                 e.stopPropagation()
-                router.push(`/admin/cortex/databases/${targetDb.id}/records/${value}`)
+                router.push(ROUTES.admin.cortexRecord(targetDb.id, String(value)))
               }}
             >
               {getTargetRecordName(String(value))}
@@ -437,7 +438,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={() => router.push(`/admin/cortex/databases/${databaseId}`)}>
+        <Button variant="ghost" size="sm" onClick={() => router.push(ROUTES.admin.cortexDatabase(databaseId))}>
           <Icon name="arrow-left" size={18} />
         </Button>
         <div className="flex items-center gap-3 flex-1">
@@ -458,7 +459,7 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
           onClick={async () => {
             if (confirm('Delete this record?')) {
               await databasesApi.deleteRecord(databaseId, recordId)
-              router.push(`/admin/cortex/databases/${databaseId}`)
+              router.push(ROUTES.admin.cortexDatabase(databaseId))
             }
           }}
           className="text-tertiary hover:text-error"
@@ -537,13 +538,13 @@ export default function RecordPage({ params }: { params: Promise<{ id: string; r
                             "flex-1 cursor-pointer",
                             isCompleted && "text-tertiary line-through"
                           )}
-                          onClick={() => router.push(`/admin/cortex/databases/${relDb.id}/records/${rec.id}`)}
+                          onClick={() => router.push(ROUTES.admin.cortexRecord(relDb.id, rec.id))}
                         >
                           {getRecName(rec)}
                         </span>
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
-                            onClick={() => router.push(`/admin/cortex/databases/${relDb.id}/records/${rec.id}`)}
+                            onClick={() => router.push(ROUTES.admin.cortexRecord(relDb.id, rec.id))}
                             className="p-1.5 text-tertiary hover:text-primary hover:bg-base rounded transition-colors"
                             title="Open"
                           >

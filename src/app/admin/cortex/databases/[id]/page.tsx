@@ -11,6 +11,7 @@ import { TMDBImportModal } from '@/app/admin/cortex/components/ui/TMDBImportModa
 import { TableView, CardsView, TodoView, MyDayView, GalleryView } from './views'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
 import { cn, generateId, customColorBg } from '@/app/admin/cortex/lib/utils'
+import { ROUTES } from '@/config/routes'
 import {
   DATABASE_COLORS,
   type Database, type DatabaseRecord, type DatabaseView, type Field, type FieldType,
@@ -156,7 +157,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
     try {
       const dbRes = await databasesApi.get(id)
       if (!dbRes.data) {
-        router.push('/admin/cortex/databases')
+        router.push(ROUTES.admin.cortexDatabases)
         return
       }
       setDatabase(dbRes.data)
@@ -176,7 +177,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
         databasesApi.list()
       ])
       if (!dbRes.data) {
-        router.push('/admin/cortex/databases')
+        router.push(ROUTES.admin.cortexDatabases)
         return
       }
       setDatabase(dbRes.data)
@@ -1475,7 +1476,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           fieldTypeIcons={FIELD_TYPE_ICONS}
           renderCellValue={renderCellValue}
           onDeleteField={handleDeleteField}
-          onNavigateToRecord={(recordId) => router.push(`/admin/cortex/databases/${id}/records/${recordId}`)}
+          onNavigateToRecord={(recordId) => router.push(ROUTES.admin.cortexRecord(id, recordId))}
         />
       )}
 
@@ -1497,7 +1498,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           onOpenNewRecord={openNewRecord}
           onDeleteRecord={handleDeleteRecord}
           onRefreshDatabase={refreshDatabase}
-          onNavigateToSourceRecord={(dbId, recordId) => router.push(`/admin/cortex/databases/${dbId}/records/${recordId}`)}
+          onNavigateToSourceRecord={(dbId, recordId) => router.push(ROUTES.admin.cortexRecord(dbId, recordId))}
         />
       )}
 
@@ -1520,7 +1521,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           onOpenNewRecord={openNewRecord}
           onDeleteRecord={handleDeleteRecord}
           onRefreshDatabase={refreshDatabase}
-          onNavigateToRecord={(recordId) => router.push(`/admin/cortex/databases/${id}/records/${recordId}`)}
+          onNavigateToRecord={(recordId) => router.push(ROUTES.admin.cortexRecord(id, recordId))}
         />
       )}
 
@@ -1542,7 +1543,7 @@ export default function DatabaseDetailPage({ params }: { params: Promise<{ id: s
           onOpenNewRecord={openNewRecord}
           onDeleteRecord={handleDeleteRecord}
           onRefreshDatabase={refreshDatabase}
-          onNavigateToRecord={(recordId) => router.push(`/admin/cortex/databases/${id}/records/${recordId}`)}
+          onNavigateToRecord={(recordId) => router.push(ROUTES.admin.cortexRecord(id, recordId))}
         />
       )}
 

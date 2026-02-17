@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import { ROUTES } from '@/config/routes'
 import { Container } from './Container'
 import { ThemeToggle } from './ThemeToggle'
 import { cn } from '@/lib/utils'
@@ -14,7 +15,7 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-nav-bg border-b border-nav-border backdrop-blur-xl backdrop-saturate-150">
       <Container className="flex h-16 items-center justify-between">
         <a
-          href="#"
+          href={ROUTES.home}
           className="font-display text-lg text-primary tracking-tight"
         >
           {siteConfig.name}

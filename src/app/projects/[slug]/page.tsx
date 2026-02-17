@@ -7,6 +7,7 @@ import { getProjectBySlug, getAllProjectSlugs } from '@/lib/data/projects'
 import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
 import { imageSizes } from '@/config/image'
+import { ROUTES } from '@/config/routes'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -41,7 +42,7 @@ export default async function ProjectPage({ params }: PageProps) {
       <section className="py-[var(--section-padding)]">
         <Container className="flex flex-col gap-6">
           <a
-            href="/#projects"
+            href={`/${ROUTES.anchors.projects}`}
             className="flex items-center gap-1.5 text-sm text-secondary transition-colors hover:text-primary"
           >
             <ArrowLeft size={14} />

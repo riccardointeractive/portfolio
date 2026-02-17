@@ -10,6 +10,8 @@ import { Icon } from '@/app/admin/cortex/components/ui/Icon'
 import { databasesApi } from '@/app/admin/cortex/lib/api'
 import { formatRelativeDate, customColorBg } from '@/app/admin/cortex/lib/utils'
 import { DEFAULT_DATABASE_COLOR, type Database } from '@/app/admin/cortex/lib/types'
+import { STORAGE_KEYS } from '@/config/auth'
+import { ROUTES } from '@/config/routes'
 
 type SortField = 'name' | 'updatedAt' | 'records'
 type SortDirection = 'asc' | 'desc'
@@ -37,7 +39,7 @@ export default function DatabasesPage() {
 
   // Load sort preference from localStorage
   useEffect(() => {
-    const savedSort = localStorage.getItem('cortex-databases-sort')
+    const savedSort = localStorage.getItem(STORAGE_KEYS.cortexSort)
     if (savedSort) {
       try {
         const { field, direction } = JSON.parse(savedSort)
@@ -53,7 +55,7 @@ export default function DatabasesPage() {
   // Save sort preference to localStorage (only after initial load)
   useEffect(() => {
     if (!sortLoaded) return
-    localStorage.setItem('cortex-databases-sort', JSON.stringify({
+    localStorage.setItem(STORAGE_KEYS.cortexSort, JSON.stringify({
       field: sortField,
       direction: sortDirection
     }))
@@ -287,7 +289,7 @@ export default function DatabasesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredAndSortedDatabases.map(db => (
                 <Card key={db.id} className="group overflow-hidden hover:bg-elevated transition-colors">
-                  <Link href={`/admin/cortex/databases/${db.id}`} className="block p-5">
+                  <Link href={ROUTES.admin.cortexDatabase(db.id)} className="block p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div
                         className="w-12 h-12 rounded-xl flex items-center justify-center"
