@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 import { getDatabases, createDatabase } from '@/app/admin/cortex/lib/db'
 
 export async function GET(request: NextRequest) {
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
     console.error('Error fetching databases:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to fetch databases' },
-      { status: 500 }
+      { status: HTTP_STATUS.INTERNAL_ERROR }
     )
   }
 }
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     console.error('Error creating database:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to create database' },
-      { status: 500 }
+      { status: HTTP_STATUS.INTERNAL_ERROR }
     )
   }
 }

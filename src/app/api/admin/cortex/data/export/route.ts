@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 import { getAllData } from '@/app/admin/cortex/lib/db'
 
 export async function GET(request: NextRequest) {
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
     console.error('Error exporting data:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to export data' },
-      { status: 500 }
+      { status: HTTP_STATUS.INTERNAL_ERROR }
     )
   }
 }

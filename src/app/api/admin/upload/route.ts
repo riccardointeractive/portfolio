@@ -3,6 +3,7 @@ import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { createR2Client, R2_BUCKET, R2_PUBLIC_URL } from '@/lib/r2/client'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 
 /**
  * POST /api/admin/upload
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
   if (!filename || !contentType) {
     return NextResponse.json(
       { error: 'filename and contentType are required' },
-      { status: 400 }
+      { status: HTTP_STATUS.BAD_REQUEST }
     )
   }
 

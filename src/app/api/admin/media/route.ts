@@ -3,6 +3,8 @@ import { DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { createAdminClient } from '@/lib/supabase/server'
 import { createR2Client, R2_BUCKET } from '@/lib/r2/client'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
+import { ENV_SERVER } from '@/config/env'
 
 /**
  * GET /api/admin/media
@@ -39,7 +41,7 @@ export async function GET(request: NextRequest) {
   const { data, error, count } = await query
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
   return NextResponse.json({
@@ -76,7 +78,7 @@ export async function POST(request: NextRequest) {
   if (!filename || !original_name || !mime_type || !size_bytes || !url) {
     return NextResponse.json(
       { error: 'Missing required fields: filename, original_name, mime_type, size_bytes, url' },
-      { status: 400 }
+      { status: HTTP_STATUS.BAD_REQUEST }
     )
   }
 
@@ -97,10 +99,10 @@ export async function POST(request: NextRequest) {
     .single()
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
-  return NextResponse.json(data, { status: 201 })
+  return NextResponse.json(data, { status: HTTP_STATUS.CREATED })
 }
 
 /**
@@ -117,7 +119,7 @@ export async function DELETE(request: NextRequest) {
   const id = searchParams.get('id')
 
   if (!id) {
-    return NextResponse.json({ error: 'id is required' }, { status: 400 })
+    return NextResponse.json({ error: 'id is required' }, { status: HTTP_STATUS.BAD_REQUEST })
   }
 
   const supabase = createAdminClient()
@@ -130,11 +132,11 @@ export async function DELETE(request: NextRequest) {
     .single()
 
   if (fetchError || !media) {
-    return NextResponse.json({ error: 'Media not found' }, { status: 404 })
+    return NextResponse.json({ error: 'Media not found' }, { status: HTTP_STATUS.NOT_FOUND })
   }
 
   // Extract key from URL
-  const r2PublicUrl = process.env.R2_PUBLIC_URL!
+  const r2PublicUrl = ENV_SERVER.r2PublicUrl
   const key = media.url.replace(`${r2PublicUrl}/`, '')
 
   // Delete from R2
@@ -153,7 +155,7 @@ export async function DELETE(request: NextRequest) {
     .eq('id', id)
 
   if (deleteError) {
-    return NextResponse.json({ error: deleteError.message }, { status: 500 })
+    return NextResponse.json({ error: deleteError.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
   return NextResponse.json({ success: true })

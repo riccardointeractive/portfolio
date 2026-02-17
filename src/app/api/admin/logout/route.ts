@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession, removeSession } from '../sessionStore'
+import { AUTH } from '@/config/auth'
+import { HTTP_STATUS } from '@/config/http'
+import { ENV_SERVER } from '@/config/env'
 
 /**
  * POST /api/admin/logout
@@ -13,7 +16,7 @@ export async function POST(request: NextRequest) {
     if (!token || typeof token !== 'string') {
       return NextResponse.json(
         { success: false, message: 'Token is required' },
-        { status: 400 }
+        { status: HTTP_STATUS.BAD_REQUEST }
       )
     }
 
@@ -25,9 +28,9 @@ export async function POST(request: NextRequest) {
       message: existed ? 'Session invalidated' : 'Session already expired',
     })
 
-    response.cookies.set('admin_session', '', {
+    response.cookies.set(AUTH.session.cookieName, '', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: ENV_SERVER.isProduction,
       sameSite: 'lax',
       path: '/',
       maxAge: 0,
@@ -38,7 +41,7 @@ export async function POST(request: NextRequest) {
     console.error('Logout error:', error)
     return NextResponse.json(
       { success: false, message: 'Server error' },
-      { status: 500 }
+      { status: HTTP_STATUS.INTERNAL_ERROR }
     )
   }
 }

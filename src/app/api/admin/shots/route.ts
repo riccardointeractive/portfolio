@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 import type { ShotInsert } from '@/types/content'
 
 /**
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
   const { data, error, count } = await query
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
   return NextResponse.json({
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
   if (!body.title || !body.slug || !body.type) {
     return NextResponse.json(
       { error: 'title, slug, and type are required' },
-      { status: 400 }
+      { status: HTTP_STATUS.BAD_REQUEST }
     )
   }
 
@@ -76,10 +77,10 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     if (error.code === '23505') {
-      return NextResponse.json({ error: 'Slug already exists' }, { status: 409 })
+      return NextResponse.json({ error: 'Slug already exists' }, { status: HTTP_STATUS.CONFLICT })
     }
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
-  return NextResponse.json(data, { status: 201 })
+  return NextResponse.json(data, { status: HTTP_STATUS.CREATED })
 }

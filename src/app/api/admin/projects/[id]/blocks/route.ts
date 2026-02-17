@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 import type { ProjectBlockInsert } from '@/types/content'
 
 interface RouteContext {
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
     .order('sort_order', { ascending: true })
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
   return NextResponse.json({ items: data })
@@ -70,8 +71,8 @@ export async function POST(request: NextRequest, context: RouteContext) {
     .single()
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
-  return NextResponse.json(data, { status: 201 })
+  return NextResponse.json(data, { status: HTTP_STATUS.CREATED })
 }

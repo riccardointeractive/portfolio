@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 
 interface RouteContext {
   params: Promise<{ id: string }>
@@ -20,7 +21,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
   const { blockIds } = (await request.json()) as { blockIds: string[] }
 
   if (!Array.isArray(blockIds) || blockIds.length === 0) {
-    return NextResponse.json({ error: 'blockIds array is required' }, { status: 400 })
+    return NextResponse.json({ error: 'blockIds array is required' }, { status: HTTP_STATUS.BAD_REQUEST })
   }
 
   const supabase = createAdminClient()
@@ -38,7 +39,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
   const failed = results.find((r) => r.error)
 
   if (failed?.error) {
-    return NextResponse.json({ error: failed.error.message }, { status: 500 })
+    return NextResponse.json({ error: failed.error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
   return NextResponse.json({ success: true })

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 import { clearAllData } from '@/app/admin/cortex/lib/db'
 
 export async function DELETE(request: NextRequest) {

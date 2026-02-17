@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 import type { ProjectBlockUpdate } from '@/types/content'
 
 interface RouteContext {
@@ -27,7 +28,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     .single()
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
   return NextResponse.json(data)
@@ -50,7 +51,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     .eq('project_id', id)
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: HTTP_STATUS.INTERNAL_ERROR })
   }
 
   return NextResponse.json({ success: true })

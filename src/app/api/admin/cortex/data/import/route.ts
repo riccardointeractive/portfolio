@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { HTTP_STATUS } from '@/config/http'
 import { importData } from '@/app/admin/cortex/lib/db'
 import type { CortexData } from '@/app/admin/cortex/lib/types'
 
@@ -15,7 +16,7 @@ export async function POST(request: NextRequest) {
     if (!data || !data.version || !Array.isArray(data.databases)) {
       return NextResponse.json(
         { success: false, error: 'Invalid data format' },
-        { status: 400 }
+        { status: HTTP_STATUS.BAD_REQUEST }
       )
     }
 
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
     console.error('Error importing data:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to import data' },
-      { status: 500 }
+      { status: HTTP_STATUS.INTERNAL_ERROR }
     )
   }
 }

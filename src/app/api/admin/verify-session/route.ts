@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '../sessionStore'
+import { HTTP_STATUS } from '@/config/http'
 
 /**
  * POST /api/admin/verify-session
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
     if (!token || typeof token !== 'string') {
       return NextResponse.json(
         { valid: false, message: 'Token is required' },
-        { status: 400 }
+        { status: HTTP_STATUS.BAD_REQUEST }
       )
     }
 
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
     if (!session) {
       return NextResponse.json(
         { valid: false, message: 'Session not found or expired' },
-        { status: 401 }
+        { status: HTTP_STATUS.UNAUTHORIZED }
       )
     }
 
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
     console.error('Session verification error:', error)
     return NextResponse.json(
       { valid: false, message: 'Server error' },
-      { status: 500 }
+      { status: HTTP_STATUS.INTERNAL_ERROR }
     )
   }
 }
