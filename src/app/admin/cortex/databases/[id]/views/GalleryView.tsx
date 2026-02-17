@@ -65,7 +65,7 @@ export function GalleryView({
               <div className="flex flex-wrap gap-1">
                 {typeOption && (
                   <span
-                    className="px-1.5 py-0.5 rounded text-[10px] font-medium"
+                    className="px-1.5 py-0.5 rounded text-xs font-medium"
                     style={{ backgroundColor: typeOption.color + '33', color: typeOption.color }}
                   >
                     {typeOption.label}
@@ -73,7 +73,7 @@ export function GalleryView({
                 )}
                 {statusOption && (
                   <span
-                    className="px-1.5 py-0.5 rounded text-[10px] font-medium"
+                    className="px-1.5 py-0.5 rounded text-xs font-medium"
                     style={{ backgroundColor: statusOption.color + '33', color: statusOption.color }}
                   >
                     {statusOption.label}
@@ -87,7 +87,7 @@ export function GalleryView({
                 </p>
               )}
 
-              <div className="flex items-center gap-2 text-[11px] text-white/70">
+              <div className="flex items-center gap-2 text-xs text-white/70">
                 {year && <span>{year}</span>}
                 {rating != null && rating > 0 && <span>★ {rating}</span>}
               </div>

@@ -85,9 +85,9 @@ export function CompareBlock({ content }: CompareBlockProps) {
           className="absolute top-0 bottom-0 w-0.5 bg-white shadow-md"
           style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
         >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md text-tertiary">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M5 3L2 8L5 13M11 3L14 8L11 13" stroke="#666" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 3L2 8L5 13M11 3L14 8L11 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
         </div>

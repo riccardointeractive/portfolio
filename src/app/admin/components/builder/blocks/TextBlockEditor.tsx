@@ -36,7 +36,7 @@ export function TextBlockEditor({ content, onChange }: TextBlockEditorProps) {
       </div>
 
       {preview ? (
-        <div className="min-h-[120px] rounded-lg border border-border-default bg-base p-3 text-sm text-primary prose prose-sm max-w-none">
+        <div className="min-h-32 rounded-lg border border-border-default bg-base p-3 text-sm text-primary prose prose-sm max-w-none">
           {content.markdown || (
             <span className="text-tertiary">Nothing to preview</span>
           )}
