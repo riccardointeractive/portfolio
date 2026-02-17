@@ -39,4 +39,5 @@ export const STORAGE_KEYS = {
   attempts: 'portfolio_admin_attempts',
   lockoutUntil: 'portfolio_admin_lockout',
   cortexSort: 'cortex-databases-sort',
+  sidebarCollapsed: 'portfolio-admin-sidebar-collapsed',
 } as const

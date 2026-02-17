@@ -14,32 +14,32 @@ import {
 } from 'lucide-react'
 import { navigationItems } from '../config/admin.config'
 import { siteConfig } from '@/config/site'
+import { STORAGE_KEYS } from '@/config/auth'
+import { ROUTES } from '@/config/routes'
 
 interface AdminSidebarProps {
   onLogout: () => void
 }
-
-const STORAGE_KEY = 'portfolio-admin-sidebar-collapsed'
 
 export function AdminSidebar({ onLogout }: AdminSidebarProps) {
   const pathname = usePathname()
   const mounted = useMounted()
   const [isCollapsed, setIsCollapsed] = useState(() => {
     if (typeof window === 'undefined') return false
-    return localStorage.getItem(STORAGE_KEY) === 'true'
+    return localStorage.getItem(STORAGE_KEYS.sidebarCollapsed) === 'true'
   })
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const toggleCollapse = () => {
     const next = !isCollapsed
     setIsCollapsed(next)
-    localStorage.setItem(STORAGE_KEY, String(next))
+    localStorage.setItem(STORAGE_KEYS.sidebarCollapsed, String(next))
   }
 
   if (!mounted) return null
 
   const isActive = (href: string) => {
-    if (href === '/admin') return pathname === '/admin'
+    if (href === ROUTES.admin.root) return pathname === ROUTES.admin.root
     return pathname?.startsWith(href)
   }
 
@@ -152,7 +152,7 @@ export function AdminSidebar({ onLogout }: AdminSidebarProps) {
         {/* Footer */}
         <div className="space-y-1 border-t border-border-default p-3">
           <a
-            href="/"
+            href={ROUTES.home}
             target="_blank"
             rel="noopener noreferrer"
             className={`
