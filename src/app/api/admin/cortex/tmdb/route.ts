@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { ENV_SERVER } from '@/config/env'
 
 const TMDB_BASE = 'https://api.themoviedb.org/3'
 const TMDB_IMG = 'https://image.tmdb.org/t/p'
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest) {
   const auth = await verifyAdminRequest(request)
   if (!auth.authorized) return auth.response
 
-  const apiKey = process.env.TMDB_API_KEY
+  const apiKey = ENV_SERVER.tmdbApiKey
   if (!apiKey) {
     return NextResponse.json(
       { success: false, error: 'TMDB_API_KEY not configured' },

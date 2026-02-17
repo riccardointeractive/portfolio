@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
 import postgres from 'postgres'
+import { ENV_SERVER } from '@/config/env'
 
 /**
  * Cortex Schema Setup
@@ -15,7 +16,7 @@ export async function POST(request: NextRequest) {
   const auth = await verifyAdminRequest(request)
   if (!auth.authorized) return auth.response
 
-  const dbUrl = process.env.SUPABASE_DB_URL
+  const dbUrl = ENV_SERVER.supabaseDbUrl
   if (!dbUrl) {
     return NextResponse.json(
       {

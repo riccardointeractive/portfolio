@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { ENV_PUBLIC } from '@/config/env'
 
 /**
  * Browser-side Supabase client with anon key.
@@ -6,7 +7,7 @@ import { createClient } from '@supabase/supabase-js'
  */
 export function createBrowserClient() {
   return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    ENV_PUBLIC.supabaseUrl,
+    ENV_PUBLIC.supabaseAnonKey
   )
 }

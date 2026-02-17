@@ -1,13 +1,14 @@
 import type { NextConfig } from "next";
+import { ENV_SERVER } from "./src/config/env";
 
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      ...(process.env.R2_PUBLIC_URL
+      ...(ENV_SERVER.r2PublicUrl
         ? [
             {
               protocol: 'https' as const,
-              hostname: new URL(process.env.R2_PUBLIC_URL).hostname,
+              hostname: new URL(ENV_SERVER.r2PublicUrl).hostname,
             },
           ]
         : []),

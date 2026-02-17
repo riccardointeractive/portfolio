@@ -5,6 +5,7 @@ import { SettingsSection } from '@/app/admin/components/SettingsSection'
 import { SettingsField } from '@/app/admin/components/SettingsField'
 import { EnvIndicator } from '@/app/admin/components/EnvIndicator'
 import { siteConfig } from '@/config/site'
+import { ENV_PUBLIC } from '@/config/env'
 
 function SocialLink({
   icon: Icon,
@@ -107,11 +108,11 @@ function SettingsContent() {
           <div className="grid grid-cols-2 gap-3">
             <EnvIndicator
               label="Supabase"
-              connected={!!process.env.NEXT_PUBLIC_SUPABASE_URL}
+              connected={!!ENV_PUBLIC.supabaseUrl}
             />
             <EnvIndicator
               label="Cloudflare R2"
-              connected={!!process.env.NEXT_PUBLIC_R2_PUBLIC_URL}
+              connected={!!ENV_PUBLIC.r2PublicUrl}
             />
           </div>
         </SettingsSection>

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { ENV_PUBLIC, ENV_SERVER } from '@/config/env'
 
 /**
  * Server-side Supabase client with service role key.
@@ -6,8 +7,8 @@ import { createClient } from '@supabase/supabase-js'
  */
 export function createAdminClient() {
   return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    ENV_PUBLIC.supabaseUrl,
+    ENV_SERVER.supabaseServiceRoleKey
   )
 }
 
@@ -17,7 +18,7 @@ export function createAdminClient() {
  */
 export function createPublicClient() {
   return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    ENV_PUBLIC.supabaseUrl,
+    ENV_PUBLIC.supabaseAnonKey
   )
 }

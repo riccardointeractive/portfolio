@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { verifyAdminRequest } from '@/lib/api/auth'
+import { ENV_SERVER } from '@/config/env'
 
 interface R2UsageResponse {
   success: boolean
@@ -40,9 +41,9 @@ interface AnalyticsResponse {
  * Requires CLOUDFLARE_API_TOKEN with R2 read permission.
  */
 async function fetchR2Usage(): Promise<AnalyticsResponse['r2']> {
-  const token = process.env.CLOUDFLARE_API_TOKEN
-  const accountId = process.env.R2_ACCOUNT_ID
-  const bucketName = process.env.R2_BUCKET_NAME
+  const token = ENV_SERVER.cloudflareApiToken
+  const accountId = ENV_SERVER.r2AccountId
+  const bucketName = ENV_SERVER.r2BucketName
 
   if (!token) {
     return { available: false, error: 'CLOUDFLARE_API_TOKEN not configured' }

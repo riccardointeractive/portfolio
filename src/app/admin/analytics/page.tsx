@@ -12,9 +12,11 @@ import {
   FileVideo,
   Server,
 } from 'lucide-react'
+import { API } from '@/config/routes'
 import { StatCard } from '@/components/ui/StatCard'
 import { EnvIndicator } from '@/app/admin/components/EnvIndicator'
 import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
+import { ENV_PUBLIC } from '@/config/env'
 
 interface AnalyticsData {
   r2: {
@@ -182,7 +184,7 @@ function AnalyticsContent() {
     setError(null)
 
     try {
-      const res = await fetch('/api/admin/analytics')
+      const res = await fetch(API.admin.analytics)
 
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`)
@@ -312,7 +314,7 @@ function AnalyticsContent() {
               />
               <EnvIndicator
                 label="Cloudflare R2"
-                connected={!!process.env.NEXT_PUBLIC_R2_PUBLIC_URL}
+                connected={!!ENV_PUBLIC.r2PublicUrl}
               />
               <EnvIndicator
                 label="R2 Analytics"
