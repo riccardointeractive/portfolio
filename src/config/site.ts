@@ -1,3 +1,5 @@
+import { ROUTES } from './routes'
+
 export const siteConfig = {
   name: 'Riccardo Marconato',
   title: 'Riccardo Marconato — Product Designer & Developer',
@@ -13,9 +15,23 @@ export const siteConfig = {
     linkedin: 'https://linkedin.com/in/riccardomarconato',
     twitter: 'https://x.com/riccardomarconato',
   },
+  skills: [
+    'React',
+    'Next.js',
+    'TypeScript',
+    'Tailwind CSS',
+    'Node.js',
+    'Solana',
+    'Rust',
+    'Figma',
+    'Framer',
+    'Vercel',
+    'Redis',
+    'Web3',
+  ],
   nav: [
-    { label: 'Projects', href: '#projects' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Projects', href: ROUTES.anchors.projects },
+    { label: 'About', href: ROUTES.anchors.about },
+    { label: 'Contact', href: ROUTES.anchors.contact },
   ],
 } as const
