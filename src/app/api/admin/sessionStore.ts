@@ -12,23 +12,17 @@
 
 import { Redis } from '@upstash/redis'
 import { type Session } from '@/app/admin/types/admin.types'
+import { REDIS_KEYS } from '@/config/redis'
+import { ENV_SERVER } from '@/config/env'
 
 // ============================================================================
 // Redis Client
 // ============================================================================
 
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  url: ENV_SERVER.redisUrl,
+  token: ENV_SERVER.redisToken,
 })
-
-// ============================================================================
-// Key Prefixes
-// ============================================================================
-
-const PREFIX = 'portfolio:'
-const sessionKey = (token: string) => `${PREFIX}session:${token}`
-const rateLimitKey = (key: string) => `${PREFIX}ratelimit:${key}`
 
 // ============================================================================
 // Session Management
@@ -38,13 +32,13 @@ export async function addSession(token: string, session: Session): Promise<void>
   const ttlMs = session.expiresAt - Date.now()
   const ttlSeconds = Math.max(Math.ceil(ttlMs / 1000), 1)
 
-  await redis.set(sessionKey(token), JSON.stringify(session), {
+  await redis.set(REDIS_KEYS.session(token), JSON.stringify(session), {
     ex: ttlSeconds,
   })
 }
 
 export async function getSession(token: string): Promise<Session | undefined> {
-  const data = await redis.get<string>(sessionKey(token))
+  const data = await redis.get<string>(REDIS_KEYS.session(token))
 
   if (!data) return undefined
 
@@ -52,7 +46,7 @@ export async function getSession(token: string): Promise<Session | undefined> {
 
   // Double-check expiry (Redis TTL should handle this, but be safe)
   if (Date.now() > session.expiresAt) {
-    await redis.del(sessionKey(token))
+    await redis.del(REDIS_KEYS.session(token))
     return undefined
   }
 
@@ -60,7 +54,7 @@ export async function getSession(token: string): Promise<Session | undefined> {
 }
 
 export async function removeSession(token: string): Promise<boolean> {
-  const result = await redis.del(sessionKey(token))
+  const result = await redis.del(REDIS_KEYS.session(token))
   return result > 0
 }
 
@@ -81,11 +75,11 @@ interface RateLimitResult {
 
 export async function checkRateLimit(
   key: string,
-  maxAttempts: number = 10,
-  windowMs: number = 15 * 60 * 1000
+  maxAttempts: number,
+  windowMs: number
 ): Promise<RateLimitResult> {
   const now = Date.now()
-  const redisKey = rateLimitKey(key)
+  const redisKey = REDIS_KEYS.rateLimit(key)
 
   const data = await redis.get<string>(redisKey)
   let entry: RateLimitEntry | null = null
@@ -123,5 +117,5 @@ export async function checkRateLimit(
 }
 
 export async function resetRateLimit(key: string): Promise<void> {
-  await redis.del(rateLimitKey(key))
+  await redis.del(REDIS_KEYS.rateLimit(key))
 }

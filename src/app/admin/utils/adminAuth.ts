@@ -6,20 +6,10 @@
  */
 
 import { type SessionData, type AuthResult } from '../types/admin.types'
-
-// ============================================================================
-// Configuration
-// ============================================================================
-
-export const SESSION_DURATION = 24 * 60 * 60 * 1000
-export const MAX_LOGIN_ATTEMPTS = 5
-export const LOCKOUT_DURATION = 15 * 60 * 1000
-
-const STORAGE_KEYS = {
-  SESSION: 'portfolio_admin_session',
-  ATTEMPTS: 'portfolio_admin_attempts',
-  LOCKOUT_UNTIL: 'portfolio_admin_lockout',
-} as const
+import { AUTH, STORAGE_KEYS } from '@/config/auth'
+import { COPY } from '@/config/copy'
+import { API } from '@/config/routes'
+import { HTTP_STATUS } from '@/config/http'
 
 // ============================================================================
 // Session Management
@@ -34,13 +24,13 @@ export async function isSessionValid(): Promise<boolean> {
   }
 
   try {
-    const response = await fetch('/api/admin/verify-session', {
+    const response = await fetch(API.admin.verifySession, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: session.token }),
     })
 
-    if (response.status === 401) {
+    if (response.status === HTTP_STATUS.UNAUTHORIZED) {
       clearSession()
       return false
     }
@@ -62,7 +52,7 @@ export function isSessionValidSync(): boolean {
 
 function getLocalSession(): SessionData | null {
   try {
-    const stored = localStorage.getItem(STORAGE_KEYS.SESSION)
+    const stored = localStorage.getItem(STORAGE_KEYS.session)
     if (!stored) return null
     const session = JSON.parse(stored) as SessionData
     if (!session.token || !session.createdAt || !session.expiresAt) return null
@@ -76,15 +66,15 @@ export function saveSession(sessionToken: string): void {
   const session: SessionData = {
     token: sessionToken,
     createdAt: Date.now(),
-    expiresAt: Date.now() + SESSION_DURATION,
+    expiresAt: Date.now() + AUTH.session.duration,
   }
-  localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(session))
-  localStorage.removeItem(STORAGE_KEYS.ATTEMPTS)
-  localStorage.removeItem(STORAGE_KEYS.LOCKOUT_UNTIL)
+  localStorage.setItem(STORAGE_KEYS.session, JSON.stringify(session))
+  localStorage.removeItem(STORAGE_KEYS.attempts)
+  localStorage.removeItem(STORAGE_KEYS.lockoutUntil)
 }
 
 export function clearSession(): void {
-  localStorage.removeItem(STORAGE_KEYS.SESSION)
+  localStorage.removeItem(STORAGE_KEYS.session)
 }
 
 export function getSessionToken(): string | null {
@@ -96,43 +86,46 @@ export function getSessionToken(): string | null {
 // ============================================================================
 
 export function isLockedOut(): boolean {
-  const lockoutUntil = localStorage.getItem(STORAGE_KEYS.LOCKOUT_UNTIL)
+  const lockoutUntil = localStorage.getItem(STORAGE_KEYS.lockoutUntil)
   if (!lockoutUntil) return false
   const until = parseInt(lockoutUntil, 10)
   if (Date.now() > until) {
-    localStorage.removeItem(STORAGE_KEYS.LOCKOUT_UNTIL)
-    localStorage.removeItem(STORAGE_KEYS.ATTEMPTS)
+    localStorage.removeItem(STORAGE_KEYS.lockoutUntil)
+    localStorage.removeItem(STORAGE_KEYS.attempts)
     return false
   }
   return true
 }
 
 export function getLockoutRemaining(): number {
-  const lockoutUntil = localStorage.getItem(STORAGE_KEYS.LOCKOUT_UNTIL)
+  const lockoutUntil = localStorage.getItem(STORAGE_KEYS.lockoutUntil)
   if (!lockoutUntil) return 0
   return Math.max(0, Math.ceil((parseInt(lockoutUntil, 10) - Date.now()) / 1000))
 }
 
 export function getAttemptCount(): number {
-  const attempts = localStorage.getItem(STORAGE_KEYS.ATTEMPTS)
+  const attempts = localStorage.getItem(STORAGE_KEYS.attempts)
   return attempts ? parseInt(attempts, 10) : 0
 }
 
 export function recordFailedAttempt(): { isLocked: boolean; attemptsRemaining: number } {
   const currentAttempts = getAttemptCount() + 1
-  localStorage.setItem(STORAGE_KEYS.ATTEMPTS, currentAttempts.toString())
+  localStorage.setItem(STORAGE_KEYS.attempts, currentAttempts.toString())
 
-  if (currentAttempts >= MAX_LOGIN_ATTEMPTS) {
-    localStorage.setItem(STORAGE_KEYS.LOCKOUT_UNTIL, (Date.now() + LOCKOUT_DURATION).toString())
+  if (currentAttempts >= AUTH.rateLimit.maxClientAttempts) {
+    localStorage.setItem(
+      STORAGE_KEYS.lockoutUntil,
+      (Date.now() + AUTH.rateLimit.lockoutDuration).toString()
+    )
     return { isLocked: true, attemptsRemaining: 0 }
   }
 
-  return { isLocked: false, attemptsRemaining: MAX_LOGIN_ATTEMPTS - currentAttempts }
+  return { isLocked: false, attemptsRemaining: AUTH.rateLimit.maxClientAttempts - currentAttempts }
 }
 
 export function resetAttempts(): void {
-  localStorage.removeItem(STORAGE_KEYS.ATTEMPTS)
-  localStorage.removeItem(STORAGE_KEYS.LOCKOUT_UNTIL)
+  localStorage.removeItem(STORAGE_KEYS.attempts)
+  localStorage.removeItem(STORAGE_KEYS.lockoutUntil)
 }
 
 // ============================================================================
@@ -144,14 +137,14 @@ export async function authenticate(password: string): Promise<AuthResult> {
     const remaining = getLockoutRemaining()
     return {
       success: false,
-      message: `Too many failed attempts. Wait ${Math.ceil(remaining / 60)} minutes.`,
+      message: COPY.auth.lockedOut(Math.ceil(remaining / 60)),
     }
   }
 
-  if (!password) return { success: false, message: 'Password is required' }
+  if (!password) return { success: false, message: COPY.auth.passwordRequired }
 
   try {
-    const response = await fetch('/api/admin/login', {
+    const response = await fetch(API.admin.login, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password }),
@@ -162,23 +155,23 @@ export async function authenticate(password: string): Promise<AuthResult> {
     if (!response.ok || !data.success) {
       const { isLocked, attemptsRemaining } = recordFailedAttempt()
       if (isLocked) {
-        return { success: false, message: 'Too many failed attempts. Locked for 15 minutes.' }
+        return { success: false, message: COPY.auth.lockedOutFixed }
       }
       return {
         success: false,
-        message: `Incorrect password. ${attemptsRemaining} attempts remaining.`,
+        message: COPY.auth.incorrectPassword(attemptsRemaining),
       }
     }
 
     if (data.sessionToken) {
       saveSession(data.sessionToken)
       resetAttempts()
-      return { success: true, message: 'Authentication successful', sessionToken: data.sessionToken }
+      return { success: true, message: COPY.auth.authSuccess, sessionToken: data.sessionToken }
     }
 
-    return { success: false, message: 'Invalid server response' }
+    return { success: false, message: COPY.auth.invalidServerResponse }
   } catch {
-    return { success: false, message: 'Network error. Please try again.' }
+    return { success: false, message: COPY.auth.networkError }
   }
 }
 
@@ -188,7 +181,7 @@ export async function logout(): Promise<void> {
 
   if (token) {
     try {
-      await fetch('/api/admin/logout', {
+      await fetch(API.admin.logout, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),

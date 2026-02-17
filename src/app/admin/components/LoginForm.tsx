@@ -7,8 +7,8 @@ import {
   isLockedOut,
   getLockoutRemaining,
   getAttemptCount,
-  MAX_LOGIN_ATTEMPTS,
 } from '../utils/adminAuth'
+import { AUTH } from '@/config/auth'
 import { siteConfig } from '@/config/site'
 
 interface LoginFormProps {
@@ -73,7 +73,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
-  const attemptsRemaining = MAX_LOGIN_ATTEMPTS - getAttemptCount()
+  const attemptsRemaining = AUTH.rateLimit.maxClientAttempts - getAttemptCount()
   const isLocked = lockoutTime > 0
 
   return (
@@ -182,7 +182,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               <div className="mb-1 font-semibold text-secondary">Security Features</div>
               <div className="space-y-0.5">
                 <div>• Server-side PBKDF2 password verification</div>
-                <div>• {MAX_LOGIN_ATTEMPTS} attempts before 15-min lockout</div>
+                <div>• {AUTH.rateLimit.maxClientAttempts} attempts before 15-min lockout</div>
                 <div>• Timing-safe comparison</div>
                 <div>• Session expires after 24 hours</div>
               </div>
@@ -191,7 +191,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         </div>
 
         {/* Attempts counter */}
-        {!isLocked && attemptsRemaining < MAX_LOGIN_ATTEMPTS && attemptsRemaining > 0 && (
+        {!isLocked && attemptsRemaining < AUTH.rateLimit.maxClientAttempts && attemptsRemaining > 0 && (
           <div className="mt-4 text-center text-sm text-tertiary">
             {attemptsRemaining} login attempt{attemptsRemaining !== 1 ? 's' : ''} remaining
           </div>
