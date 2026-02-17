@@ -2,27 +2,60 @@
 
 ## Project Overview
 
-Personal portfolio for Riccardo Marconato (riccardomarconato.com). Single-page site with Hero, Projects, About, and Contact sections.
+Personal portfolio for Riccardo Marconato (riccardomarconato.com). Single-page site with Hero, Projects, About, and Contact sections. Full admin CMS with project builder, media library, and Cortex database manager.
 
 **Stack:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS 4
 **Deploy:** Vercel
 **Typography:** Clash Display (headings) + Switzer (body) + Geist Mono (code)
 **Theme:** Neutral/minimal — dark + light mode, no strong accent colors
+**Services:** Supabase (DB), Cloudflare R2 (media), Upstash Redis (sessions)
 
 ---
 
 ## Critical Rules
 
-### 1. No Hardcoding
+### 1. No Hardcoding — The Config Dictionary
 
 If something is repeated, it should not be hardcoded. **If you're typing the same value twice, you're doing it wrong.**
 
-| What | Where |
-|------|-------|
-| Site metadata | `src/config/site.ts` |
-| Project data | `src/config/projects.ts` |
-| Design tokens (JS) | `src/config/design-tokens.ts` |
-| CSS Variables | `src/app/globals.css` |
+Every literal value in the codebase has a home in `src/config/`. **A perfect file has zero magic values — every number, string, path, timing, and message is an import from `@/config/*`.**
+
+#### Config Directory (10 files)
+
+| File | What belongs here | Example import |
+|------|-------------------|----------------|
+| `site.ts` | Name, role, bio, tagline, email, social links, skills, nav | `siteConfig.name`, `siteConfig.skills` |
+| `copy.ts` | All user-facing strings (section titles, CTAs, error messages, validation) | `COPY.sections.hero.ctaPrimary`, `COPY.auth.invalidCredentials` |
+| `routes.ts` | All page paths + API endpoints | `ROUTES.admin.projects`, `API.admin.login` |
+| `auth.ts` | Session duration, rate limits, PBKDF2 params, cookie name, storage keys | `AUTH.session.duration`, `STORAGE_KEYS.session` |
+| `http.ts` | HTTP status codes | `HTTP_STATUS.UNAUTHORIZED` |
+| `env.ts` | Typed environment variables (server + public) | `ENV_SERVER.adminPasswordHash`, `ENV_PUBLIC.supabaseUrl` |
+| `redis.ts` | Redis key patterns with namespace | `REDIS_KEYS.session(token)` |
+| `design-tokens.ts` | JS mirror of CSS custom properties | `colors.dark.bg.surface` |
+| `image.ts` | Responsive image `sizes` strings | `imageSizes.card` |
+| `projects.ts` | Static project fallback data | `projects` |
+
+#### Perfect File Checklist
+
+When editing or migrating any file, verify **every** item:
+
+| Rule | Bad | Good |
+|------|-----|------|
+| No user strings | `'View Projects'` | `COPY.sections.hero.ctaPrimary` |
+| No section titles | `'Selected Projects'` | `COPY.sections.projects.title` |
+| No error messages | `'Invalid credentials'` | `COPY.auth.invalidCredentials` |
+| No validation msgs | `'title and slug are required'` | `COPY.validation.titleAndSlugRequired` |
+| No route paths | `href="/admin/projects"` | `href={ROUTES.admin.projects}` |
+| No API URLs | `fetch('/api/admin/login')` | `fetch(API.admin.login)` |
+| No anchor links | `href="#projects"` | `href={ROUTES.anchors.projects}` |
+| No `process.env` | `process.env.ADMIN_PASSWORD_HASH` | `ENV_SERVER.adminPasswordHash` |
+| No magic numbers | `SESSION_DURATION = 24 * 60 * 60 * 1000` | `AUTH.session.duration` |
+| No PBKDF2 config | `100000` iterations, `64` key length | `AUTH.pbkdf2.iterations` |
+| No cookie names | `'admin_session'` | `AUTH.session.cookieName` |
+| No HTTP status | `{ status: 401 }` | `{ status: HTTP_STATUS.UNAUTHORIZED }` |
+| No Redis keys | `` `portfolio:session:${token}` `` | `REDIS_KEYS.session(token)` |
+| No storage keys | `localStorage.getItem('portfolio_admin_session')` | `localStorage.getItem(STORAGE_KEYS.session)` |
+| No skills inline | `const skills = ['React', ...]` | `siteConfig.skills` |
 
 ### 2. Design System — Single Source of Truth
 
@@ -90,20 +123,35 @@ src/
 ├── app/
 │   ├── layout.tsx          # Root layout (fonts, metadata, providers)
 │   ├── page.tsx            # Homepage (assembles sections)
-│   └── globals.css         # Design tokens (CSS custom properties)
+│   ├── globals.css         # Design tokens (CSS custom properties)
+│   ├── projects/[slug]/    # Dynamic project detail pages
+│   ├── admin/              # Admin CMS (projects, shots, media, cortex)
+│   └── api/admin/          # API routes (auth, CRUD, upload)
 ├── components/
-│   ├── ui/                 # Primitives (Button, Badge, Card)
+│   ├── ui/                 # Primitives (Button, Badge, Card, Input)
 │   ├── sections/           # Page sections (Hero, Projects, About, Contact)
+│   ├── blocks/             # Content blocks (Text, Media, Compare, Quote)
 │   └── layout/             # Header, Footer, Container, ThemeToggle
-├── config/
+├── config/                 # ⭐ All configuration (10 files — see Config Dictionary)
+│   ├── site.ts             # Metadata, social, skills, nav
+│   ├── copy.ts             # All user-facing strings
+│   ├── routes.ts           # Page paths + API endpoints
+│   ├── auth.ts             # Session, rate limits, PBKDF2, storage keys
+│   ├── http.ts             # HTTP status codes
+│   ├── env.ts              # Typed environment variables
+│   ├── redis.ts            # Redis key patterns
 │   ├── design-tokens.ts    # JS tokens (mirrors CSS vars)
-│   ├── projects.ts         # Project data
-│   └── site.ts             # Site metadata, social links
+│   ├── image.ts            # Responsive image sizes
+│   └── projects.ts         # Static project fallback
 ├── hooks/                  # Custom hooks
 ├── lib/
-│   └── utils.ts            # cn() helper
+│   ├── utils.ts            # cn() helper
+│   ├── supabase/           # Supabase clients (admin + public)
+│   ├── r2/                 # Cloudflare R2 client
+│   └── api/auth.ts         # Admin request verification
 └── types/
-    └── index.ts            # Shared types
+    ├── index.ts            # Shared types
+    └── content.ts          # CMS content types
 ```
 
 ### Naming Conventions
@@ -129,6 +177,9 @@ Always use the `@/` alias for imports:
 ```typescript
 import { Button } from '@/components/ui/Button'
 import { siteConfig } from '@/config/site'
+import { ROUTES } from '@/config/routes'
+import { COPY } from '@/config/copy'
+import { AUTH } from '@/config/auth'
 import { cn } from '@/lib/utils'
 ```
 
@@ -185,7 +236,7 @@ chore: Build, deps, config changes
 ## Quick Reference
 
 ```
-Project folder: ~/Projects/portfolio/
+Project folder: ~/Projects/riccardo/
 Dev server:     npm run dev (localhost:3000)
 Build:          npm run build
 Lint:           npm run lint
