@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
+import { API, ROUTES } from '@/config/routes'
 import {
   ProjectMetadataForm,
   type ProjectFormData,
@@ -15,7 +16,7 @@ function NewProjectContent() {
   const handleSave = async (formData: ProjectFormData) => {
     setIsSaving(true)
     try {
-      const res = await fetch('/api/admin/projects', {
+      const res = await fetch(API.admin.projects, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -23,7 +24,7 @@ function NewProjectContent() {
 
       if (res.ok) {
         const project = await res.json()
-        router.push(`/admin/projects/${project.id}/builder`)
+        router.push(ROUTES.admin.projectBuilder(project.id))
       }
     } finally {
       setIsSaving(false)
@@ -34,7 +35,7 @@ function NewProjectContent() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-3">
         <button
-          onClick={() => router.push('/admin/projects')}
+          onClick={() => router.push(ROUTES.admin.projects)}
           className="rounded-lg p-1.5 transition-colors hover:bg-hover"
         >
           <ArrowLeft size={18} className="text-secondary" />
@@ -50,7 +51,7 @@ function NewProjectContent() {
       <div className="max-w-2xl rounded-xl border border-border-default bg-surface p-6">
         <ProjectMetadataForm
           onSave={handleSave}
-          onCancel={() => router.push('/admin/projects')}
+          onCancel={() => router.push(ROUTES.admin.projects)}
           isSaving={isSaving}
         />
       </div>

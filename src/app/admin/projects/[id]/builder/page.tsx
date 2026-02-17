@@ -7,6 +7,7 @@ import { AdminLoadingSpinner } from '@/app/admin/components/AdminLoadingSpinner'
 import { BlockList } from '@/app/admin/components/builder/BlockList'
 import { useBuilder } from '@/app/admin/hooks/useBuilder'
 import { cn } from '@/lib/utils'
+import { ROUTES } from '@/config/routes'
 import type { ProjectStatus } from '@/types/content'
 
 function BuilderContent({ projectId }: { projectId: string }) {
@@ -33,7 +34,7 @@ function BuilderContent({ projectId }: { projectId: string }) {
       <div className="flex flex-col items-center justify-center py-20">
         <p className="text-sm text-secondary">Project not found</p>
         <button
-          onClick={() => router.push('/admin/projects')}
+          onClick={() => router.push(ROUTES.admin.projects)}
           className="mt-3 text-sm text-interactive hover:underline"
         >
           Back to projects
@@ -53,7 +54,7 @@ function BuilderContent({ projectId }: { projectId: string }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => router.push('/admin/projects')}
+            onClick={() => router.push(ROUTES.admin.projects)}
             className="rounded-lg p-1.5 transition-colors hover:bg-hover"
           >
             <ArrowLeft size={18} className="text-secondary" />
@@ -91,7 +92,7 @@ function BuilderContent({ projectId }: { projectId: string }) {
 
         <div className="flex items-center gap-2">
           <button
-            onClick={() => router.push(`/admin/projects/new?edit=${projectId}`)}
+            onClick={() => router.push(ROUTES.admin.projectEdit(projectId))}
             className="flex items-center gap-1.5 rounded-lg border border-border-default px-3 py-1.5 text-sm text-secondary transition-colors hover:bg-hover"
           >
             <Settings2 size={14} />

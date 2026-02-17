@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { X, Search, Upload } from 'lucide-react'
+import { API } from '@/config/routes'
 import { MediaUploader } from './MediaUploader'
 import { cn } from '@/lib/utils'
 import { imageSizes } from '@/config/image'
@@ -30,7 +31,7 @@ export function MediaPicker({ isOpen, onClose, onSelect, filter }: MediaPickerPr
     if (search) params.set('q', search)
 
     try {
-      const res = await fetch(`/api/admin/media?${params}`)
+      const res = await fetch(`${API.admin.media}?${params}`)
       const data = await res.json()
       setItems(data.items ?? [])
       setTotalPages(data.totalPages ?? 1)

@@ -20,6 +20,7 @@ export const ROUTES = {
     projects: '/admin/projects',
     projectNew: '/admin/projects/new',
     projectBuilder: (id: string) => `/admin/projects/${id}/builder`,
+    projectEdit: (id: string) => `/admin/projects/new?edit=${id}`,
     shots: '/admin/shots',
     media: '/admin/media',
     analytics: '/admin/analytics',

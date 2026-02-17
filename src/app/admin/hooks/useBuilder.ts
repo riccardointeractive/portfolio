@@ -1,6 +1,7 @@
 'use client'
 
 import { useReducer, useCallback, useEffect, useRef } from 'react'
+import { API } from '@/config/routes'
 import type { Project, ProjectBlock, BlockContent, BlockType } from '@/types/content'
 
 interface BuilderState {
@@ -83,8 +84,8 @@ export function useBuilder(projectId: string) {
     dispatch({ type: 'SET_LOADING', isLoading: true })
     try {
       const [projectRes, blocksRes] = await Promise.all([
-        fetch(`/api/admin/projects/${projectId}`),
-        fetch(`/api/admin/projects/${projectId}/blocks`),
+        fetch(API.admin.project(projectId)),
+        fetch(API.admin.projectBlocks(projectId)),
       ])
 
       if (projectRes.ok) {
@@ -117,7 +118,7 @@ export function useBuilder(projectId: string) {
   // Add block
   const addBlock = useCallback(
     async (type: BlockType, content: BlockContent) => {
-      const res = await fetch(`/api/admin/projects/${projectId}/blocks`, {
+      const res = await fetch(API.admin.projectBlocks(projectId), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type, content }),
@@ -142,7 +143,7 @@ export function useBuilder(projectId: string) {
       saveTimeoutRef.current = setTimeout(async () => {
         dispatch({ type: 'SET_SAVING', isSaving: true })
         try {
-          await fetch(`/api/admin/projects/${projectId}/blocks/${blockId}`, {
+          await fetch(API.admin.projectBlock(projectId, blockId), {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ content }),
@@ -159,7 +160,7 @@ export function useBuilder(projectId: string) {
   // Delete block
   const deleteBlock = useCallback(
     async (blockId: string) => {
-      const res = await fetch(`/api/admin/projects/${projectId}/blocks/${blockId}`, {
+      const res = await fetch(API.admin.projectBlock(projectId, blockId), {
         method: 'DELETE',
       })
 
@@ -176,7 +177,7 @@ export function useBuilder(projectId: string) {
     async (blockIds: string[]) => {
       dispatch({ type: 'REORDER_BLOCKS', blockIds })
 
-      await fetch(`/api/admin/projects/${projectId}/blocks/reorder`, {
+      await fetch(API.admin.projectBlocksReorder(projectId), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ blockIds }),
@@ -191,7 +192,7 @@ export function useBuilder(projectId: string) {
     async (updates: Partial<Project>) => {
       dispatch({ type: 'SET_SAVING', isSaving: true })
       try {
-        const res = await fetch(`/api/admin/projects/${projectId}`, {
+        const res = await fetch(API.admin.project(projectId), {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updates),

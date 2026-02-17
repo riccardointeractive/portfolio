@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { Trash2, Copy, Check, ExternalLink } from 'lucide-react'
+import { API } from '@/config/routes'
 import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
@@ -38,7 +39,7 @@ function MediaContent() {
     if (search) params.set('q', search)
 
     try {
-      const res = await fetch(`/api/admin/media?${params}`)
+      const res = await fetch(`${API.admin.media}?${params}`)
       const data = await res.json()
       setItems(data.items ?? [])
       setTotalPages(data.totalPages ?? 1)
@@ -56,7 +57,7 @@ function MediaContent() {
   const handleDelete = async (media: MediaRecord) => {
     if (!confirm(`Delete "${media.original_name}"?`)) return
 
-    await fetch(`/api/admin/media?id=${media.id}`, { method: 'DELETE' })
+    await fetch(`${API.admin.media}?id=${media.id}`, { method: 'DELETE' })
     setSelected(null)
     fetchMedia()
   }

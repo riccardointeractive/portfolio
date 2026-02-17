@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import NextImage from 'next/image'
 import { Image } from 'lucide-react'
+import { API } from '@/config/routes'
 import type { ShotBlockContent, Shot } from '@/types/content'
 
 interface ShotBlockEditorProps {
@@ -17,7 +18,7 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
 
   // Load available shots
   useEffect(() => {
-    fetch('/api/admin/shots?limit=100')
+    fetch(`${API.admin.shots}?limit=100`)
       .then((r) => r.json())
       .then((data) => setShots(data.items ?? []))
       .catch(() => {})
@@ -26,7 +27,7 @@ export function ShotBlockEditor({ content, onChange }: ShotBlockEditorProps) {
   // Load selected shot details
   useEffect(() => {
     if (content.shot_id) {
-      fetch(`/api/admin/shots/${content.shot_id}`)
+      fetch(API.admin.shot(content.shot_id))
         .then((r) => r.json())
         .then((data) => {
           if (data.id) setShot(data)

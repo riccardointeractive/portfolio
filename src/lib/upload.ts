@@ -1,4 +1,5 @@
 import type { MediaRecord } from '@/types/content'
+import { API } from '@/config/routes'
 
 interface UploadOptions {
   file: File
@@ -26,7 +27,7 @@ export async function uploadFile({
   onProgress,
 }: UploadOptions): Promise<UploadResult> {
   // 1. Get presigned URL
-  const presignRes = await fetch('/api/admin/upload', {
+  const presignRes = await fetch(API.admin.upload, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -46,7 +47,7 @@ export async function uploadFile({
   await uploadToR2(uploadUrl, file, file.type, onProgress)
 
   // 3. Register in the database
-  const confirmRes = await fetch('/api/admin/media', {
+  const confirmRes = await fetch(API.admin.media, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

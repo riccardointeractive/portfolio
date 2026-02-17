@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Plus } from 'lucide-react'
+import { API } from '@/config/routes'
 import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
@@ -39,7 +40,7 @@ function ShotsContent() {
     if (search) params.set('q', search)
 
     try {
-      const res = await fetch(`/api/admin/shots?${params}`)
+      const res = await fetch(`${API.admin.shots}?${params}`)
       const data = await res.json()
       setShots(data.items ?? [])
       setTotalPages(data.totalPages ?? 1)
@@ -58,8 +59,8 @@ function ShotsContent() {
     setIsSaving(true)
     try {
       const url = editingShot
-        ? `/api/admin/shots/${editingShot.id}`
-        : '/api/admin/shots'
+        ? API.admin.shot(editingShot.id)
+        : API.admin.shots
       const method = editingShot ? 'PATCH' : 'POST'
 
       const res = await fetch(url, {
@@ -81,12 +82,12 @@ function ShotsContent() {
   const handleDelete = async (shot: Shot) => {
     if (!confirm(`Delete "${shot.title}"?`)) return
 
-    await fetch(`/api/admin/shots/${shot.id}`, { method: 'DELETE' })
+    await fetch(API.admin.shot(shot.id), { method: 'DELETE' })
     fetchShots()
   }
 
   const handleTogglePublish = async (shot: Shot) => {
-    await fetch(`/api/admin/shots/${shot.id}`, {
+    await fetch(API.admin.shot(shot.id), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ published: !shot.published }),

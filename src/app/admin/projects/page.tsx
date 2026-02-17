@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, Star, Pencil, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { API, ROUTES } from '@/config/routes'
 import { Button } from '@/components/ui/Button'
 import { AdminFilterTabs } from '@/app/admin/components/AdminFilterTabs'
 import { AdminSearchBar } from '@/app/admin/components/AdminSearchBar'
@@ -31,7 +32,7 @@ function ProjectsContent() {
     if (search) params.set('q', search)
 
     try {
-      const res = await fetch(`/api/admin/projects?${params}`)
+      const res = await fetch(`${API.admin.projects}?${params}`)
       const data = await res.json()
       setProjects(data.items ?? [])
     } catch {
@@ -48,12 +49,12 @@ function ProjectsContent() {
   const handleDelete = async (project: Project) => {
     if (!confirm(`Delete "${project.title}" and all its blocks?`)) return
 
-    await fetch(`/api/admin/projects/${project.id}`, { method: 'DELETE' })
+    await fetch(API.admin.project(project.id), { method: 'DELETE' })
     fetchProjects()
   }
 
   const handleToggleFeatured = async (project: Project) => {
-    await fetch(`/api/admin/projects/${project.id}`, {
+    await fetch(API.admin.project(project.id), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ featured: !project.featured }),
@@ -64,7 +65,7 @@ function ProjectsContent() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-end">
-        <Button onClick={() => router.push('/admin/projects/new')}>
+        <Button onClick={() => router.push(ROUTES.admin.projectNew)}>
           <Plus size={16} />
           New Project
         </Button>
@@ -91,7 +92,7 @@ function ProjectsContent() {
         <EmptyState
           title="No projects yet"
           action={
-            <Button variant="ghost" onClick={() => router.push('/admin/projects/new')}>
+            <Button variant="ghost" onClick={() => router.push(ROUTES.admin.projectNew)}>
               Create your first project
             </Button>
           }
@@ -124,7 +125,7 @@ function ProjectsContent() {
                 <tr
                   key={project.id}
                   className="transition-colors hover:bg-hover cursor-pointer"
-                  onClick={() => router.push(`/admin/projects/${project.id}/builder`)}
+                  onClick={() => router.push(ROUTES.admin.projectBuilder(project.id))}
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
@@ -162,7 +163,7 @@ function ProjectsContent() {
                         <Star size={14} className={project.featured ? 'fill-current text-warning' : ''} />
                       </button>
                       <button
-                        onClick={() => router.push(`/admin/projects/${project.id}/builder`)}
+                        onClick={() => router.push(ROUTES.admin.projectBuilder(project.id))}
                         className="rounded-lg p-1.5 text-tertiary transition-colors hover:bg-elevated hover:text-secondary"
                         title="Edit"
                       >
